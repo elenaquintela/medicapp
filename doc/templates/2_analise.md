@@ -40,4 +40,4 @@ Para cumplir a LOPDPGDD e/ou GDPR debe ter un apartado na web onde se indique qu
 
 **Deben explicarse os diferentes mecanismos utilizados para cumprir a lexislación relativa á protección de datos.**
 
-> Completa tamén os documentos: [planificación](a2_planificacion) e [orzamento](a3_orzamento).
+> Completa tamén os documentos: [planificación](doc/templates/a2_planificacion.md) e [orzamento](doc/templates/a3_orzamento.md).
