@@ -31,7 +31,6 @@ Para acadar unha avaliación positiva do proxecto, deben cubrirse os seguintes r
 * Frontend
   * Linguaxes: [HTML5](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5), [CSS3](https://developer.mozilla.org/en-US/docs/Web/CSS), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/javascript).
   * [Responsive design](https://developers.google.com/web/fundamentals/design-and-ux/responsive/).
-  * Comunicación asíncrona: [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX).
   * Uso de librerías e/ou frameworks JavaScript: [jQuery](https://jquery.com/), [ReactJS](https://reactjs.org/), [VueJS](https://vuejs.org/), [AngularJS](https://angularjs.org/), etc.
   * Validación de formularios.
 * Backend
@@ -48,7 +47,7 @@ Utilización de bases de datos SQL e/ou NonSQL: [MySQL](https://www.mysql.com/)
 Algúns dos requisitos que se nomean a continuación axudan a conseguir unha mellor cualificación final no proxecto:
 
 * Frontend
-  * Comunicación asíncrona: [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API), [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API).
+  * Comunicación asíncrona: [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX), [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API), [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API).
   * Uso de framework CSS: [Bootstrap](https://getbootstrap.com/), [Foundation](https://get.foundation/), [Pure](https://purecss.io/), [UIkit](https://getuikit.com/), etc.
   * Uso dun preprocesador CSS: [LESS](http://lesscss.org/), [SASS](https://sass-lang.com/), [Stylus](https://stylus-lang.com/), etc.
 * Backend
