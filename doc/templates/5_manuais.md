@@ -12,6 +12,6 @@ Neste apartado describiranse todos os pasos necesarios para que calquera persoa 
 
 Neste apartado incluiranse as posibilidades de mellora da aplicación no futuro.
 
-> *Tarefa*: completa o documento [referencias](DAMO-anexo1_referencias)
+> *Tarefa*: completa o documento [referencias](a1_referencias)
 
-> *Tarefa*: Remata de completar os anexos: [planificación](a2_planificacion) e [orzamento](a3_orzamento).
+> *Tarefa*: Remata de completar os anexos: [planificación](doc/templates/a2_planificacion) e [orzamento](doc/templates/3_orzamento).
