@@ -12,6 +12,6 @@ Neste apartado describiranse todos os pasos necesarios para que calquera persoa 
 
 Neste apartado incluiranse as posibilidades de mellora da aplicación no futuro.
 
-> *Tarefa*: completa o documento [referencias](a1_referencias)
+> *Tarefa*: completa o documento [referencias](doc/templates/a1_referencias.md)
 
-> *Tarefa*: Remata de completar os anexos: [planificación](./doc/templates/a2_planificacion) e [orzamento](./doc/templates/a3_orzamento).
+> *Tarefa*: Remata de completar os anexos: [planificación](doc/templates/a2_planificacion.md) e [orzamento](doc/templates/a3_orzamento.md).
