@@ -1,68 +1,24 @@
 # Orzamento
 
-Cando realizar o orzamento:
-- **Antes de comezar o estudo preliminar**, realiza un orzamento para as fases de estudo preliminar, análise e deseño. 
-- **Unha vez realiza esas tres fases**, remata de completar o orzamento co coste da fase de execución.
+Este apartado debe incluír os investimentos a realizar para iniciar a actividade, os custos que supón o mantemento da mesma durante un tempo determinado (normalmente un ano) e os ingresos que se pretenden conseguir.
 
+Esta análise ten como misión determinar e xustificar o custo económico da execución e posta en marcha do proxecto. Esta análise é relativamente fácil de realizar se a planificación está ben elaborada.
 
-Realizar o orzamento do proxecto é relativamente fácil se a planificación está ben elaborada. 
-Neste caso dispoñerase dun custo por cada actividade e a suma do custo de todas as actividades será o custo total do proxecto. 
-Para establecer os custos do proxecto téñense en conta diferentes conceptos: 
-Materiais que se utilizan: material funxible, materias primas, materiais didácticos, roupa de traballo… 
-Custo horario das persoas que participan directamente na actividade. 
-Aluguer/compra de ferramentas, maquinaria, equipos informáticos e/ou audiovisuais… 
-Aluguer/compra de locais 
-Contratos de subministracións: auga, luz, electricidade, gas… Subcontrataciones 
-Gastos de publicidade… 
-Seguros ... 
+Para establecer os custos do proxecto téñense en conta diferentes conceptos:
 
-O maior custo no proxecto case sempre corresponde ás persoas, polo que é importante controlar o número de horas que se invisten en cada actividade para que non se nos desequilibre o orzamento. Tamén hai que coidar as subcontratacións; convén que traballen cun orzamento establecido.
- A continuación preséntanse dúas opción de táboa para facilitar a creación do orzamento do proxecto:
+- Materiais que se utilizan: material funxible, materias primas, materiais didácticos, roupa de traballo, …
+- Man de obra: custos relacionados co equipo humano involucrado no proxecto.
+- Alugueiro/compra de ferramentas, maquinaria, equipos informáticos e/ou audiovisuais, …
+- Alugueiro/compra de locais
+- Contratos de subministracións: auga, luz, electricidade, gas, … Subcontratacións
+- Gastos de publicidade.
+- Seguros.
 
-## Orzamento por actividade
+O maior custo no proxecto case sempre corresponde ás persoas, polo que é importante controlar o número de horas que se invisten en cada actividade para que non aparezan desaxustes no orzamento. Tamén hai que coidar as subcontratacións; convén que traballen cun orzamento establecido.
 
-| ACTIVIDADE | DURACIÓN | CUSTO (EUROS) | | CUSTO TOTAL ACTIVIDADE |
-|--|--|--|--|--|
-|            |          | PERSOAS|RECURSOS MATERIAIS|
-|||||
-|||||
-|||||
-|||||
+Tamén é interesante investigar as posibles axudas e subvencións ás que se pode optar.
 
-| TOTAL | PROXECTO | 
-| -- | -- |
+A continuación preséntanse ás opcións posibles en canto a este apartado:
 
-## Orzamento por partidas de inversión / gasto:
-
-| CONCEPTO | IMPORTE|
-|--|--|
-|**A) INVERSIONS**
-|Gastos de establecemento e gastos de constitución
-|Total inmobilizacións inmateriais
-|Terreos
-|Construcións
-|Instalacións técnicas
-|Maquinaria
-|Ferramentas
-|Mobiliario e instalacións
-|Equipos informáticos
-|Elementos de transporte
-|Outro inmobilizado material
-|Total inmobilizacións materiais
-|Outros gastos a distribuír en varios exercicios
-|**TOTAL INVERSIÓNS:**
-|**B) GASTOS**
-|Compras de materiais
-|Arrendamentos
-|Publicidade, propaganda e relacións públicas
-|Persoal
-|Reparacións e conservación
-|Servizos de profesionais independentes
-|Outros gastos xerais
-|Gastos financeiros
-|Amortizacións
-|Gastos de xestión e administración
-|**TOTAL GASTOS:**
-
-|TOTAL ORZAMENTO:
-|--|
+- O alumnado que realice un proxecto para vendelo a unha terceira persoa, debe realizar un orzamento.
+- O alumnado que realice un proxecto para explotalo e construír unha empresa, ten que realizar un balance e a conta de resultados, incluíndo unha breve descrición da forma xurídica de explotación.
