@@ -1,4 +1,4 @@
-# Proxecto DAW Ordinario
+# Proxecto DAW DUAL
 
 ## Resumo
 
