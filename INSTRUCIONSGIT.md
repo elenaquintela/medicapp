@@ -1,4 +1,4 @@
-# INSTRUCIÓNS
+# INSTRUCIÓNS PROXECTO EN git
 
 ## Introdución
 
