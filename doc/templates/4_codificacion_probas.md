@@ -2,10 +2,22 @@
 
 ## Codificación
 
-A codificación é a parte máis longa do proxecto. Deberemos empregar a metodoloxía establecida no Anexo Planificación e ir rexistrando na documentación as desviacións no calendario.
+Durante a fase de codificación do proxecto elaboraranse varios prototipos dos que se indicará a descrición das funcionalides implementadas.
 
-Mentres se vai codificando a aplicación, iranse atopando problemas e haberá que ir modificando aspectos do deseño. Estes cambios tamén se deben recoller na documentación.
+Debe crearse unha carpeta no repositorio e subir o código frecuentemente.
+
+A medida que se vai codificando aparecerán problemas e haberá que modificar diversos aspectos da fase de deseño. A documentación a elaborar debe recoller os problemas atopados e as solucións adoptadas.
+
+Nas reunións de seguimento da FCT mostraranse os prototipos desenvolvidos durante esta fase aos que se irán engadindo as funcionalidades planificadas no proxecto. Estes prototipos deben quedar perfectamente etiquetados no repositorio subindo a versión do código correspondente e establecendo a etiqueta “prototipo 1” e “prototipo 2”.
+
+## Prototipos
+
+A medida que se vai codificando crearanse varios prototipos. Para cada un, facer unha descrición das funcionalidades implementadas e incluír algunha captura de pantalla.
+
+## Innovación
+
+No caso de utilizar tecnoloxías diferentes ás estudadas no ciclo formativo, farase unha descrición dos retos asumidos e como se resolveron.
 
 ## Probas
 
-Unha vez rematada a codificación, poderemos facer as probas finais que confirmen que o proxecto está listo para presentar. Nesas probas non deberían aparecer ningún tipo de erro na pantalla, así como todos os enlaces deberán estar operativos e funcionando correctamente e non xerar erros tampouco na consola de JavaScript. Recoméndase revisar os logs do servidor web para atopar erros que non se amosen na pantalla.
+Deben describirse as probas realizadas e conclusión obtidas. Describir os problemas atopados e como foron solucionados.

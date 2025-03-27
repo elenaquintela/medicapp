@@ -1,27 +1,25 @@
 # Deseño
 
-Unha vez realizada a fase de análise, debemos ter como resultado un listado de tarefas ou funcións a implementar. Nesta fase, debemos deseñar os algoritmos para implementar cada unha das funcións (cun diagrama ou pseudocódigo). Isto soamente debería ser necesario para funcións ou tarefas complexas que requiran de pasos máis pequenos para a súa implementación.
+Este documento inclúe os diferentes diagramas, esquemas e deseños que axuden a describir mellor o proxecto detallando os seus compoñentes, funcionalidades, bases de datos e interface.
 
-Unha vez realices esta fase, remata de completar o último anexo: Orzamento.
+O documento a elaborar debería incluír os seguintes apartados:
 
-## Modelo conceptual do dominio da aplicación
-Pode ser un diagrama de clases usando UML, ConML, ou outra linguaxe semellante.
+## Diagrama da arquitectura
 
-## Casos de uso
-Descritos en fichas e/ou mediante esquemas; deben incluír o(s) tipo(s) de usuario implicados en cada caso de uso.
+Incluír os diagramas de arquitectura que representen de forma gráfica a aplicación, os seus compoñentes e a súa interrelación: bases de datos, nube, microservizos, etc.
+
+## Diagrama de Base de Datos
+
+Neste apartado incluiranse os diagramas relacionados coa Base de Datos:
+
+- Modelo Entidade/relación
+- Modelo relacional
+
+Pódese entregar a captura do phpMyAdmin se se emprega MariaDB como Modelo relacional.
 
 ## Deseño de interface de usuarios
-Unha forma de axudar ó deseño da aplicación é realizar uns mockups: pódelos facer á man ou cunha aplicación ou a través dunha web do estilo: https://app.diagrams.net/
 
-Os mockups deben incluir todas as vistas da aplicación, é dicir, todas as páxinas diferentes que un usuario (de calquera tipo) vai a poder ver. Un mockup permite ver como se verá unha páxina concreta da nosa aplicación web. O deseño de mockups vainos axudar a:
+Neste apartado deben incluírse os deseños das diferentes interfaces da aplicación. Estes deseños deben incluír todas as vistas da aplicación, é dicir, todas as páxinas diferentes que unha persoa usuaria (de calquera tipo) vai poder ver. Tamén se debe incluír información de como navegar dunha ventá a outra.
 
-- Avanzar moi rápido na parte frontend: ao ter os mockups realizados, xa sabemos que elementos vai ter cada vista e onde colocalos. Podes empregar un framework CSS ou programar as follas de estilos.
-- Visualizar a información que vai a ser necesaria mostrar. Sabendo con que información imos traballar e sabendo a información que necesitamos mostrar ao usuarios, podemos organizar os datos dunha forma axeitada para gardalos na base de datos. 
+Estes diagramas axudan no deseño da aplicación. Poden facerse á man, cunha aplicación ou a través dunha web do estilo: [diagrams](https://app.diagrams.net/)
 
-## Diagrama de Base de Datos.
-Nesta fase tamén teremos que realizar:
-
-- Modelo Entidade/relación 
-- Modelo relacional 
-
-Poderedes entregar a captura do phpMyAdmin se empregades MariaDB como Modelo relacional.

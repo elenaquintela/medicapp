@@ -1,80 +1,35 @@
 # Estudo preliminar
 
-Neste estudo concretaremos a idea o máximo posible. Canto máis concretos sexamos, máis fáciles van ser de desenvolver as seguintes partes. É necesario realizar completamente o estudo preliminar para pasar ás seguintes fases.
+Neste documento concretarase a idea a desenvolver o máximo posible. Canto máis concreto sexa, máis fáciles van ser de desenvolver as seguintes partes. 
+
+O estudo preliminar debe ser aprobado polo equipo docente para poder pasar ás seguintes fases.
 
 O estudo preliminar inclúe:
 
-## 1. Introdución
-- Descrición resumida da aplicación. Trátase dunha presentación na cal se debe explicar en que consiste o noso proxecto e que nos permite facer.
+## 1. Descrición do proxecto
 
-## 2. Obxectivo
-- Cal é o propósito principal da aplicación a desenvolver?
-- Que problema resolve? 
+Descrición resumida da aplicación, onde se explica a idea do proxecto e o seu obxectivo principal. 
 
+### 1.1. Xustificación do proxecto
 
-## 3. Definicións 
-- Definirase o vocabulario propio utilizado no proxecto. O vocabulario inclúe:
-	- Termos que son propios do proxecto.
-	- Termos de ámbito técnico como abreviaturas, siglas, acrónimos, etc.
+Neste apartado incluirase a información necesaria para xustificar a realización do proxecto. Debe indicarse como xurdiu a idea do proxecto, que obxectivo se persegue coa súa posta en marcha e/ou que problema vai resolver.
 
-## 4. Audiencia
-- A quen vai destinada a aplicación? Describe con moito detalle o tipo de persoa ou empresa para a cal vai dirixida a túa aplicación. Inclúe sexo, franxas de idades, intereses, situación social, económica, etc.
+### 1.2. Funcionalidades do proxecto
 
-## 5. Necesidades
-- Describe o problema ou a necesidade.
-- Existen na actualidade aplicacións que tenten dar resposta a esa(s) necesidade(s)? En que medida o conseguen?
-- Por que é necesaria a posta en marcha dun proxecto que aborde dita necesidade?
-- Cal é o obxectivo xeral que persegue o proxecto?
-- Responde a estas preguntas concretas:
-	- Como se pode responder a esta necesidade? 
-	- Que pode facerse para cambiar este estado de cousas? 
-	- Como podemos contribuír desde a nosa situación a que o problema se resolva? 
-	- Que medios, actividades e recursos van poñer en xogo? 
-	- Que actividades van realizar? 
-	- Con qué metodoloxía vai levar a cabo o traballo?  
-	- Que persoas serían precisas para realizar o proxecto con éxito? 
-	- Con canto tempo se conta? 
-	- Canto tempo se necesita?
+Explicaranse de forma xeral as funcionalidades que vai ofrecer o proxecto.
 
-Recurso: [Guía para a elaboración de proyectos. Gobierno Vasco.](https://www.pluralismoyconvivencia.es/upload/19/71/guia_elaboracion_proyectos_c.pdf) (páxina 26 e seguintes)
+### 1.3. Estudo de necesidades
 
-## 6. Modelo de negocio 
-O desenvolvemento da aplicación abre unha oportunidade de negocio? É posible comercializala? Como?
+Indicaranse diferentes aplicacións existentes que resolvan problemas similares, explicación de en que medida o conseguen indicando a súa posición no mercado.
 
-### 6.1. Viabilidade
+### 1.4. Persoas destinatarias
 
-#### 6.1.1. Viabilidade técnica
-- Será posible dispoñer dos recursos humanos e medios de produción necesarios (materias primas, maquinaria, instalacións, etc.)?
-- Existe algún impedimento técnico que dificulte o proceso produtivo?  
+Explicitarase o tipo de persoas ás que vai dirixida a aplicación (contexto social ou sector empresarial, franxa de idade, colectivo, ...). É necesario aclarar se o público obxectivo son persoas, grupos sociais e/ou empresas.
 
-#### 6.1.2. Viabilidade económica
-- Os beneficios do proxecto son superiores aos costes?
-- As perdas poden cubrirse vía financiamento (por parte da administración pública, con subvencións, etc)?    
+### 1.5. Modelo de negocio
 
-### 6.2. Competencia
-- Identificación da competencia, as súas características e a súa posición no mercado.
-- Existencia de productos/servizos substitutivos.
+Elección do modelo de negocio explicando a súa xustificación (modelo de pago / freemium - de balde as funcionalidades básicas, mentres que se cobra por servizos máis avanzados / In house - desenvolvemento a medida para contornas empresariais / de subscrición / por publicidade / outros).
 
-Recurso: [Modelo de plan de negocios. Empresa de servicios informáticos. IGAPE](http://www.igape.es/images/crear-unha-empresa/Recursos/PlansdeNegocio/16ServiciosInformaticos12_5_cas.pdf) (páxina 45 e seguintes)
+## 2. Requirimentos
 
-### 6.3. Promoción
-- Técnicas elixidas:
-	+ Redes sociais.
-	+ Plataformas multimedia.
-	+ Páxina web.
-	+ Posicionamento web.
-	+ Patrocinios.
-	+ Participación en eventos.
-	+ Prácticas de responsabilidade social corporativa.
-	+ Outros.
-- Xustifica a elección.
-    
-### 6.4. Modelo de negocio
-- Modelo elixido: 
-	+ Modelo de pago.
-	+ Freemium: é de balde pero as funcionalidades extras son de pago.
-	+ In house: desenvolvementos a medida para contornos empresariais.
-	+ De subscrición.
-	+ Por publicidade.
-	+ Outros.
-- Xustifica a elección.
+Descrición dos medios materiais e das tecnoloxías necesarias que se usarán para desenvolver o proxecto incluíndo as linguaxes de programación, técnicas, librerías, bases de datos, servizos usados, servidores, API’s, etc.
