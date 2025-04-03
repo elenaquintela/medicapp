@@ -18,10 +18,12 @@ Dito o anterior, este proxecto espera poder contribuír a cumprir mellor co trat
     - En cada tratamento, rexistro de fármacos consumidos (nome, dose, instrucións do médico, prospecto).
     - Alertas e recordatorios para a toma de cada medicamento, para a renovación dalgunha receita ou para recoller a medicación na farmacia cando se está a acabar.
     - Rexistro histórico de cambios (por exemplo, cando se substitúe un medicamento por outro).
+
 * Xestión de citas médicas:
     - Rexistro de citas (motivo, data, lugar, nome do médico, especialidade).
     - Apartados opcionais para anotar síntomas, observacións ou preguntas a realizar durante a consulta.
     - Recordatorios adicionais (por exemplo, para levar documentos, levar mostras para analizar ou pedir unha ambulancia se fora necesario).
+
 **Funcionalidades avanzadas:**
     - Sincronización con calendarios externos como Google Calendar.
     - Seguimento de síntomas e efectos secundarios para xerar informes que se poidan compartir co médico.
@@ -68,14 +70,18 @@ Deste xeito, garántense as funcionalidades esenciais sen custo para o usuario, 
 ## 2. Requirimentos
 
 Tecnoloxías e ferramentas necesarias:
+
 **Desenvolvemento frontend:**
 * HTML5
 * CSS con Bootstrap
 * JavaScript e jQuery
+
 **Desenvolvemento backend:**
 * PHP con Laravel
+
 **Base de datos:**
 * XAMPP con MariaDB.
+
 **Ferramentas de desenvolvemento e despregamento:**
 * IDE: Visual Studio Code
 * Control de versións: GitLab
