@@ -46,10 +46,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
         4.  O sistema valida e garda a conta, o perfil, o tratamento e
             a/s medicación/s, vinculándoas ao usuario como creador.
 
-            -   **Usuarios Invitados**: este tipo de usuario rexístrase
-                > mediante unha invitación dun Usuario Premium ao correo
-                > electrónico (Ver 3. Envío e xestión de invitacións a
-                > perfís).
+            -   **Usuarios Invitados**: este tipo de usuario rexístrase mediante unha invitación dun Usuario Premium ao correo electrónico (Ver 3. Envío e xestión de invitacións a perfís).
 
 -   **Datos de saída:** confirmación de rexistro, token de sesión e
     > acceso ao panel de perfís.
@@ -100,8 +97,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
 -   **Proceso:**
 
-    1.  O creador accede ao xestor de invitacións e selecciona
-        > "Cancelar".
+    1.  O creador accede ao xestor de invitacións e selecciona "Cancelar".
 
     2.  O sistema invalida o enlace pendente.
 
