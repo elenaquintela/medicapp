@@ -36,7 +36,25 @@ Exemplo:
 
 ## Tipos de usuarios
 
-Describir os tipos de usuario que poderán acceder ao sistema. Habitualmente os tipos de usuario veñen definidos polas funcionalidades ás cales teñen acceso. En termos xerais existen moitos grupos de usuarios: anónimos, novos, rexistrados, bloqueados, confirmados, verificados, administradores, etc.
+### Usuario Novo
+Usuario que se acaba de rexistrar na aplicación por primeira vez, pero aínda non completou a verificación (por exemplo, a través da confirmación do correo electrónico). Sen acceso ata que se verifique a súa identidade.
+
+### Usuario Estándar
+Usuario rexistrado e verificado que accede co plan gratuíto. Poderá acceder ás funcionalidades básicas, como a xestión de tratamentos, citas, medicamentos e recordatorios simples.
+Se este usuario quixera usar a versión de pago, deberá actualizar a súa subscrición.
+
+### Usuario Premium
+Usuario rexistrado, verificado e que adquiriu a subscrición premium (de pago). Terá acceso completo a tódalas funcionalidades da aplicación,  tanto básicas como avanzadas (multiusuario, alertas avanzadas, sincronización con Google Calendar...).
+
+### Usuario Invitado
+Trátase daquel que foi invitado por un usuario Premium para xestionar un mesmo perfil, xa que so estes poden acceder á funcionalidade avanzada de multiusuario. Este tipo de usuario é igual ao Usuario Estándar, excepto cando se trata de roles de perfís, como por exemplo no caso de eliminación da conta. Cando un Usuario Invitado borra a súa conta, anúlanse os seus accesos aos perfís aos que foi invitado, pero non o perfil do doente nin os datos asociados a el. Pero se un usuario deste tipo creou un perfil, este eliminarase coma se se tratara dun Usuario Estándar.
+
+### Usuario Bloqueado
+Usuario coa conta desactivada, xa sexa por problemas de seguridade, incumprimentos ou verificación fallida. Non terá acceso ata que poida reactivar a conta.
+
+### Administrador
+Usuario con privilexios especiais para a xestión global e administración do sistema.
+
 
 ## Normativa
 
