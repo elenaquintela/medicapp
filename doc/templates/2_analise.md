@@ -21,16 +21,20 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 ## Funcionalidades
 
 ### 1.	Rexistro de usuario e creación de perfil
-    * Actores: Usuario Estándar, Usuario Premium,  Usuario Invitado, Administrador.
-    * Datos de entrada: nome, correo electrónico e contrasinal do usuario, datos persoais do paciente (nome, data de nacemento, sexo,   etc.), datos do tratamento inicial (causa/condición, data de inicio, unha ou varias medicacións: nome, dose, pauta, causa específica), datos de pago (se selecciona o plan Premium).
-    * Proceso:
--	Usuarios Estándar e Premium:
-1.	O usuario completa o formulario de rexistro cos seus datos (nome, correo electrónico, contrasinal)
-2.	O usuario selecciona o plan de pago.
-3.	O usuario crea o perfil cos datos do doente e un tratamento ca/s súa/s medicación/s asociada/s.
-4.	O sistema valida e garda a conta, o perfil, o tratamento e a/s medicación/s, vinculándoas ao usuario como creador.  
--	Usuarios Invitados: este tipo de usuario rexístrase mediante unha invitación dun Usuario Premium ao correo electrónico (Ver 3. Envío e xestión de invitacións a perfís).
-o	Datos de saída: confirmación de rexistro, token de sesión e acceso ao panel de perfís.
+    - **Actores:** Usuario Estándar, Usuario Premium,  Usuario Invitado, Administrador.
+    - **Datos de entrada:** - Nome, correo electrónico e contrasinal do usuario
+        - Datos persoais do paciente (nome, data de nacemento, sexo, etc.)
+        - Datos do tratamento inicial (causa/condición, data de inicio, unha ou varias medicacións: nome, dose, pauta, causa específica)
+        - Datos de pago (se selecciona o plan Premium)
+    - **Proceso:**
+        - **Usuarios Estándar e Premium:**
+            1. O usuario completa o formulario de rexistro cos seus datos (nome, correo electrónico, contrasinal)
+            2. O usuario selecciona o plan de pago.
+            3. O usuario crea o perfil cos datos do doente e un tratamento ca/s súa/s medicación/s asociada/s.
+            4. O sistema valida e garda a conta, o perfil, o tratamento e a/s medicación/s, vinculándoas ao usuario como creador.  
+        - **Usuarios Invitados:** este tipo de usuario rexístrase mediante unha invitación dun Usuario Premium ao correo electrónic
+        (Ver 3. Envío e xestión de invitacións a perfís).
+    - Datos de saída: confirmación de rexistro, token de sesión e acceso ao panel de perfís.
 
 ### 2.	Autenticación de usuario
 o	Actores: Usuario Estándar, Usuario Premium, Usuario Invitado, Administrador.
