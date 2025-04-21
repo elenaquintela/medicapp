@@ -48,8 +48,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
             -   **Usuarios Invitados**: este tipo de usuario rexístrase mediante unha invitación dun Usuario Premium ao correo electrónico (Ver 3. Envío e xestión de invitacións a perfís).
 
--   **Datos de saída:** confirmación de rexistro, token de sesión e
-    > acceso ao panel de perfís.
+-   **Datos de saída:** confirmación de rexistro, token de sesión e acceso ao panel de perfís.
 
 1.  **Autenticación de usuario**
 
@@ -115,14 +114,14 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
     -   **Proceso:**
 
-        1.  [Crear]{.underline}: O usuario accede á sección de perfís e
+        1.  **Crear:** O usuario accede á sección de perfís e
             selecciona "Crear novo" e introduce datos; o sistema valida
             e garda o perfil, tratamento inicial e medicacións.
 
-        2.  [Editar]{.underline}: o usuario modifica datos do perfil; o
+        2.  **Editar:** o usuario modifica datos do perfil; o
             sistema actualiza a información.
 
-        3.  [Eliminar]{.underline}: o usuario elimina o perfil e anula
+        3.  **Eliminar**: o usuario elimina o perfil e anula
             os accesos aos invitados.
 
     -   **Datos de saída:** actualización da lista de perfís dispoñibles
@@ -247,8 +246,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
     2.  O sistema elimina perfil de usuario, perfís, tratamentos,
         medicacións e datos asociados.
 
-    -   **Datos de saída:** mensaxe de confirmación de conta eliminada e
-        saída da sesión.
+-   **Datos de saída:** mensaxe de confirmación de conta eliminada e saída da sesión.
 
 
 ## Tipos de usuarios
