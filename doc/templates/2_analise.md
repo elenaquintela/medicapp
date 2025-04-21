@@ -4,7 +4,19 @@ Este documento describe os requirimentos do proxecto especificando que funcional
 
 ## Descrición xeral
 
-Descrición xeral do proxecto. Describir de forma xeral e clara que vai realizar a aplicación, sen entrar nos detalles internos (que datos se procesan, de que tipo son, etc).
+Este proxecto trátase dunha aplicación web responsiva, adaptada tamén a tablet e móbil, destinada a simplificar e optimizar a xestión da medicación e das citas médicas para doentes con enfermidades crónicas e adultos maiores. 
+A aplicación realizará as seguintes funcións xerais:
+
+1.	Autenticación e xestión de perfís de usuario e pacientes.
+2.	Rexistro, modificación e eliminación de tratamentos, medicacións e citas.
+3.	Alertas e recordatorios configurables para tomas e renovacións de medicamentos, e citas médicas.
+4.	Visualización de históricos 
+5.	Substitucións de fármacos.
+6.	Xeración de reportes personalizados sobre a evolución do tratamento.
+7.	Administración de permisos para coidadores e familiares.
+
+O usuario autenticado accederá a un panel inicial onde seleccionará ou creará un perfil de paciente, desde o cal poderá consultar e xestionar toda a información relacionada cos seus tratamentos e citas médicas.
+
 
 ## Funcionalidades
 
