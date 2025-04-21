@@ -48,9 +48,11 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
             -   **Usuarios Invitados**: este tipo de usuario rexístrase mediante unha invitación dun Usuario Premium ao correo electrónico (Ver 3. Envío e xestión de invitacións a perfís).
 
--   **Datos de saída:** confirmación de rexistro, token de sesión e acceso ao panel de perfís.
+    -   **Datos de saída:** confirmación de rexistro, token de sesión e acceso ao panel de perfís.
 
-1.  **Autenticación de usuario**
+---
+
+2.  **Autenticación de usuario**
 
     -   **Actores:** Usuario Estándar, Usuario Premium, Usuario
         Invitado, Administrador.
@@ -65,7 +67,9 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
     -   **Datos de saída:** token de sesión e acceso ás funcionalidades
         permitidas.
 
-2.  **Envío e xestión de invitacións a perfís**
+---
+
+3.  **Envío e xestión de invitacións a perfís**
 
     -   **Actores:** Usuario Premium, Administrador.
 
@@ -88,21 +92,25 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
     -   **Datos de saída:** notificación de envío de invitación; perfil
         accesible na conta do invitado.
 
-3.  **Cancelación de invitacións**
+---
+
+4.  **Cancelación de invitacións**
 
     -   **Actores:** Usuario Premium, Administrador.
 
--   **Datos de entrada:** correo electrónico do invitado.
+    -   **Datos de entrada:** correo electrónico do invitado.
 
--   **Proceso:**
+    -   **Proceso:**
 
-    1.  O creador accede ao xestor de invitacións e selecciona "Cancelar".
+        1.  O creador accede ao xestor de invitacións e selecciona "Cancelar".
 
-    2.  O sistema invalida o enlace pendente.
+        2.  O sistema invalida o enlace pendente.
 
--   **Datos de saída:** confirmación de cancelación.
+    -   **Datos de saída:** confirmación de cancelación.
 
-4.  **Xestión de perfís adicionais**
+---
+
+5.  **Xestión de perfís adicionais**
 
     -   **Actores:** Usuario Estándar, Usuario Premium, Usuario
         Invitado, Administrador.
@@ -114,20 +122,22 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
     -   **Proceso:**
 
-        1.  **Crear:** O usuario accede á sección de perfís e
+        1.  Crear: O usuario accede á sección de perfís e
             selecciona "Crear novo" e introduce datos; o sistema valida
             e garda o perfil, tratamento inicial e medicacións.
 
-        2.  **Editar:** o usuario modifica datos do perfil; o
+        2.  Editar: o usuario modifica datos do perfil; o
             sistema actualiza a información.
 
-        3.  **Eliminar**: o usuario elimina o perfil e anula
+        3.  Eliminar: o usuario elimina o perfil e anula
             os accesos aos invitados.
 
     -   **Datos de saída:** actualización da lista de perfís dispoñibles
         e confirmación.
 
-5.  **Xestión de tratamentos**
+---
+
+6.  **Xestión de tratamentos**
 
     -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
@@ -147,7 +157,9 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
     -   **Datos de saída**: listaxe actualizada de tratamentos dentro do
         perfil e mensaxe de confirmación.
 
-6.  **Xestión de medicación e substitucións**
+---
+
+7.  **Xestión de medicación e substitucións**
 
     -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
@@ -165,7 +177,9 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
     -   **Datos de saída:** cronoloxía visual de medicacións e
         notificación de substitución realizada.
 
-7.  **Xestión de citas médicas**
+---
+
+8.  **Xestión de citas médicas**
 
     -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
@@ -185,7 +199,9 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
     -   **Datos de saída:** calendario actualizado de citas e
         confirmación de programación de recordatorios.
 
-8.  **Alertas e recordatorios**
+---
+
+9.  **Alertas e recordatorios**
 
     -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
@@ -203,7 +219,9 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
     -   **Datos de saída:** entrega de recordatorios e rexistro de
         eventos de alerta.
 
-9.  **Visualización de históricos**
+---
+
+10.  **Visualización de históricos**
 
     -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
@@ -219,7 +237,9 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
     -   **Datos de saída:** visualización descargable e consultable do
         historial.
 
-10. **Xeración de reportes personalizados**
+---
+
+11. **Xeración de reportes personalizados**
 
     -   **Actores:** Usuario Premium, Administrador.
 
@@ -233,20 +253,22 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
     -   **Datos de saída:** enlace de descarga do reporte personalizado.
 
-11. **Eliminación de conta**
+---
+
+12. **Eliminación de conta**
 
     -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
--   **Datos de entrada:** confirmación de usuario e credenciais.
+    -   **Datos de entrada:** confirmación de usuario e credenciais.
 
--   **Proceso:**
+    -   **Proceso:**
 
-    1.  O usuario solicita eliminación de conta.
+        1.  O usuario solicita eliminación de conta.
 
-    2.  O sistema elimina perfil de usuario, perfís, tratamentos,
+        2.  O sistema elimina perfil de usuario, perfís, tratamentos,
         medicacións e datos asociados.
 
--   **Datos de saída:** mensaxe de confirmación de conta eliminada e saída da sesión.
+    -   **Datos de saída:** mensaxe de confirmación de conta eliminada e saída da sesión.
 
 
 ## Tipos de usuarios
