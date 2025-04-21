@@ -229,7 +229,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
         tipo de historial (tratamentos, medicacións, substitucións)
 
     -   **Proceso:**
-
+    
         1.  O sistema recupera datos históricos pertinentes.
 
         2.  Agrúpanse e preséntanse en táboas ou gráficos sinxelos.
@@ -270,7 +270,6 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
     -   **Datos de saída:** mensaxe de confirmación de conta eliminada e saída da sesión.
 
----
 
 ## Tipos de usuarios
 
