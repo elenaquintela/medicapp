@@ -20,19 +20,111 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
 ## Funcionalidades
 
-Describir con detalle e precisión que operacións se van poder realizar a través da aplicación informática, indicando que actores interveñen en cada caso.
+### 1.	Rexistro de usuario e creación de perfil
+    * Actores: Usuario Estándar, Usuario Premium,  Usuario Invitado, Administrador.
+    * Datos de entrada: nome, correo electrónico e contrasinal do usuario, datos persoais do paciente (nome, data de nacemento, sexo,   etc.), datos do tratamento inicial (causa/condición, data de inicio, unha ou varias medicacións: nome, dose, pauta, causa específica), datos de pago (se selecciona o plan Premium).
+    * Proceso:
+-	Usuarios Estándar e Premium:
+1.	O usuario completa o formulario de rexistro cos seus datos (nome, correo electrónico, contrasinal)
+2.	O usuario selecciona o plan de pago.
+3.	O usuario crea o perfil cos datos do doente e un tratamento ca/s súa/s medicación/s asociada/s.
+4.	O sistema valida e garda a conta, o perfil, o tratamento e a/s medicación/s, vinculándoas ao usuario como creador.  
+-	Usuarios Invitados: este tipo de usuario rexístrase mediante unha invitación dun Usuario Premium ao correo electrónico (Ver 3. Envío e xestión de invitacións a perfís).
+o	Datos de saída: confirmación de rexistro, token de sesión e acceso ao panel de perfís.
 
-Enumeralas, de maneira que na fase de deseño se poida crear o caso de uso correspondente a cada funcionalidade.
+### 2.	Autenticación de usuario
+o	Actores: Usuario Estándar, Usuario Premium, Usuario Invitado, Administrador.
+o	Datos de entrada: credenciais do usuario (correo electrónico e contrasinal).
+o	Proceso:
+1.	O sistema valida as credenciais e xera un token de sesión. 
+o	Datos de saída: token de sesión e acceso ás funcionalidades permitidas.
 
-Cada función ten uns datos de entrada e uns datos de saída. Entre os datos de entrada e de saída, realízase un proceso, que debe ser explicado.
+### 3.	Envío e xestión de invitacións a perfís
+o	Actores: Usuario Premium, Administrador.
+o	Datos de entrada: correo electrónico do usuario invitado.
+o	Proceso:
+1.	O creador introduce o correo electrónico do usuario invitado.
+2.	O sistema envía un enlace de invitación por email.
+3.	O invitado fai clic no enlace e completa un breve rexistro co seu nome e contrasinal (o correo electrónico non fará falta porque xa se gardou ao acceder mediante a invitación).
+4.	O sistema asigna automaticamente o perfil compartido ao invitado.
+o	Datos de saída: notificación de envío de invitación; perfil accesible na conta do invitado.
 
-Exemplo:
+### 4.	Cancelación de invitacións
+o	Actores: Usuario Premium, Administrador.
+o	Datos de entrada: correo electrónico do invitado.
+o	Proceso:
+1.	O creador accede ao xestor de invitacións e selecciona “Cancelar”.
+2.	O sistema invalida o enlace pendente.
+o	Datos de saída: confirmación de cancelación.
 
-| Acción | Descrición |
-|--------|------------|
-| Alta cliente | Dar de alta un cliente na base de datos |
-| Modificar cliente | Modificar un cliente na base de datos |
-| Eliminar cliente | Cliente eliminado da base de datos |
+### 5.	Xestión de perfís adicionais
+o	Actores: Usuario Estándar, Usuario Premium, Usuario Invitado, Administrador.
+o	Datos de entrada: datos persoais do paciente para o novo perfil (nome, data de nacemento, sexo, etc.), datos do tratamento inicial (causa/condición, data de inicio, unha ou varias medicacións: nome, dose, pauta, causa específica).
+o	Proceso:
+1.	Crear: O usuario accede á sección de perfís e selecciona “Crear novo” e introduce datos; o sistema valida e garda o perfil, tratamento inicial e medicacións.
+2.	Editar: o usuario modifica datos do perfil; o sistema actualiza a información.
+3.	Eliminar: o usuario elimina o perfil e anula os accesos aos invitados.
+o	Datos de saída: actualización da lista de perfís dispoñibles e confirmación.
+
+### 6.	Xestión de tratamentos
+o	Actores: Usuario Estándar, Usuario Premium, Administrador.
+o	Datos de entrada: perfil asociado, motivo do tratamento (condición ou enfermidade), data de inicio, unha ou varias medicacións (nome, dose, pauta, causa específica)
+o	Proceso:
+1.	Creación: o usuario engade os datos do tratamento.
+2.	Edición: o usuario modifica campos existentes.
+3.	Eliminación: o usuario marca o tratamento como finalizado e arquívao para histórico.
+o	Datos de saída: listaxe actualizada de tratamentos dentro do perfil e mensaxe de confirmación.
+
+### 7.	Xestión de medicación e substitucións
+o	Actores: Usuario Estándar, Usuario Premium, Administrador.
+o	Datos de entrada: nome do fármaco, dose, instrucións, tratamento asociado.
+o	Proceso:
+1.	Engadir/Editar/Eliminar: o usuario xestiona entradas de medicación.
+2.	Substitución: ao configurar un substituto, o sistema documenta o cambio no historial de tratamentos.
+o	Datos de saída: cronoloxía visual de medicacións e notificación de substitución realizada.
+
+### 8.	Xestión de citas médicas
+o	Actores: Usuario Estándar, Usuario Premium, Administrador.
+o	Datos de entrada: data, hora, lugar, nome do médico, especialidade, notas opcionais
+o	Proceso:
+1.	Engadir: o usuario crea unha nova cita.
+2.	Editar: o usuario modifica detalles da cita.
+3.	Eliminar: o usuario cancela unha cita.
+4.	Configuración de recordatorios personalizados.
+o	Datos de saída: calendario actualizado de citas e confirmación de programación de recordatorios.
+
+### 9.	Alertas e recordatorios
+o	Actores: Usuario Estándar, Usuario Premium, Administrador.
+o	Datos de entrada: perfil, configuración de alertas (tomas, renovacións, citas)
+o	Proceso:
+1.	O sistema programa notificacións en base aos intervalos definidos.
+2.	Envíase un email a tódolos usuarios vinculados ao perfil do paciente co recordatorio.
+o	Datos de saída: entrega de recordatorios e rexistro de eventos de alerta.
+
+### 10.	Visualización de históricos
+o	Actores: Usuario Estándar, Usuario Premium, Administrador.
+o	Datos de entrada: selección de perfil, intervalo de datas, tipo de historial (tratamentos, medicacións, substitucións)
+o	Proceso:
+1.	O sistema recupera datos históricos pertinentes.
+2.	Agrúpanse e preséntanse en táboas ou gráficos sinxelos.
+o	Datos de saída: visualización descargable e consultable do historial.
+
+### 11.	Xeración de reportes personalizados
+o	Actores: Usuario Premium, Administrador.
+o	Datos de entrada: perfís, tratamentos, intervalo de datas
+o	Proceso:
+1.	O sistema agrega os datos seleccionados.
+2.	Xera un ficheiro PDF.
+o	Datos de saída: enlace de descarga do reporte personalizado.
+
+### 12.	Eliminación de conta
+o	Actores: Usuario Estándar, Usuario Premium, Administrador.
+o	Datos de entrada: confirmación de usuario e credenciais.
+o	Proceso:
+1.	O usuario solicita eliminación de conta.
+2.	O sistema elimina perfil de usuario, perfís, tratamentos, medicacións e datos asociados.
+o	Datos de saída: mensaxe de confirmación de conta eliminada e saída da sesión.
+
 
 ## Tipos de usuarios
 
