@@ -273,23 +273,23 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
 ## Tipos de usuarios
 
-### Usuario Novo
+**Usuario Novo**
 Usuario que se acaba de rexistrar na aplicación por primeira vez, pero aínda non completou a verificación (por exemplo, a través da confirmación do correo electrónico). Sen acceso ata que se verifique a súa identidade.
 
-### Usuario Estándar
+**Usuario Estándar**
 Usuario rexistrado e verificado que accede co plan gratuíto. Poderá acceder ás funcionalidades básicas, como a xestión de tratamentos, citas, medicamentos e recordatorios simples.
 Se este usuario quixera usar a versión de pago, deberá actualizar a súa subscrición.
 
-### Usuario Premium
+**Usuario Premium**
 Usuario rexistrado, verificado e que adquiriu a subscrición premium (de pago). Terá acceso completo a tódalas funcionalidades da aplicación,  tanto básicas como avanzadas (multiusuario, alertas avanzadas, sincronización con Google Calendar...).
 
-### Usuario Invitado
+**Usuario Invitado**
 Trátase daquel que foi invitado por un usuario Premium para xestionar un mesmo perfil, xa que so estes poden acceder á funcionalidade avanzada de multiusuario. Este tipo de usuario é igual ao Usuario Estándar, excepto cando se trata de roles de perfís, como por exemplo no caso de eliminación da conta. Cando un Usuario Invitado borra a súa conta, anúlanse os seus accesos aos perfís aos que foi invitado, pero non o perfil do doente nin os datos asociados a el. Pero se un usuario deste tipo creou un perfil, este eliminarase coma se se tratara dun Usuario Estándar.
 
-### Usuario Bloqueado
+**Usuario Bloqueado**
 Usuario coa conta desactivada, xa sexa por problemas de seguridade, incumprimentos ou verificación fallida. Non terá acceso ata que poida reactivar a conta.
 
-### Administrador
+**Administrador**
 Usuario con privilexios especiais para a xestión global e administración do sistema.
 
 
@@ -306,3 +306,8 @@ O desenvolvemento deste proxecto estará suxeito á normativa vixente en España
 4.	**Recomendacións da Axencia Española de Protección de Datos (AEPD) para apps de saúde:** Aínda que non se poidan considerar como normativa, existen un conxunto de principios e boas prácticas en España relacionados co tratamento de datos sanitarios en aplicacións de saúde. 
 
 Este compromiso de cumprimento verase reflexado nos apartados “Aviso legal”, “Política de privacidade” e “Política de cookies” dentro da aplicación web.
+
+### Mecanismos para o cumprimento da lexislación relativa á protección de datos
+
+- **Uso de HTTPS/TLS:** protocolo seguro para a navegación web, que asegura a conexión e o cifrado da información, e evita posibles ataques.
+- **Xeración da clave de aplicación (APP_KEY):** moi importante para o cifrado de datos, a seguridade de sesións e a firma de datos.
