@@ -295,16 +295,14 @@ Usuario con privilexios especiais para a xestión global e administración do si
 
 ## Normativa
 
-Investigarase que normativa vixente afecta ao desenvolvemento do proxecto e de que maneira. O proxecto debe adaptarse ás esixencias legais dos territorios onde vai operar.
+O desenvolvemento deste proxecto estará suxeito á normativa vixente en España en materia de protección de datos e dereitos dixitais, adaptándose ás esixencias para o tratamento de datos persoais sensibles, como poden ser aqueles relacionados coa saúde. Polo tanto, contemplarase:
 
-Pola natureza dos sistema de información, unha lei que se vai a ter que mencionar de forma obrigatoria é la [Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales (LOPDPGDD)](https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673). O ámbito da LOPDPGDD é nacional. Se a aplicación está pensada para operar a nivel europeo, tamén se debe facer referencia á [General Data Protection Regulation (GDPR)](https://eur-lex.europa.eu/eli/reg/2016/679/oj). Na documentación debe afirmarse que o proxecto cumpre coa normativa vixente.
+1.	**Lei Orgánica 3/2018, de 5 de decembro, de Protección de Datos Persoais e garantía dos dereitos dixitais (LOPDPGDD):** Regulación de cuestións relacionadas co tratamento de datos persoais dos usuarios en contornas dixitais no territorio español.
 
-Para cumplir a LOPDPGDD e/ou GDPR debe ter un apartado na web onde se indique quen é a persoa responsable do tratamento dos datos e para que fins se van utilizar. Habitualmente esta información estructúrase nos seguintes apartados:
+2.	**General Data Protection Regulation (GDPR):** Imprescindible para operar dentro da Unión Europea.
 
-* Aviso legal.
-* Política de privacidade.
-* Política de cookies.
+3.	**Lei de Servizos da Sociedade da Información e Comercio Electrónico (LSSI-CE) e Lei Xeral para a Defensa dos Consumidores e Usuarios:** Moi importantes ao tratarse dun servizo *freemium*, xa que debe regularse a información sobre ofertas, pagos, cancelación, prezos, dereito a reembolso, etc. Ademais, a primeira regula as obrigas relativas ao uso de *cookies*.
 
-**Deben explicarse os diferentes mecanismos utilizados para cumprir a lexislación relativa á protección de datos.**
+4.	**Recomendacións da Axencia Española de Protección de Datos (AEPD) para apps de saúde:** Aínda que non se poidan considerar como normativa, existen un conxunto de principios e boas prácticas en España relacionados co tratamento de datos sanitarios en aplicacións de saúde. 
 
-> Completa tamén os documentos: [planificación](doc/templates/a2_planificacion.md) e [orzamento](doc/templates/a3_orzamento.md).
+Este compromiso de cumprimento verase reflexado nos apartados “Aviso legal”, “Política de privacidade” e “Política de cookies” dentro da aplicación web.
