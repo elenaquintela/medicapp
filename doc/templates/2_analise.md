@@ -20,276 +20,238 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
 ## Funcionalidades
 
-1.  **Rexistro de usuario e creación de perfil**
+### **Rexistro de usuario e creación de perfil**
 
-    -   **Actores:** Usuario Estándar, Usuario Premium, Usuario
-        Invitado, Administrador.
+- **Actores:** Usuario Estándar, Usuario Premium, Usuario Invitado, Administrador.
 
-    -   **Datos de entrada:** nome, correo electrónico e contrasinal do
-        usuario, datos persoais do paciente (nome, data de nacemento,
-        sexo, etc.), datos do tratamento inicial (causa/condición, data
-        de inicio, unha ou varias medicacións: nome, dose, pauta, causa
-        específica), datos de pago (se selecciona o plan Premium).
+- **Datos de entrada:** nome, correo electrónico e contrasinal do usuario, datos persoais do paciente (nome, data de nacemento, sexo, etc.), datos do tratamento inicial (causa/condición, data de inicio, unha ou varias medicacións: nome, dose, pauta, causa específica), datos de pago (se selecciona o plan Premium).
 
-    -   **Proceso:**
+- **Proceso:**
 
-        -   **Usuarios Estándar e Premium:**
+    -   **Usuarios Estándar e Premium:**
 
-            1.  O usuario completa o formulario de rexistro cos seus datos
-            (nome, correo electrónico, contrasinal)
+        1.  O usuario completa o formulario de rexistro cos seus datos (nome, correo electrónico, contrasinal)
 
-            2.  O usuario selecciona o plan de pago.
+        2.  O usuario selecciona o plan de pago.
 
-            3.  O usuario crea o perfil cos datos do doente e un tratamento
-            ca/s súa/s medicación/s asociada/s.
+        3.  O usuario crea o perfil cos datos do doente e un tratamento ca/s súa/s medicación/s asociada/s.
 
-            4.  O sistema valida e garda a conta, o perfil, o tratamento e
-            a/s medicación/s, vinculándoas ao usuario como creador.
+        4.  O sistema valida e garda a conta, o perfil, o tratamento e a/s medicación/s, vinculándoas ao usuario como creador.
 
-        -   **Usuarios Invitados**: este tipo de usuario rexístrase mediante unha invitación dun Usuario Premium ao correo electrónico (Ver 3. Envío e xestión de invitacións a perfís).
+    -   **Usuarios Invitados**: este tipo de usuario rexístrase mediante unha invitación dun Usuario Premium ao correo electrónico (Ver 3. Envío e xestión de invitacións a perfís).
 
-    -   **Datos de saída:** confirmación de rexistro, token de sesión e acceso ao panel de perfís.
+- **Datos de saída:** confirmación de rexistro, token de sesión e acceso ao panel de perfís.
 
 ---
 
-2.  **Autenticación de usuario**
+###  **Autenticación de usuario**
 
-    -   **Actores:** Usuario Estándar, Usuario Premium, Usuario
+- **Actores:** Usuario Estándar, Usuario Premium, Usuario
         Invitado, Administrador.
 
-    -   **Datos de entrada:** credenciais do usuario (correo electrónico
+- **Datos de entrada:** credenciais do usuario (correo electrónico
         e contrasinal).
 
-    -   **Proceso:**
+- **Proceso:**
 
-        1.  O sistema valida as credenciais e xera un token de sesión.
+    1.  O sistema valida as credenciais e xera un token de sesión.
 
-    -   **Datos de saída:** token de sesión e acceso ás funcionalidades
-        permitidas.
-
----
-
-3.  **Envío e xestión de invitacións a perfís**
-
-    -   **Actores:** Usuario Premium, Administrador.
-
-    -   **Datos de entrada:** correo electrónico do usuario invitado.
-
-    -   **Proceso:**
-
-        1.  O creador introduce o correo electrónico do usuario
-            invitado.
-
-        2.  O sistema envía un enlace de invitación por email.
-
-        3.  O invitado fai clic no enlace e completa un breve rexistro
-            co seu nome e contrasinal (o correo electrónico non fará
-            falta porque xa se gardou ao acceder mediante a invitación).
-
-        4.  O sistema asigna automaticamente o perfil compartido ao
-            invitado.
-
-    -   **Datos de saída:** notificación de envío de invitación; perfil
-        accesible na conta do invitado.
+- **Datos de saída:** token de sesión e acceso ás funcionalidades permitidas.
 
 ---
 
-4.  **Cancelación de invitacións**
+### **Envío e xestión de invitacións a perfís**
 
-    -   **Actores:** Usuario Premium, Administrador.
+- **Actores:** Usuario Premium, Administrador.
 
-    -   **Datos de entrada:** correo electrónico do invitado.
+- **Datos de entrada:** correo electrónico do usuario invitado.
 
-    -   **Proceso:**
+- **Proceso:**
 
-        1.  O creador accede ao xestor de invitacións e selecciona "Cancelar".
+    1.  O creador introduce o correo electrónico do usuario invitado.
 
-        2.  O sistema invalida o enlace pendente.
+    2.  O sistema envía un enlace de invitación por email.
 
-    -   **Datos de saída:** confirmación de cancelación.
+    3.  O invitado fai clic no enlace e completa un breve rexistro co seu nome e contrasinal (o correo electrónico non fará falta porque xa se gardou ao acceder mediante a invitación).
 
----
+    4.  O sistema asigna automaticamente o perfil compartido ao invitado.
 
-5.  **Xestión de perfís adicionais**
-
-    -   **Actores:** Usuario Estándar, Usuario Premium, Usuario
-        Invitado, Administrador.
-
-    -   **Datos de entrada:** datos persoais do paciente para o novo
-        perfil (nome, data de nacemento, sexo, etc.), datos do
-        tratamento inicial (causa/condición, data de inicio, unha ou
-        varias medicacións: nome, dose, pauta, causa específica).
-
-    -   **Proceso:**
-
-        1.  Crear: O usuario accede á sección de perfís e
-            selecciona "Crear novo" e introduce datos; o sistema valida
-            e garda o perfil, tratamento inicial e medicacións.
-
-        2.  Editar: o usuario modifica datos do perfil; o
-            sistema actualiza a información.
-
-        3.  Eliminar: o usuario elimina o perfil e anula
-            os accesos aos invitados.
-
-    -   **Datos de saída:** actualización da lista de perfís dispoñibles
-        e confirmación.
+    - **Datos de saída:** notificación de envío de invitación; perfil accesible na conta do invitado.
 
 ---
 
-6.  **Xestión de tratamentos**
+### **Cancelación de invitacións**
 
-    -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+- **Actores:** Usuario Premium, Administrador.
 
-    -   **Datos de entrada:** perfil asociado, motivo do tratamento
-        (condición ou enfermidade), data de inicio, unha ou varias
-        medicacións (nome, dose, pauta, causa específica)
+- **Datos de entrada:** correo electrónico do invitado.
 
-    -   **Proceso:**
+- **Proceso:**
 
-        1.  Creación: o usuario engade os datos do tratamento.
+    1.  O creador accede ao xestor de invitacións e selecciona "Cancelar".
 
-        2.  Edición: o usuario modifica campos existentes.
+    2.  O sistema invalida o enlace pendente.
 
-        3.  Eliminación: o usuario marca o tratamento como finalizado e
-            arquívao para histórico.
-
-    -   **Datos de saída**: listaxe actualizada de tratamentos dentro do
-        perfil e mensaxe de confirmación.
+- **Datos de saída:** confirmación de cancelación.
 
 ---
 
-7.  **Xestión de medicación e substitucións**
+### **Xestión de perfís adicionais**
 
-    -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+- **Actores:** Usuario Estándar, Usuario Premium, Usuario Invitado, Administrador.
 
-    -   **Datos de entrada:** nome do fármaco, dose, instrucións,
-        tratamento asociado.
+- **Datos de entrada:** datos persoais do paciente para o novo perfil (nome, data de nacemento, sexo, etc.), datos do tratamento inicial (causa/condición, data de inicio, unha ou varias medicacións: nome, dose, pauta, causa específica).
 
-    -   **Proceso:**
+- **Proceso:**
 
-        1.  Engadir/Editar/Eliminar: o usuario xestiona entradas de
+    1.  Crear: O usuario accede á sección de perfís e selecciona "Crear novo" e introduce datos; o sistema valida e garda o perfil, tratamento inicial e medicacións.
+
+    2.  Editar: o usuario modifica datos do perfil; o sistema actualiza a información.
+
+    3.  Eliminar: o usuario elimina o perfil e anula os accesos aos invitados.
+
+- **Datos de saída:** actualización da lista de perfís dispoñibles e confirmación.
+
+---
+
+### **Xestión de tratamentos**
+
+- **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+
+- **Datos de entrada:** perfil asociado, motivo do tratamento (condición ou enfermidade), data de inicio, unha ou varias medicacións (nome, dose, pauta, causa específica)
+
+- **Proceso:**
+
+    1.  Creación: o usuario engade os datos do tratamento.
+
+    2.  Edición: o usuario modifica campos existentes.
+
+    3.  Eliminación: o usuario marca o tratamento como finalizado e arquívao para histórico.
+
+- **Datos de saída**: listaxe actualizada de tratamentos dentro do perfil e mensaxe de confirmación.
+
+---
+
+### **Xestión de medicación e substitucións**
+
+- **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+
+- **Datos de entrada:** nome do fármaco, dose, instrucións, tratamento asociado.
+
+- **Proceso:**
+
+    1.  Engadir/Editar/Eliminar: o usuario xestiona entradas de
             medicación.
 
-        2.  Substitución: ao configurar un substituto, o sistema
+    2.  Substitución: ao configurar un substituto, o sistema
             documenta o cambio no historial de tratamentos.
 
-    -   **Datos de saída:** cronoloxía visual de medicacións e
-        notificación de substitución realizada.
+- **Datos de saída:** cronoloxía visual de medicacións e notificación de substitución realizada.
 
 ---
 
-8.  **Xestión de citas médicas**
+### **Xestión de citas médicas**
 
-    -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+- **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
-    -   **Datos de entrada:** data, hora, lugar, nome do médico,
-        especialidade, notas opcionais
+- **Datos de entrada:** data, hora, lugar, nome do médico, especialidade, notas opcionais
 
-    -   **Proceso:**
+- **Proceso:**
 
-        1.  Engadir: o usuario crea unha nova cita.
+    1.  Engadir: o usuario crea unha nova cita.
 
-        2.  Editar: o usuario modifica detalles da cita.
+    2.  Editar: o usuario modifica detalles da cita.
 
-        3.  Eliminar: o usuario cancela unha cita.
+    3.  Eliminar: o usuario cancela unha cita.
 
-        4.  Configuración de recordatorios personalizados.
+    4.  Configuración de recordatorios personalizados.
 
-    -   **Datos de saída:** calendario actualizado de citas e
-        confirmación de programación de recordatorios.
+- **Datos de saída:** calendario actualizado de citas e confirmación de programación de recordatorios.
 
 ---
 
-9.  **Alertas e recordatorios**
+### **Alertas e recordatorios**
 
-    -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+- **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
-    -   **Datos de entrada:** perfil, configuración de alertas (tomas,
-        renovacións, citas)
+- **Datos de entrada:** perfil, configuración de alertas (tomas, renovacións, citas)
 
-    -   **Proceso:**
+- **Proceso:**
 
-        1.  O sistema programa notificacións en base aos intervalos
-            definidos.
+    1.  O sistema programa notificacións en base aos intervalos definidos.
 
-        2.  Envíase un email a tódolos usuarios vinculados ao perfil do
-            paciente co recordatorio.
+    2.  Envíase un email a tódolos usuarios vinculados ao perfil do paciente co recordatorio.
 
-    -   **Datos de saída:** entrega de recordatorios e rexistro de
-        eventos de alerta.
+-   **Datos de saída:** entrega de recordatorios e rexistro de eventos de alerta.
 
 ---
 
-10.  **Visualización de históricos**
+### **Visualización de históricos**
 
-    -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+- **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
-    -   **Datos de entrada:** selección de perfil, intervalo de datas,
-        tipo de historial (tratamentos, medicacións, substitucións)
+- **Datos de entrada:** selección de perfil, intervalo de datas, tipo de historial (tratamentos, medicacións, substitucións)
 
-    -   **Proceso:**
+- **Proceso:**
     
-        1.  O sistema recupera datos históricos pertinentes.
+    1.  O sistema recupera datos históricos pertinentes.
 
-        2.  Agrúpanse e preséntanse en táboas ou gráficos sinxelos.
+    2.  Agrúpanse e preséntanse en táboas ou gráficos sinxelos.
 
-    -   **Datos de saída:** visualización descargable e consultable do
-        historial.
-
----
-
-11. **Xeración de reportes personalizados**
-
-    -   **Actores:** Usuario Premium, Administrador.
-
-    -   **Datos de entrada:** perfís, tratamentos, intervalo de datas
-
-    -   **Proceso:**
-
-        1.  O sistema agrega os datos seleccionados.
-
-        2.  Xera un ficheiro PDF.
-
-    -   **Datos de saída:** enlace de descarga do reporte personalizado.
+- **Datos de saída:** visualización descargable e consultable do historial.
 
 ---
 
-12. **Eliminación de conta**
+### **Xeración de reportes personalizados**
 
-    -   **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+- **Actores:** Usuario Premium, Administrador.
 
-    -   **Datos de entrada:** confirmación de usuario e credenciais.
+- **Datos de entrada:** perfís, tratamentos, intervalo de datas
 
-    -   **Proceso:**
+- **Proceso:**
 
-        1.  O usuario solicita eliminación de conta.
+    1.  O sistema agrega os datos seleccionados.
 
-        2.  O sistema elimina perfil de usuario, perfís, tratamentos,
-        medicacións e datos asociados.
+    2.  Xera un ficheiro PDF.
 
-    -   **Datos de saída:** mensaxe de confirmación de conta eliminada e saída da sesión.
+- **Datos de saída:** enlace de descarga do reporte personalizado.
+
+---
+
+###  **Eliminación de conta**
+
+- **Actores:** Usuario Estándar, Usuario Premium, Administrador.
+
+- **Datos de entrada:** confirmación de usuario e credenciais.
+
+- **Proceso:**
+
+    1.  O usuario solicita eliminación de conta.
+
+    2.  O sistema elimina perfil de usuario, perfís, tratamentos, medicacións e datos asociados.
+
+- **Datos de saída:** mensaxe de confirmación de conta eliminada e saída da sesión.
 
 
 ## Tipos de usuarios
 
-**Usuario Novo**
+**Usuario Novo**  
 Usuario que se acaba de rexistrar na aplicación por primeira vez, pero aínda non completou a verificación (por exemplo, a través da confirmación do correo electrónico). Sen acceso ata que se verifique a súa identidade.
 
-**Usuario Estándar**
+**Usuario Estándar**  
 Usuario rexistrado e verificado que accede co plan gratuíto. Poderá acceder ás funcionalidades básicas, como a xestión de tratamentos, citas, medicamentos e recordatorios simples.
 Se este usuario quixera usar a versión de pago, deberá actualizar a súa subscrición.
 
-**Usuario Premium**
+**Usuario Premium**  
 Usuario rexistrado, verificado e que adquiriu a subscrición premium (de pago). Terá acceso completo a tódalas funcionalidades da aplicación,  tanto básicas como avanzadas (multiusuario, alertas avanzadas, sincronización con Google Calendar...).
 
-**Usuario Invitado**
+**Usuario Invitado**  
 Trátase daquel que foi invitado por un usuario Premium para xestionar un mesmo perfil, xa que so estes poden acceder á funcionalidade avanzada de multiusuario. Este tipo de usuario é igual ao Usuario Estándar, excepto cando se trata de roles de perfís, como por exemplo no caso de eliminación da conta. Cando un Usuario Invitado borra a súa conta, anúlanse os seus accesos aos perfís aos que foi invitado, pero non o perfil do doente nin os datos asociados a el. Pero se un usuario deste tipo creou un perfil, este eliminarase coma se se tratara dun Usuario Estándar.
 
-**Usuario Bloqueado**
+**Usuario Bloqueado**  
 Usuario coa conta desactivada, xa sexa por problemas de seguridade, incumprimentos ou verificación fallida. Non terá acceso ata que poida reactivar a conta.
 
-**Administrador**
+**Administrador**  
 Usuario con privilexios especiais para a xestión global e administración do sistema.
 
 

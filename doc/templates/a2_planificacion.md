@@ -2,7 +2,8 @@
 
 ## Metodoloxía prevista
 
-Descrición da metodoloxía prevista en todas as fases.
+Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse seguir a metodoloxía en cascada. Esta metodoloxía de desenvolvemento de software consiste en realizar cada fase por completo antes de pasar á seguinte. De todas formas, sempre haberá marxe para pequenos axustes a medida que surxan dificultades ou novas ideas interesantes para implementar.
+
 
 ## Fases planificadas
 
@@ -14,11 +15,33 @@ Pódense indicar os recursos materiais e humanos asociados a cada tarefa ou, se 
 
 ### Fase 1: Estudo preliminar
 
-Descrición das tarefas a realizar, duración e recursos necesarios.
+**Tarefas a realizar:**
+- Redacción da descrición do proxecto e xustificación da idea.
+- Estudo do público obxectivo e da posible relevancia social.
+- Estudo de produtos similares, das súas valoracións e carencias.
+- Definicion de funcionalidades básicas e avanzadas.
+- Definición do modelo de negocio
+- Selección das tecnoloxías a empregar
+
+**Duración estimada total:** 6 horas
+
+**Recursos necesarios:** ordenador portátil, conexión a Internet.
 
 ### Fase 2: Análise
 
-Descrición das tarefas a realizar, duración e recursos necesarios.
+**Tarefas a realizar:**
+
+- Redacción detallada das funcionalidades
+- Estimación dos casos de uso 
+- Definición de tipos de usuario e permisos
+- Investigación sobre a normativa a ter en conta
+- Investigación sobre mecanismos para cumprir a normativa
+
+
+**Duración estimada total:** 16 horas
+
+**Recursos necesarios:** ordenador portátil, conexión a Internet.
+
 
 ### Fase 3: Deseño
 
