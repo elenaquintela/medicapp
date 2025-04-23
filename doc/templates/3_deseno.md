@@ -6,6 +6,18 @@ O documento a elaborar debería incluír os seguintes apartados:
 
 ## Diagrama da arquitectura
 
+### Diagrama de arquitectura lóxica / de capas
+
+!["Diagrama de capas"](/doc/img/diagrama_capas2.png)
+
+### Diagrama de despregue
+
+
+
+### Diagrama de compoñentes
+
+### Diagrama de casos de uso
+
 Incluír os diagramas de arquitectura que representen de forma gráfica a aplicación, os seus compoñentes e a súa interrelación: bases de datos, nube, microservizos, etc.
 
 ## Diagrama de Base de Datos
@@ -15,7 +27,7 @@ Neste apartado incluiranse os diagramas relacionados coa Base de Datos:
 - Modelo Entidade/relación
 - Modelo relacional
 
-Pódese entregar a captura do phpMyAdmin se se emprega MariaDB como Modelo relacional.
+!["Modelo relacional"](/doc/img/diagrama_bd.PNG)
 
 ## Deseño de interface de usuarios
 
