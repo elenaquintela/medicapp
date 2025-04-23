@@ -14,7 +14,7 @@ Dito o anterior, este proxecto espera poder contribuír a cumprir mellor co trat
 
 **Funcionalidades básicas**
 * Xestión de tratamentos/medicación:
-    - Rexistro de tratamentos (motivo, data de inicio)
+    - Rexistro de tratamentos (motivo, data de inicio).
     - En cada tratamento, rexistro de fármacos consumidos (nome, dose, instrucións do médico, prospecto).
     - Alertas e recordatorios para a toma de cada medicamento, para a renovación dalgunha receita ou para recoller a medicación na farmacia cando se está a acabar.
     - Rexistro histórico de cambios (por exemplo, cando se substitúe un medicamento por outro).
@@ -42,11 +42,11 @@ Dado que non existen aplicacións web similares á aquí exposta, tomaremos as a
 Medisafe céntrase na xestión de medicación e é unha das aplicacións de saúde líderes no seu sector, xa que conta con millóns de descargas e unha elevada valoración media dos usuarios. Destacan elementos como os recordatorios e alarmas, as súas opcións de personalización e unha interfaz bastante intuitiva. Pola contra, MyTherapy, a pesar de non contar con tanto recoñecemento, ten un enfoque máis global, xa que tamén incorpora: seguimento dos síntomas, rexistro de parámetros  (presión arterial, peso, etc...), un diario de saúde para anotar eventos relevantes, informes e estatísticas sobre a evolución da saúde do usuario, e funcións adicionais para planificar actividades relacionadas co coidado persoal.
 
 Analizando as reseñas destas dúas aplicacións en Google Play e Apple App Store, atopámonos con varios aspectos que botan en falta os usuarios e que se poderían superar con este proxecto:
-* **Maior personalización**
+* **Maior personalización**  
 Aos usuarios gustaríalles que os recordatorios e notificacións puidesen personalizarse máis e ter a posibilidade de elixir entre distintos tons e formatos de alerta axustados ás súas rutinas persoais. Tamén resaltan a falta de recomendacións de saúde e estilo de vida personalizadas segundo a súa situación médica.
-* **Interfaz adaptada a usuarios da terceira idade**
+* **Interfaz adaptada a usuarios da terceira idade**  
 A interface destas aplicacións, malia ser amigable, presenta dificultades de navegación para os usuarios de avanzada idade. Probablemente un deseño máis simple solucionaría este problema. 
-* **Un seguimento máis detallado** 
+* **Un seguimento máis detallado**   
 Aos usuarios gustaríalles incluír funcionalidades coas que poidan rexistrar máis información e ter un historial máis completo da súa saúde, como por exemplo: cambios na medicación, efectos secundarios e notas persoais para compartir co seu médico. Ademais, suxiren que toda esta información se presente de xeito visual, con resumos sinxelos, para facilitar a súa comprensión.
 
 En resumo, atopámonos con aplicacións existentes como Medisafe e MyTherapy que non cobren completamente as necesidades dos usuarios. Polo tanto, o noso obxectivo é desenvolver unha aplicación web (tamén adaptada a tablet e móbil) que ofreza unha experiencia mellorada, centrándonos especialmente na personalización, accesibilidade e funcionalidades de seguimento.

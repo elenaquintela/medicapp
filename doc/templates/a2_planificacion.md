@@ -7,12 +7,6 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 
 ## Fases planificadas
 
-Descrición das fases en que se divide o proxecto.
-
-Para cada fase indicar as tarefas a realizar, os recursos necesarios (tanto hardware como software) e a duración.
-
-Pódense indicar os recursos materiais e humanos asociados a cada tarefa ou, se son os mesmos, de maneira máis xeral.
-
 ### Fase 1: Estudo preliminar
 
 **Tarefas a realizar:**
@@ -20,8 +14,8 @@ Pódense indicar os recursos materiais e humanos asociados a cada tarefa ou, se 
 - Estudo do público obxectivo e da posible relevancia social.
 - Estudo de produtos similares, das súas valoracións e carencias.
 - Definicion de funcionalidades básicas e avanzadas.
-- Definición do modelo de negocio
-- Selección das tecnoloxías a empregar
+- Definición do modelo de negocio.
+- Selección das tecnoloxías a empregar.
 
 **Duración estimada total:** 6 horas
 
@@ -31,11 +25,11 @@ Pódense indicar os recursos materiais e humanos asociados a cada tarefa ou, se 
 
 **Tarefas a realizar:**
 
-- Redacción detallada das funcionalidades
-- Estimación dos casos de uso 
-- Definición de tipos de usuario e permisos
-- Investigación sobre a normativa a ter en conta
-- Investigación sobre mecanismos para cumprir a normativa
+- Redacción detallada das funcionalidades.
+- Estimación dos casos de uso. 
+- Definición de tipos de usuario e permisos.
+- Investigación sobre a normativa a ter en conta.
+- Investigación sobre mecanismos para cumprir a normativa.
 
 
 **Duración estimada total:** 16 horas

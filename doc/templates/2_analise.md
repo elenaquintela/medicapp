@@ -10,7 +10,7 @@ A aplicación realizará as seguintes funcións xerais:
 1.	Autenticación e xestión de perfís de usuario e pacientes.
 2.	Rexistro, modificación e eliminación de tratamentos, medicacións e citas.
 3.	Alertas e recordatorios configurables para tomas e renovacións de medicamentos, e citas médicas.
-4.	Visualización de históricos 
+4.	Visualización de históricos.
 5.	Substitucións de fármacos.
 6.	Xeración de reportes personalizados sobre a evolución do tratamento.
 7.	Administración de permisos para coidadores e familiares.
@@ -76,7 +76,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
     4.  O sistema asigna automaticamente o perfil compartido ao invitado.
 
-    - **Datos de saída:** notificación de envío de invitación; perfil accesible na conta do invitado.
+- **Datos de saída:** notificación de envío de invitación; perfil accesible na conta do invitado.
 
 ---
 
@@ -154,7 +154,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
 - **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
-- **Datos de entrada:** data, hora, lugar, nome do médico, especialidade, notas opcionais
+- **Datos de entrada:** data, hora, lugar, nome do médico, especialidade, notas opcionais.
 
 - **Proceso:**
 
@@ -174,7 +174,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
 - **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
-- **Datos de entrada:** perfil, configuración de alertas (tomas, renovacións, citas)
+- **Datos de entrada:** perfil, configuración de alertas (tomas, renovacións, citas).
 
 - **Proceso:**
 
@@ -190,7 +190,7 @@ O usuario autenticado accederá a un panel inicial onde seleccionará ou creará
 
 - **Actores:** Usuario Estándar, Usuario Premium, Administrador.
 
-- **Datos de entrada:** selección de perfil, intervalo de datas, tipo de historial (tratamentos, medicacións, substitucións)
+- **Datos de entrada:** selección de perfil, intervalo de datas, tipo de historial (tratamentos, medicacións, substitucións).
 
 - **Proceso:**
     
