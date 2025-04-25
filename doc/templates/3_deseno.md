@@ -10,11 +10,6 @@ O documento a elaborar debería incluír os seguintes apartados:
 
 !["Diagrama de capas"](/doc/img/diagrama_capas2.png)
 
-### Diagrama de despregue
-
-
-
-### Diagrama de compoñentes
 
 ### Diagrama de casos de uso
 
@@ -35,3 +30,4 @@ Neste apartado deben incluírse os deseños das diferentes interfaces da aplicac
 
 Estes diagramas axudan no deseño da aplicación. Poden facerse á man, cunha aplicación ou a través dunha web do estilo: [diagrams](https://app.diagrams.net/)
 
+!["Vista1"](/doc/img/vista1.png)
