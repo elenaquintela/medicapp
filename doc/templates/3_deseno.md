@@ -32,11 +32,19 @@ Estes diagramas axudan no deseño da aplicación. Poden facerse á man, cunha ap
 
 ### Interfaz de Login
 
-!["Vista login"](/doc/img/vista1.png)
+!["Vista login"](/doc/img/vistaLogin.png)
 
-### Interfaz de Rexistro
+### Interfaz de Rexistro de Usuario
 
-!["Vista registro] 
+!["Vista registro usuario"](/doc/img/vistaRegistro.png)
+
+### Interfaz de Rexistro de Perfil e Tratamento
+
+!["Vista rexistro perfil"](/doc/img/vistaPerfil.png)
+
+### Interfaz de Rexistro de Medicación
+
+!["Vista rexistro medicación"](/doc/img/vistaMedicacion.png)
 
 ### Interfaz de Planes de pago
 
@@ -44,9 +52,9 @@ Estes diagramas axudan no deseño da aplicación. Poden facerse á man, cunha ap
 
 ### Interfaz principal do Usuario Estándar
 
-![Vista principal Usuario Estándar]
+!["Vista principal Usuario Estándar"](/doc/img/vistaEstandar1.png)
 
-### Interfaz principal do Usuario Premium
+!["Vista principal Usuario Estándar menú lateral"](/doc/img/vistaEstandar2.png)
 
-![Vista principal Usuario Premium]
+
 
