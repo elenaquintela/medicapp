@@ -39,7 +39,29 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 
 ### Fase 3: Deseño
 
-Descrición das tarefas a realizar, duración e recursos necesarios.
+**Tarefas a realizar:**
+
+- Definición dos diagramas concretos que se deseñarán para este proxecto.
+- Investigación sobre como elaborar un diagrama de capas.
+- Elaboración do diagrama de capas da aplicación.
+- Creación da base de datos en phpMyAdmin para obter o diagrama da base de datos.
+- Creación dun nome, un logo e unha paleta de cores para a aplicación.
+- Estimación das interfaces a deseñar.
+- Deseño das interfaces:
+    - Interfaz de Login
+    - Interfaz de rexistro de usuario
+    - Interfaz de rexistro de perfil e tratamento
+    - Interfaz de rexistro de medicación
+    - Interfaz de rexistro de cita médica
+    - Interfaz de plans de pago
+    - Interfaz principal para Usuario Estándar
+    - Interfaz de Axustes
+    - Interfaz de Informes
+
+
+**Duración estimada total:** 68 horas
+
+**Recursos necesarios:** ordenador portátil, conexión a Internet.
 
 ### Fase 4: Codificación e probas
 
