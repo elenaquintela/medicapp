@@ -59,13 +59,14 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
     - Interfaz de Informes
 
 
-**Duración estimada total:** 68 horas
+**Duración estimada total:** 28 horas
 
 **Recursos necesarios:** ordenador portátil, conexión a Internet.
 
 ### Fase 4: Codificación e probas
 
-Descrición das tarefas a realizar, duración e recursos necesarios.
+- Creación do proxecto Laravel
+
 
 ### Fase 5: Manuais do proxecto
 
