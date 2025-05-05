@@ -10,7 +10,6 @@ O documento a elaborar debería incluír os seguintes apartados:
 
 !["Diagrama de capas"](/doc/img/diagrama_capas2.png)
 
-
 ### Diagrama de casos de uso
 
 !["Diagrama de casos de uso"](/doc/img/diagramaCasosUso.png)
@@ -70,14 +69,20 @@ No menú despregable na esquina superior dereita haberá dúas opcións:
 
 !["Vista axustes usuario"](/doc/img/vistaAxustesUsuarioPremium.png)
 
-
 ### Interface de tratamentos
 
+Na táboa, os tratamentos arquivados aparecerán ao final, e os activos más novos aparecerán de primeiros.
 
+!["Vista xestión de tratamentos"](/doc/img/vistaTratamento.png)
 
-### Interface citas médicas para Usuario Estándar
+### Interface de detalles de tratamento
+
+!["Vista detalles tratamento"](/doc/img/vistaDetallesTratamento.png)
+
+### Interface citas médicas para Usuario Estándar (invitado)
 
 O botón verde co "+" levaranos á interface de creación de citas.
+A versión para Usuario Estándar será totalmente igual pero sen a columna "Creado por", xa que non tería sentido se so xestiona unha persoa ese perfil.
 
 !["Vista citas médicas Usuario Estándar"](/doc/img/vistaCitasEstandar.png)
 
@@ -109,7 +114,9 @@ Co Usuario Premium poderanse sincronizar as citas médicas con Google Calendar i
 !["Vista perfís Usuario Estándar creador"](/doc/img/vistaXestionPerfilEstandar.png)
 
 
-
 ### Interface de informes
 
+Só dispoñible para Usuarios Premium.
+A vista previa xeneraráse nesta mesma páxina entre o xenerador e o histórico de informes.
 
+!["Vista informes personalizados"](/doc/img/vistaInformes.png)
