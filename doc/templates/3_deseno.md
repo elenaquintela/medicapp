@@ -64,11 +64,11 @@ No menú despregable na esquina superior dereita haberá dúas opcións:
 
 (O input para invitacións a outros usuarios estará desactivadada no plan Estándar)
 
-!["Vista axustes usuario"](/doc/img/vistaAjustesUsuario.png)
+!["Vista axustes usuario"](/doc/img/vistaAxustesUsuario.png)
 
 ### Interface de axustes de Usuario Premium
 
-!["Vista axustes usuario"](/doc/img/vistaAjustesUsuarioPremium.png)
+!["Vista axustes usuario"](/doc/img/vistaAxustesUsuarioPremium.png)
 
 
 ### Interface de tratamentos
@@ -98,6 +98,15 @@ Co Usuario Premium poderanse sincronizar as citas médicas con Google Calendar i
 
 !["Vista perfís Usuario Premium desplegable"](/doc/img/vistaXestionPerfilPremium2.png)
 
+
+### Interface de xestión de perfís para Usuario Invitado
+
+!["Vista perfís Usuario invitado desplegable"](/doc/img/vistaXestionPerfilInvitado.png)
+
+
+### Interface de xestión de perfís para Usuario Estándar creador
+
+!["Vista perfís Usuario Estándar creador"](/doc/img/vistaXestionPerfilEstandar.png)
 
 
 
