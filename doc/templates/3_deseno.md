@@ -8,37 +8,37 @@ O documento a elaborar debería incluír os seguintes apartados:
 
 ### Diagrama de arquitectura lóxica / de capas
 
-!["Diagrama de capas"](/doc/img/diagrama_capas2.png)
+!["Diagrama de capas"](/doc/img/diagramas/diagrama_capas.png)
 
 ### Diagrama de casos de uso
 
-!["Diagrama de casos de uso"](/doc/img/diagramaCasosUso.png)
+!["Diagrama de casos de uso"](/doc/img/diagramas/diagrama_casos_uso.png)
 
 ## Diagrama de Base de Datos
 
-!["Modelo relacional"](/doc/img/diagrama_bd.PNG)
+!["Modelo relacional"](/doc/img/diagramas/diagrama_bd.PNG)
 
 ## Deseño de interface de usuarios
 
 ### Interfaz de Login
 
-!["Vista login"](/doc/img/vistaLogin.png)
+!["Vista login"](/doc/img/interfaces/vistaLogin.png)
 
 ### Interface de Rexistro de Usuario
 
-!["Vista registro usuario"](/doc/img/vistaRegistro.png)
+!["Vista registro usuario"](/doc/img/interfaces/vistaRegistro.png)
 
 ### Interface de Rexistro de Perfil e Tratamento
 
-!["Vista rexistro perfil"](/doc/img/vistaPerfil.png)
+!["Vista rexistro perfil"](/doc/img/interfaces/vistaPerfil.png)
 
 ### Interface de Rexistro de Medicación
 
-!["Vista rexistro medicación"](/doc/img/vistaMedicacion.png)
+!["Vista rexistro medicación"](/doc/img/interfaces/vistaMedicacion.png)
 
 ### Interface de Planes de pago
 
-!["Vista de plans de pago"](/doc/img/vistaPlanes.png)
+!["Vista de plans de pago"](/doc/img/interfaces/vistaPlanes.png)
 
 ### Interface principal do Usuario Estándar
 
@@ -47,13 +47,13 @@ O documento a elaborar debería incluír os seguintes apartados:
 - **Botón despregable co nome do doente/perfil** para seleccionar outro perfil que poida estar xestionando o usuario autenticado e ver a súa interface.
 - **Menú despregable lateral:** para acceder ás interfaces de xestión de tratamentos, citas médicas, perfís, informes (desactivada no plan Estándar). Tamén cunha opción para pechar sesión.
 
-!["Vista principal Usuario Estándar"](/doc/img/vistaEstandar1.png)
+!["Vista principal Usuario Estándar"](/doc/img/interfaces/vistaEstandar1.png)
 
-!["Vista principal Usuario Estándar menú lateral"](/doc/img/vistaEstandar2.png)
+!["Vista principal Usuario Estándar menú lateral"](/doc/img/interfaces/vistaEstandar2.png)
 
 ### Interface principal do Usuario Premium
 
-!["Vista principal Usuario Premium"](/doc/img/vistaPremium.png)
+!["Vista principal Usuario Premium"](/doc/img/interfaces/vistaPremium.png)
 
 ### Interface de axustes de Usuario Estándar
 No menú despregable na esquina superior dereita haberá dúas opcións:
@@ -63,55 +63,55 @@ No menú despregable na esquina superior dereita haberá dúas opcións:
 
 (O input para invitacións a outros usuarios estará desactivadada no plan Estándar)
 
-!["Vista axustes usuario"](/doc/img/vistaAxustesUsuario.png)
+!["Vista axustes usuario"](/doc/img/interfaces/vistaAxustesUsuario.png)
 
 ### Interface de axustes de Usuario Premium
 
-!["Vista axustes usuario"](/doc/img/vistaAxustesUsuarioPremium.png)
+!["Vista axustes usuario"](/doc/img/interfaces/vistaAxustesUsuarioPremium.png)
 
 ### Interface de tratamentos
 
 Na táboa, os tratamentos arquivados aparecerán ao final, e os activos más novos aparecerán de primeiros.
 
-!["Vista xestión de tratamentos"](/doc/img/vistaTratamento.png)
+!["Vista xestión de tratamentos"](/doc/img/interfaces/vistaTratamento.png)
 
 ### Interface de detalles de tratamento
 
-!["Vista detalles tratamento"](/doc/img/vistaDetallesTratamento.png)
+!["Vista detalles tratamento"](/doc/img/interfaces/vistaDetallesTratamento.png)
 
 ### Interface citas médicas para Usuario Estándar (invitado)
 
 O botón verde co "+" levaranos á interface de creación de citas.
 A versión para Usuario Estándar será totalmente igual pero sen a columna "Creado por", xa que non tería sentido se so xestiona unha persoa ese perfil.
 
-!["Vista citas médicas Usuario Estándar"](/doc/img/vistaCitasEstandar.png)
+!["Vista citas médicas Usuario Estándar"](/doc/img/interfaces/vistaCitasEstandar.png)
 
 ### Interface citas médicas para Usuario Premium
 
 Co Usuario Premium poderanse sincronizar as citas médicas con Google Calendar individualmente ou en conxunto.  
 
-!["Vista citas médicas Usuario Premium"](/doc/img/vistaCitasPremium.png)
+!["Vista citas médicas Usuario Premium"](/doc/img/interfaces/vistaCitasPremium.png)
 
 ### Interface de rexistro de cita médica 
 
-!["Vista rexistro cita médica"](/doc/img/vistaRexistroCita.png)
+!["Vista rexistro cita médica"](/doc/img/interfaces/vistaRexistroCita.png)
 
 
 ### Interface de xestión de perfís para Usuario Premium
 
-!["Vista perfís Usuario Premium"](/doc/img/vistaXestionPerfilPremium.png)
+!["Vista perfís Usuario Premium"](/doc/img/interfaces/vistaXestionPerfilPremium.png)
 
-!["Vista perfís Usuario Premium desplegable"](/doc/img/vistaXestionPerfilPremium2.png)
+!["Vista perfís Usuario Premium desplegable"](/doc/img/interfaces/vistaXestionPerfilPremium2.png)
 
 
 ### Interface de xestión de perfís para Usuario Invitado
 
-!["Vista perfís Usuario invitado desplegable"](/doc/img/vistaXestionPerfilInvitado.png)
+!["Vista perfís Usuario invitado desplegable"](/doc/img/interfaces/vistaXestionPerfilInvitado.png)
 
 
 ### Interface de xestión de perfís para Usuario Estándar creador
 
-!["Vista perfís Usuario Estándar creador"](/doc/img/vistaXestionPerfilEstandar.png)
+!["Vista perfís Usuario Estándar creador"](/doc/img/interfaces/vistaXestionPerfilEstandar.png)
 
 
 ### Interface de informes
@@ -119,4 +119,4 @@ Co Usuario Premium poderanse sincronizar as citas médicas con Google Calendar i
 Só dispoñible para Usuarios Premium.
 A vista previa xeneraráse nesta mesma páxina entre o xenerador e o histórico de informes.
 
-!["Vista informes personalizados"](/doc/img/vistaInformes.png)
+!["Vista informes personalizados"](/doc/img/interfaces/vistaInformes.png)
