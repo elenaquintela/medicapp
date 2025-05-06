@@ -79,7 +79,11 @@ Na táboa, os tratamentos arquivados aparecerán ao final, e os activos más nov
 
 !["Vista detalles tratamento"](/doc/img/interfaces/vistaDetallesTratamento.png)
 
-### Interface citas médicas para Usuario Estándar (invitado)
+### Interface de programación de recordatorio para tomas
+
+!["Vista programación de recordatorio"](/doc/img/interfaces/vistaRecordatorio.png)
+
+### Interface de citas médicas para Usuario Estándar (invitado)
 
 O botón verde co "+" levaranos á interface de creación de citas.
 A versión para Usuario Estándar será totalmente igual pero sen a columna "Creado por", xa que non tería sentido se so xestiona unha persoa ese perfil.
