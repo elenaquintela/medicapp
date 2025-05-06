@@ -65,7 +65,18 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 
 ### Fase 4: Codificación e probas
 
-- Creación do proxecto Laravel
+**Configuración inicial**
+
+- Instalar PHP
+- Instalar Composer
+- Instalar Laravel
+- Crear proxecto
+- Crear a clave da aplicación (APP_KEY)
+- Configurar o entorno no arquivo .env
+- Instalar Laravel Breeze
+- Instalar dependencias frontend e compilar frontend
+- Executar as migracións de base de datos
+- Adaptar a migración de Breeze á base de datos 
 
 
 ### Fase 5: Manuais do proxecto
