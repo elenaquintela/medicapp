@@ -1,9 +1,5 @@
 # Deseño
 
-Este documento inclúe os diferentes diagramas, esquemas e deseños que axuden a describir mellor o proxecto detallando os seus compoñentes, funcionalidades, bases de datos e interface.
-
-O documento a elaborar debería incluír os seguintes apartados:
-
 ## Diagrama da arquitectura
 
 ### Diagrama de arquitectura lóxica / de capas
