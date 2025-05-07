@@ -76,8 +76,16 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 - Instalar Laravel Breeze
 - Instalar dependencias frontend e compilar frontend
 - Executar as migracións de base de datos
-- Adaptar a migración de Breeze á base de datos 
 
+** Backend **
+
+- Adaptar a migración de Breeze á base de datos
+- Comprobar que o rexistro e o login funcionan
+- Elaborar os modelos Eloquent de Perfil, Tratamento, Medicamento e Cita
+
+** Frontend **
+
+- Facer a vista principal / de Login
 
 ### Fase 5: Manuais do proxecto
 
