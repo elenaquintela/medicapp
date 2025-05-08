@@ -10,16 +10,13 @@
 
     <div class="flex items-center justify-center min-h-screen relative">
         <div class="flex w-full max-w-6xl bg-[#0C1222] rounded-lg shadow-lg overflow-hidden">
-
             <!-- Lado izquierdo -->
             <div class="w-1/2 p-12 flex flex-col justify-center space-y-6">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 bg-yellow-300 rounded-full"></div>
-                    <div class="w-8 h-8 bg-sky-400 rounded-full"></div>
-                    <h1 class="text-3xl font-bold ml-2">MedicApp</h1>
+                <div class="shrink-0 flex items-center space-x-3">
+                    <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-20 h-16">
+                    <span class="text-6xl font-bold">MedicApp</span>
                 </div>
-
                 <!-- Texto principal -->
                 <h2 class="text-3xl font-bold">Tu medicación, siempre a tiempo</h2>
 
@@ -30,14 +27,16 @@
                     <br>para que tú solo te dediques a <span class="text-yellow-300">vivir</span>.
                 </p>
 
-                <a href="{{ route('register') }}"
-                   class="bg-yellow-300 text-[#0C1222] font-bold py-3 px-10 rounded-full w-fit hover:bg-yellow-200 transition">
-                    Comenzar
-                </a>
+                <button class="text-center mt-6">
+                    <a href="{{ route('register') }}"
+                       class="bg-yellow-300 text-[#0C1222] font-bold py-3 px-10 rounded-full w-fit hover:bg-yellow-200 transition">
+                        Comenzar
+                    </a>
+                </button>
             </div>
 
             <!-- Lado derecho: login -->
-            <div class="w-1/2 bg-white text-[#0C1222] p-12 flex flex-col justify-center border-4 border-yellow-300 rounded-r-lg">
+            <div class="w-1/2 p-12 flex flex-col justify-center border-4 border-yellow-300 rounded-r-lg">
                 <h2 class="text-xl text-center mb-1">¿Ya tiene una cuenta?</h2>
                 <h3 class="text-2xl font-bold text-center mb-6">Iniciar sesión</h3>
 
