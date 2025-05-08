@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// Esta más que una tabla de enlace es una tabla de detalle, tiene su propia clave primaria y sus propios campos. Además, tiene una relación consigo misma para poder gestionar los medicamentos sustitutos. Por eso necesitamos el modelo de Medicamento y el de Tratamiento.
+// Esta más que una tabla de enlace es una tabla de detalle, tiene su propia clave primaria y sus propios campos. Además, tiene una relación consigo misma para poder gestionar los medicamentos sustitutos. Por eso necesitamos este modelo.
 
 class TratamientoMedicamento extends Model
 {

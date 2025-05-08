@@ -37,4 +37,22 @@ class Usuario extends Authenticatable
         return $this->belongsToMany(Perfil::class, 'usuario_perfil', 'id_usuario', 'id_perfil')
             ->withPivot('rol_en_perfil', 'fecha_inv', 'estado');
     }
+
+    // Relación con Cita: un usuario puede crear muchas citas
+    public function citasCreadas()
+    {
+        return $this->hasMany(Cita::class, 'id_usuario_crea', 'id_usuario');
+    }
+
+    // Relación con Notificacion: un usuario puede recibir muchas notificaciones
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificacion::class, 'id_usuario_dest', 'id_usuario');
+    }
+
+    // Relación con Informe: un usuario puede crear muchos informes
+    public function informes()
+    {
+        return $this->hasMany(Informe::class, 'id_usuario', 'id_usuario');
+    }
 }
