@@ -29,4 +29,12 @@ class Usuario extends Authenticatable
     {
         return $this->contrasena;
     }
+
+    // Relación con Perfil:
+    // Un perfil puede pertenecer a muchos usuarios, y un usuario puede tener muchos perfiles.
+    public function perfiles()
+    {
+        return $this->belongsToMany(Perfil::class, 'usuario_perfil', 'id_usuario', 'id_perfil')
+            ->withPivot('rol_en_perfil', 'fecha_inv', 'estado');
+    }
 }
