@@ -12,6 +12,8 @@ class Tratamiento extends Model
     protected $table = 'tratamiento';
     protected $primaryKey = 'id_tratamiento';
 
+    public $timestamps = true;
+
     protected $fillable = [
         'id_perfil',
         'causa',

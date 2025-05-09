@@ -12,6 +12,8 @@ class Perfil extends Model
     protected $table = 'perfil';
     protected $primaryKey = 'id_perfil';
 
+    public $timestamps = true;
+
     //Cuando usas métodos como Model::create([...]) o Model->update([...]), Laravel solo acepta los campos que tú le autorices explícitamente en $fillable.
     protected $fillable = [
         'nombre_paciente',
@@ -32,6 +34,12 @@ class Perfil extends Model
         //echo $usuario->pivot->rol_en_perfil;
         //}
     }
+
+    public function tratamientos()
+    {
+        return $this->hasMany(Tratamiento::class, 'id_perfil', 'id_perfil');
+    }
+
 
     // Relación con Cita: un perfil puede tener muchas citas
     public function citas()

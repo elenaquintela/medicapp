@@ -14,6 +14,8 @@ class TratamientoMedicamento extends Model
     protected $table = 'tratamiento_medicamento';
     protected $primaryKey = 'id_trat_med';
 
+    public $timestamps = true;
+
     protected $fillable = [
         'id_tratamiento',
         'id_medicamento',
