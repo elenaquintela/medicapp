@@ -20,12 +20,12 @@
                 <!-- Texto principal -->
                 <h2 class="text-3xl font-bold">Tu medicación, siempre a tiempo</h2>
 
-                <p class="text-lg leading-relaxed">
+                <p class="text-xl leading-relaxed text-center">
                     MedicApp te recuerda cada toma,<br>
-                    organiza tus <span class="text-yellow-300">citas médicas</span> y guarda
+                    organiza tus <span class="text-yellow-300">citas médicas</span> y guarda <br>
                     todo tu <span class="text-yellow-300">tratamiento</span> en un solo lugar…
                     <br>para que tú solo te dediques a <span class="text-yellow-300">vivir</span>.
-                </p>
+                </p><br>
 
                 <button class="text-center mt-6">
                     <a href="{{ route('register') }}"
@@ -75,10 +75,7 @@
         </div>
 
         <!-- Footer -->
-        <footer class="absolute bottom-0 left-0 right-0 bg-[#3F423D] text-white text-sm text-center py-2">
-            Aviso legal &nbsp;&middot;&nbsp; Política de privacidad &nbsp;&middot;&nbsp; Política de cookies
-        </footer>
+        <x-footer />
     </div>
-
 </body>
 </html>
