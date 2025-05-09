@@ -9,11 +9,7 @@
 <body class="bg-[#0C1222] text-white min-h-screen font-sans flex flex-col justify-between">
 
     <!-- Header con logo -->
-    <header class="bg-[#0C1222] py-4 px-6 flex items-center shadow-md">
-        <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-20 h-auto mr-3">
-        <h1 class="text-4xl font-bold text-white">MedicApp</h1>
-    </header>
-
+    <x-header />
     <!-- Formulario centrado -->
     <main class="flex-grow flex items-center justify-center">
         <div class="w-full max-w-md px-8">
