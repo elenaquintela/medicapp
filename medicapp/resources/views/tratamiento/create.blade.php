@@ -28,7 +28,7 @@
 
                 <!-- Botón -->
                 <div class="text-center mt-8">
-                    <button type="submit"
+                    <button type="submit" name="accion" value="done"
                             class="bg-yellow-300 text-[#0C1222] font-bold text-lg px-10 py-3 rounded-full hover:bg-yellow-200 transition">
                         Crear tratamiento
                     </button>

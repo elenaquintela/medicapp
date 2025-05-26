@@ -64,7 +64,6 @@ class MedicacionController extends Controller
                     ->with('success', 'Tratamiento y medicación registrados con éxito');
             }
         }
-
         return back()->withErrors(['accion' => 'Acción no reconocida.']);
     }
 }

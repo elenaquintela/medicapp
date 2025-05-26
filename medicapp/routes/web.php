@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TratamientoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 
 Route::get('/', function () {
@@ -32,8 +33,28 @@ Route::get('/tratamiento/{tratamiento}/medicacion', [MedicacionController::class
 Route::post('/tratamiento/{tratamiento}/medicacion', [MedicacionController::class, 'store'])->name('medicacion.store');
 
 Route::get('/planes', function () {
+    $usuario = Auth::user();
+    if ($usuario->rol_global) {
+        return redirect()->route('dashboard');
+    }
+
     return view('account.planes');
-})->name('planes.show');
+})->middleware('auth')->name('planes.show');
+
+
+Route::post('/planes', function (Request $request) {
+    $request->validate([
+        'rol_global' => 'required|in:estandar,premium'
+    ]);
+
+    /** @var \App\Models\Usuario $usuario */
+    $usuario = Auth::user();
+    $usuario->rol_global = $request->rol_global;
+    $usuario->save();
+
+    return redirect()->route('perfil.create');
+})->middleware('auth')->name('planes.store');
+
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])

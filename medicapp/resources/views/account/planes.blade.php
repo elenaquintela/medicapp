@@ -51,17 +51,28 @@
             
                     <tr>
                         <td></td>
+                        <!-- Botón para plan Estándar -->
                         <td class="py-8 px-6 text-center">
-                            <a href="{{ route('dashboard') }}"
-                               class="inline-block bg-yellow-200 text-[#0C1222] font-bold px-8 py-3 rounded hover:bg-yellow-300 transition">
-                                SELECCIONAR
-                            </a>
+                            <form method="POST" action="{{ route('planes.store') }}">
+                                @csrf
+                                <input type="hidden" name="rol_global" value="estandar">
+                                <button type="submit"
+                                    class="inline-block bg-yellow-200 text-[#0C1222] font-bold px-8 py-3 rounded hover:bg-yellow-300 transition">
+                                    SELECCIONAR
+                                </button>
+                            </form>
                         </td>
+
+                        <!-- Botón para plan Premium -->
                         <td class="py-8 px-6 text-center">
-                            <a href="{{ route('dashboard') }}"
-                               class="inline-block bg-blue-300 text-[#0C1222] font-bold px-8 py-3 rounded hover:bg-blue-200 transition">
-                                SELECCIONAR
-                            </a>
+                            <form method="POST" action="{{ route('planes.store') }}">
+                                @csrf
+                                <input type="hidden" name="rol_global" value="premium">
+                                <button type="submit"
+                                    class="inline-block bg-blue-300 text-[#0C1222] font-bold px-8 py-3 rounded hover:bg-blue-200 transition">
+                                    SELECCIONAR
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>
