@@ -65,6 +65,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::get('/tratamiento/create', [TratamientoController::class, 'create'])->name('tratamiento.create');
 Route::post('/tratamiento', [TratamientoController::class, 'store'])->name('tratamiento.store');
 
+Route::get('/citas', [\App\Http\Controllers\CitaController::class, 'index'])->name('cita.index');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');

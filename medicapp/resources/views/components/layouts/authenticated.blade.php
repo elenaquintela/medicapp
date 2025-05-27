@@ -10,12 +10,21 @@
 </head>
 <body class="bg-[#0C1222] text-white min-h-screen h-screen font-sans flex flex-col justify-between">
     
+    <!-- Cabecera -->
     <x-auth-header :perfilesUsuario="$perfilesUsuario" :perfilActivo="$perfilActivo" />
 
-    <main class="flex-grow">
-        {{ $slot }}
-    </main>
+    <!-- Contenido principal -->
+    <div class="flex flex-grow">
+        @auth
+            <x-sidebar />
+        @endauth
 
+        <main class="flex-1 p-4">
+            {{ $slot }}
+        </main>
+    </div>
+
+    <!-- Pie -->
     <x-footer />
 </body>
 </html>
