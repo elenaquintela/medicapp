@@ -11,7 +11,12 @@
 <body class="bg-[#0C1222] text-white min-h-screen h-screen font-sans flex flex-col justify-between">
     
     <!-- Cabecera -->
-    <x-auth-header :perfilesUsuario="$perfilesUsuario" :perfilActivo="$perfilActivo" />
+    @auth
+        <x-auth-header 
+            :perfilesUsuario="$perfilesUsuario ?? []" 
+            :perfilActivo="$perfilActivo ?? null" 
+        />
+    @endauth
 
     <!-- Contenido principal -->
     <div class="flex flex-grow">

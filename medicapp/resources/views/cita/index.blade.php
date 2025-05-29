@@ -4,6 +4,13 @@
         <!-- Título centrado -->
         <h2 class="text-3xl font-bold mb-8 text-center">Citas médicas</h2>
 
+        <!-- Mensaje de éxito -->
+        @if (session('success'))
+            <div class="mb-6 bg-green-500 text-white px-4 py-3 rounded shadow text-center">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Filtro con icono -->
         <div class="flex items-center gap-3 mb-6 w-full max-w-[85%]">
             <img src="{{ asset('filtro.png') }}" alt="Filtro"
@@ -19,7 +26,6 @@
 
             <!-- Tabla de citas -->
             <div class="max-w-[85%] w-full overflow-x-auto mx-auto">
-
                 <table class="w-full text-sm text-white border border-white">
                     <thead class="bg-blue-400 text-black uppercase text-center">
                         <tr>
@@ -27,46 +33,56 @@
                             <th class="py-3 px-4">Hora</th>
                             <th class="py-3 px-4">Especialista - Lugar</th>
                             <th class="py-3 px-4">Motivo</th>
+                            <th class="py-3 px-4">Observaciones</th> 
                             <th class="py-3 px-4">Creado por</th>
                             <th class="py-3 px-4">Editar</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        <tr class="border-t border-white">
-                            <td class="py-3">12 / 09 / 2025</td>
-                            <td class="py-3">09:15</td>
-                            <td class="py-3">Dr. Suárez</td>
-                            <td class="py-3">Renovar prescripción médica</td>
-                            <td class="py-3">Rosario</td>
-                            <td class="py-3">
-                                <button class="hover:opacity-80">
-                                    <img src="{{ asset('editar.png') }}" alt="Editar" class="w-6 h-6 object-contain invert">
-                                </button>
-                            </td>
-                        </tr>
-                        <tr class="border-t border-white">
-                            <td class="py-3">23 / 09 / 2025</td>
-                            <td class="py-3">08:00</td>
-                            <td class="py-3">Enfermería - Centro de salud</td>
-                            <td class="py-3">Vacuna Gripe</td>
-                            <td class="py-3">Elena</td>
-                            <td class="py-3">
-                               <button class="hover:opacity-80">
-                                    <img src="{{ asset('editar.png') }}" alt="Editar" class="w-6 h-6 object-contain invert">
-                                </button>
-                            </td>
-                        </tr>
+                        @forelse ($citas as $cita)
+                            <tr class="border-t border-white">
+                                <td class="py-3">
+                                    {{ \Carbon\Carbon::parse($cita->fecha)->format('d / m / Y') }}
+                                </td>
+                                <td class="py-3">
+                                    {{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}
+                                </td>
+                                <td class="py-3">
+                                    {{ $cita->especialidad ? $cita->especialidad . ' - ' : '' }}
+                                    {{ $cita->ubicacion }}
+                                </td>
+                                <td class="py-3">{{ $cita->motivo }}</td>
+                                <td class="py-3">{{ $cita->observaciones }}</td> 
+                                <td class="py-3">
+                                    {{ $cita->usuarioCreador->nombre ?? 'Desconocido' }}
+                                </td>
+                                
+                                <td class="py-3">
+                                    <a href="{{ route('cita.edit', $cita->id_cita) }}" class="hover:opacity-80 inline-block">
+                                        <img src="{{ asset('editar.png') }}" alt="Editar" class="w-6 h-6 object-contain invert mx-auto">
+                                    </a>
+                                </td>
+            
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="py-4 text-center text-gray-300">No hay citas registradas.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
+
+
             <!-- Botones -->
             <div class="w-[15%] flex flex-col items-center justify-center gap-6">
                 <!-- Botón + -->
-                <button class="bg-green-400 hover:bg-green-500 text-black rounded-full w-20 h-20 flex items-center justify-center shadow-lg">
+                <a href="{{ route('cita.create') }}"
+                   class="bg-green-400 hover:bg-green-500 text-black rounded-full w-20 h-20 flex items-center justify-center shadow-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
                     </svg>
-                </button>
+                </a>
 
                 <!-- Google Calendar -->
                 <div class="w-20 h-20">

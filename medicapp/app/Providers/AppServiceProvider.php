@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            /** @var \App\Models\Usuario $user */
+            $user = Auth::user();
+
+            if ($user) {
+                // Carga explícita de la relación perfiles
+                $user->load('perfiles');
+
+
+                $perfilActivo = null;
+                $perfilActivoId = Session::get('perfil_activo_id');
+
+                if ($perfilActivoId) {
+                    $perfilActivo = $user->perfiles->firstWhere('id_perfil', $perfilActivoId);
+                }
+
+                $view->with('perfilActivo', $perfilActivo);
+                $view->with('perfilesUsuario', $user->perfiles);
+            }
+        });
     }
 }

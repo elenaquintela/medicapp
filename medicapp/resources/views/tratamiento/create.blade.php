@@ -18,7 +18,7 @@
 
             <form method="POST" action="{{ route('tratamiento.store') }}" class="space-y-6">
                 @csrf
-                <input type="hidden" name="id_perfil" value="{{ request('perfil') }}">
+
                 <!-- Causa del tratamiento -->
                 <div>
                     <label for="causa" class="block mb-1 text-lg">Causa de tratamiento</label>

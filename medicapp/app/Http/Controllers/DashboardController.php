@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Usuario;
 
 class DashboardController extends Controller
 {
@@ -12,25 +11,29 @@ class DashboardController extends Controller
     {
         /** @var \App\Models\Usuario $usuario */
         $usuario = Auth::user();
-        $perfilesUsuario = $usuario->perfiles()->get();
+        $usuario->load('perfiles');
 
-        // ¿Viene un perfil en la URL?
+        // Comprobar si viene el cambio de perfil en la URL
         $idPerfilSeleccionado = $request->input('perfil');
-
-        if ($idPerfilSeleccionado && $perfilesUsuario->contains('id_perfil', $idPerfilSeleccionado)) {
-            // Guardar selección en la sesión
+        if ($idPerfilSeleccionado && $usuario->perfiles->contains('id_perfil', $idPerfilSeleccionado)) {
             session(['perfil_activo_id' => $idPerfilSeleccionado]);
         }
 
-        // Obtener el perfil activo de la sesión o usar el primero disponible
-        $perfilActivo = $perfilesUsuario->firstWhere('id_perfil', session('perfil_activo_id'));
+        // Obtener el perfil activo
+        $perfilActivo = $usuario->perfilActivo;
 
-        if (!$perfilActivo) {
-            $perfilActivo = $perfilesUsuario->first();
-        }
-
+        // Tratamientos del perfil activo
         $tratamientos = $perfilActivo ? $perfilActivo->tratamientos : collect();
 
-        return view('dashboard', compact('perfilesUsuario', 'perfilActivo', 'tratamientos'));
+        // Citas futuras del perfil activo
+        $citas = $perfilActivo
+            ? $perfilActivo->citas()
+                ->whereDate('fecha', '>=', now()->toDateString())
+                ->orderBy('fecha')
+                ->orderBy('hora_inicio')
+                ->get()
+            : collect();
+
+        return view('dashboard', compact('perfilActivo', 'tratamientos', 'citas'));
     }
 }

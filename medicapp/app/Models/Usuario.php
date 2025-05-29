@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property-read \App\Models\Perfil|null $perfilActivo
+ */
+
+
 class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -56,5 +61,12 @@ class Usuario extends Authenticatable
     public function informes()
     {
         return $this->hasMany(Informe::class, 'id_usuario', 'id_usuario');
+    }
+
+
+    public function getPerfilActivoAttribute()
+    {
+        $id = session('perfil_activo_id');
+        return $this->perfiles->firstWhere('id_perfil', $id);
     }
 }

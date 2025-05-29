@@ -13,13 +13,13 @@
     :perfilesUsuario="$perfilesUsuario ?? []" 
     :perfilActivo="$perfilActivo ?? null" />
 
+
     {{-- Contenido principal --}}
     <main class="flex-1">
         @yield('content')
     </main>
 
-
-    {{-- Footer personalizado --}}
+    {{-- Footer siempre visible --}}
     <x-footer />
     
 </body>

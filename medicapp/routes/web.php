@@ -5,10 +5,10 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\MedicacionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TratamientoController;
+use App\Http\Controllers\CitaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -41,7 +41,6 @@ Route::get('/planes', function () {
     return view('account.planes');
 })->middleware('auth')->name('planes.show');
 
-
 Route::post('/planes', function (Request $request) {
     $request->validate([
         'rol_global' => 'required|in:estandar,premium'
@@ -55,23 +54,36 @@ Route::post('/planes', function (Request $request) {
     return redirect()->route('perfil.create');
 })->middleware('auth')->name('planes.store');
 
-
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-
-
 Route::get('/tratamiento/create', [TratamientoController::class, 'create'])->name('tratamiento.create');
 Route::post('/tratamiento', [TratamientoController::class, 'store'])->name('tratamiento.store');
-
-Route::get('/citas', [\App\Http\Controllers\CitaController::class, 'index'])->name('cita.index');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');
     Route::patch('/account', [AccountController::class, 'update'])->name('account.update');
-    Route::delete('/acccount', [AccountController::class, 'destroy'])->name('account.destroy');
+    Route::delete('/account', [AccountController::class, 'destroy'])->name('account.destroy');
+
+    Route::get('/citas', [CitaController::class, 'index'])->name('cita.index');
+    Route::get('/citas/crear', [CitaController::class, 'create'])->name('cita.create');
+    Route::post('/citas', [CitaController::class, 'store'])->name('cita.store');
+
+    Route::get('/citas/{cita}/editar', [CitaController::class, 'edit'])->name('cita.edit');
+    Route::put('/citas/{cita}', [CitaController::class, 'update'])->name('cita.update');
+
 });
+
+Route::get('/perfil/usar/{id}', [\App\Http\Controllers\PerfilActivoController::class, 'cambiar'])
+    ->middleware('auth')
+    ->name('perfil.cambiar');
+
+
+Route::post('/perfil/seleccionar', function (Request $request) {
+    $request->validate(['id_perfil' => 'required|integer']);
+    session(['perfil_activo_id' => $request->id_perfil]);
+    return redirect()->back();
+})->middleware('auth')->name('perfil.seleccionar');
 
 require __DIR__ . '/auth.php';

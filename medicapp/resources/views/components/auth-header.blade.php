@@ -1,5 +1,10 @@
 @props(['perfilesUsuario', 'perfilActivo' => null])
 
+@php
+    $usuario = Auth::user();
+    $rol = $usuario->rol_global;
+@endphp
+
 <header class="bg-[#0C1222] text-white py-4 px-6 flex items-center justify-between shadow-md">
     <!-- Logo + Nombre -->
     <div class="shrink-0 flex items-center space-x-3">
@@ -32,15 +37,14 @@
                         {{ $perfil->nombre_paciente }}
                     </x-dropdown-link>
                     @endforeach
-            
+
                     <hr class="my-2 border-gray-300">
-            
+
                     <x-dropdown-link :href="route('perfil.create')">
                         + Crear nuevo perfil
                     </x-dropdown-link>
                 @endif
             </x-slot>
-            
         </x-dropdown>
 
         <!-- Notificaciones -->
@@ -51,30 +55,42 @@
         </a>
 
         <!-- Menú usuario -->
-        <x-dropdown align="right" width="48">
-            <x-slot name="trigger">
-                <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#0C1222] hover:text-gray-300 focus:outline-none transition">
-                    {{ Auth::user()->nombre ?? Auth::user()->name }}
-                    <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-            </x-slot>
+@php
+    $user = Auth::user();
+    $isPremium = $user->rol_global === 'premium';
+@endphp
 
-            <x-slot name="content">
-                <x-dropdown-link :href="route('account.edit')">
-                    Cuenta
-                </x-dropdown-link>
+<x-dropdown align="right" width="48">
+    <x-slot name="trigger">
+        <button
+            class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow transition
+            {{ $isPremium ? 'bg-[#7fb0dd] text-white hover:bg-[#6aa1d0]' : 'bg-yellow-300 text-[#0C1222] hover:bg-yellow-200' }}">
+            <span class="font-bold mr-2">{{ $user->nombre ?? $user->name }}</span>
+            <span class="text-sm font-semibold {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}">
+                {{ ucfirst($user->rol_global) }}
+            </span>
+            <svg class="ml-2 w-4 h-4 {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd" />
+            </svg>
+        </button>
+    </x-slot>
 
-                <!-- Logout -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-dropdown-link href="{{ route('logout') }}"
-                                     onclick="event.preventDefault(); this.closest('form').submit();">
-                        Salir
-                    </x-dropdown-link>
-                </form>
-            </x-slot>
-        </x-dropdown>
+    <x-slot name="content">
+        <x-dropdown-link :href="route('account.edit')">
+            Cuenta
+        </x-dropdown-link>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <x-dropdown-link href="{{ route('logout') }}"
+                             onclick="event.preventDefault(); this.closest('form').submit();">
+                Salir
+            </x-dropdown-link>
+        </form>
+    </x-slot>
+</x-dropdown>
+
     </div>
 </header>

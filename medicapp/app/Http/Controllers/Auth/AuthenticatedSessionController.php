@@ -27,6 +27,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        session(['perfil_activo_id' => Auth::user()->perfiles->first()?->id_perfil]);
+
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
