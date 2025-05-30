@@ -27,8 +27,8 @@ class Tratamiento extends Model
         return $this->belongsTo(Perfil::class, 'id_perfil', 'id_perfil');
     }
 
-    // Relación con Medicamento: un tratamiento puede tener muchos medicamentos
-    public function tratamientosMedicamento()
+    // Relación con Medicamento: un tratamiento puede tener muchas medicaciones
+    public function medicaciones()
     {
         return $this->hasMany(TratamientoMedicamento::class, 'id_tratamiento', 'id_tratamiento');
     }

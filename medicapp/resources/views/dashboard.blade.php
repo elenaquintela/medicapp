@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="flex flex-1 h-full">
-    <!-- Contenido principal -->
     <main class="flex-1 px-8 py-6 space-y-12">
+
         <!-- Sección HOY -->
         <section>
             <h2 class="text-orange-400 text-xl font-bold mb-2">HOY</h2>
@@ -66,15 +66,17 @@
 
             <!-- Pestañas de tratamientos -->
             <div class="flex space-x-2">
-                @forelse ($tratamientos as $tratamiento)
-                    <button class="bg-gray-300 text-[#0C1222] font-semibold px-4 py-2 rounded-t-md">
+                @forelse ($tratamientos as $key => $tratamiento)
+                    <button type="button"
+                            onclick="mostrarTratamiento('{{ $tratamiento->id_tratamiento }}')"
+                            class="tratamiento-tab bg-white text-[#0C1222] font-semibold px-4 py-2 rounded-t-md"
+                            id="tab-{{ $tratamiento->id_tratamiento }}">
                         {{ $tratamiento->causa }}
                     </button>
                 @empty
                     <p class="text-white">No hay tratamientos registrados.</p>
                 @endforelse
 
-                {{-- Botón para añadir tratamiento (solo si hay perfil activo) --}}
                 @if ($perfilActivo)
                     <a href="{{ route('tratamiento.create', ['perfil' => $perfilActivo->id_perfil]) }}">
                         <button type="button" class="bg-green-300 hover:bg-green-400 text-[#0C1222] font-bold px-4 py-2 rounded-t-md">
@@ -82,13 +84,60 @@
                         </button>
                     </a>
                 @endif
-            </div>          
-
-            <!-- Contenido de la pestaña activa -->
-            <div class="bg-blue-100 text-[#0C1222] rounded-b-md p-6 shadow">
-                <p>Aquí irá la información del tratamiento seleccionado.</p>
             </div>
+
+            <!-- Contenido dinámico del tratamiento -->
+            @foreach ($tratamientos as $key => $tratamiento)
+                <div id="tratamiento-{{ $tratamiento->id_tratamiento }}"
+                     class="tratamiento-content bg-blue-100 text-[#0C1222] rounded-b-md p-6 shadow {{ $key !== 0 ? 'hidden' : '' }}">
+
+                    @if ($tratamiento->medicaciones && $tratamiento->medicaciones->isNotEmpty())
+                        <ul class="list-disc pl-5 space-y-4">
+                            @foreach ($tratamiento->medicaciones as $med)
+                                <li>
+                                    <strong>{{ $med->medicamento->nombre ?? '(Sin nombre)' }}</strong>
+                                    <ul class="list-none pl-3 text-sm space-y-1">
+                                        <li><span class="font-semibold">Dosis:</span> {{ $med->dosis }}</li>
+                                        <li><span class="font-semibold">Vía:</span> {{ $med->via }}</li>
+                                        <li><span class="font-semibold">Pauta:</span> cada {{ $med->pauta_intervalo }} {{ $med->pauta_unidad }}</li>
+                                        @if ($med->observaciones)
+                                            <li><span class="font-semibold">Observaciones:</span> {{ $med->observaciones }}</li>
+                                        @endif
+                                    </ul>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>No hay medicaciones registradas para este tratamiento.</p>
+                    @endif
+                </div>
+            @endforeach
         </section>
     </main>
 </div>
+
+<script>
+    function mostrarTratamiento(id) {
+        const contenidos = document.querySelectorAll('.tratamiento-content');
+        const pestañas = document.querySelectorAll('.tratamiento-tab');
+
+        contenidos.forEach(div => div.classList.add('hidden'));
+        pestañas.forEach(btn => {
+            btn.classList.remove('bg-blue-100', 'font-bold');
+            btn.classList.add('bg-white');
+        });
+
+        document.getElementById(`tratamiento-${id}`).classList.remove('hidden');
+        const activeTab = document.getElementById(`tab-${id}`);
+        activeTab.classList.remove('bg-white');
+        activeTab.classList.add('bg-blue-100', 'font-bold');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const primeraPestaña = document.querySelector('.tratamiento-tab');
+        if (primeraPestaña) {
+            primeraPestaña.click();
+        }
+    });
+</script>
 @endsection

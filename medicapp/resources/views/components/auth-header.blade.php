@@ -6,11 +6,11 @@
 @endphp
 
 <header class="bg-[#0C1222] text-white py-4 px-6 flex items-center justify-between shadow-md">
-    <!-- Logo + Nombre -->
-    <div class="shrink-0 flex items-center space-x-3">
+    <!-- Logo + Nombre como enlace al dashboard -->
+    <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center space-x-3 hover:opacity-90 transition">
         <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-20 h-auto">
         <span class="text-4xl font-bold text-white">MedicApp</span>
-    </div>
+    </a>
 
     <!-- Controles de usuario -->
     <div class="flex items-center space-x-6">
@@ -85,7 +85,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <x-dropdown-link href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                     onclick="event.preventDefault(); this.closest('form').submit();">
                         Salir
                     </x-dropdown-link>
                 </form>

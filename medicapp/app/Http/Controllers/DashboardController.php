@@ -22,19 +22,21 @@ class DashboardController extends Controller
         // Obtener el perfil activo
         $perfilActivo = $usuario->perfilActivo;
 
-        // Tratamientos del perfil activo
-        $tratamientos = $perfilActivo ? $perfilActivo->tratamientos : collect();
+        // Tratamientos con medicaciones y medicamentos precargados
+        $tratamientos = $perfilActivo
+            ? $perfilActivo->tratamientos()->with('medicaciones.medicamento')->get()
+            : collect();
 
         // Citas futuras del perfil activo
         $citas = $perfilActivo
             ? $perfilActivo->citas()
-            ->whereDate('fecha', '>=', now()->toDateString())
-            ->orderBy('fecha')
-            ->orderBy('hora_inicio')
-            ->get()
+                ->whereDate('fecha', '>=', now()->toDateString())
+                ->orderBy('fecha')
+                ->orderBy('hora_inicio')
+                ->get()
             : collect();
 
-        // ✅ Añadir esta línea para que funcione el layout
+        // Perfiles para el layout
         $perfilesUsuario = $usuario->perfiles;
 
         return view('dashboard', compact('perfilActivo', 'tratamientos', 'citas', 'perfilesUsuario'));
