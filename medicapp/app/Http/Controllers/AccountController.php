@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+
 
 class AccountController extends Controller
 {
@@ -17,7 +19,7 @@ class AccountController extends Controller
     public function edit(Request $request): View
     {
         return view('account.edit', [
-            'user' => $request->user(),
+            'usuario' => $request->user(),
         ]);
     }
 
@@ -26,16 +28,22 @@ class AccountController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Actualizar el nombre
+        $user->nombre = $request->validated()['nombre'];
+
+        // Si se envió una nueva contraseña, actualizarla
+        if ($request->filled('password')) {
+            $user->contrasena = bcrypt($request->password);
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('account.edit')->with('status', 'profile-updated');
     }
+
+
 
     /**
      * Delete the user's account.
@@ -43,13 +51,19 @@ class AccountController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+            'contrasena' => ['required'],
         ]);
 
         $user = $request->user();
 
-        Auth::logout();
+        // Verificar la contraseña 
+        if (!Hash::check($request->contrasena, $user->contrasena)) {
+            return back()->withErrors([
+                'contrasena' => 'La contraseña es incorrecta.',
+            ])->with('openDeleteModal', true);
+        }
 
+        Auth::logout();
         $user->delete();
 
         $request->session()->invalidate();

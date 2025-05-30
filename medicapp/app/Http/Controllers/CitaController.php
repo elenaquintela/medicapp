@@ -175,13 +175,17 @@ class CitaController extends Controller
             return redirect()->route('cita.index')->withErrors(['No tienes permiso para actualizar esta cita.']);
         }
 
+        $especialidad = $request->especialidad === 'otra'
+            ? $request->especialidad_otra
+            : $request->especialidad;
+
         $cita->update([
             'fecha' => $request->fecha,
             'hora_inicio' => $request->hora_inicio,
             'hora_fin' => $request->hora_fin,
             'motivo' => $request->motivo,
             'ubicacion' => $request->ubicacion,
-            'especialidad' => $request->especialidad,
+            'especialidad' => $especialidad,
             'recordatorio' => $request->has('recordatorio') ? 1 : 0,
             'observaciones' => $request->observaciones
         ]);

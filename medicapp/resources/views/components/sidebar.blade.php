@@ -16,7 +16,7 @@
                     <a href="{{ route('cita.index') }}" class="hover:text-orange-600" x-show="menuAbierto">Citas</a>
                     <a href="#" class="hover:text-orange-600" x-show="menuAbierto">Perfiles</a>
                     <a href="#" class="hover:text-orange-600" x-show="menuAbierto">Informes</a>
-                    <a href="#" class="hover:text-orange-600" x-show="menuAbierto">Ajustes</a>
+                    <a href="{{ route('account.edit') }}" class="hover:text-orange-600" x-show="menuAbierto">Ajustes</a>
                     <a href="{{ url('/') }}" class="text-red-600 hover:underline mt-8" x-show="menuAbierto">SALIR</a>
                 </nav>
             </aside>

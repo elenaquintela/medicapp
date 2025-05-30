@@ -51,30 +51,29 @@
             <!-- Columna derecha -->
             <div class="flex flex-col gap-6">
                 <!-- Especialidad -->
-                <!-- Especialidad -->
-<div>
-    <label for="especialidad" class="block mb-1 text-lg text-white">Especialidad</label>
-    <div class="w-full">
-        <select name="especialidad" id="especialidad"
-            class="w-full p-3 rounded text-[#0C1222] text-sm"
-            onchange="mostrarInputEspecialidad(this)">
-            <option value="">Seleccione una especialidad</option>
-            @foreach ($especialidades as $esp)
-                <option value="{{ $esp }}" {{ old('especialidad', $cita->especialidad) === $esp ? 'selected' : '' }}>
-                    {{ $esp }}
-                </option>
-            @endforeach
-            <option value="otra" {{ !in_array(old('especialidad', $cita->especialidad), $especialidades) ? 'selected' : '' }}>
-                Otra
-            </option>
-        </select>
+                    <div>
+                        <label for="especialidad" class="block mb-1 text-lg text-white">Especialidad</label>
+                        <div class="w-full">
+                            <select name="especialidad" id="especialidad"
+                                class="w-full p-3 rounded text-[#0C1222] text-sm"
+                                onchange="mostrarInputEspecialidad(this)">
+                                <option value="">Seleccione una especialidad</option>
+                                @foreach ($especialidades as $esp)
+                                    <option value="{{ $esp }}" {{ old('especialidad', $cita->especialidad) === $esp ? 'selected' : '' }}>
+                                        {{ $esp }}
+                                    </option>
+                                @endforeach
+                                <option value="otra" {{ !in_array(old('especialidad', $cita->especialidad), $especialidades) ? 'selected' : '' }}>
+                                    Otra
+                                </option>
+                            </select>
 
-        <input type="text" name="especialidad_otra" id="input-especialidad-otra"
-               class="w-full mt-2 p-3 rounded text-[#0C1222] text-sm {{ in_array(old('especialidad', $cita->especialidad), $especialidades) ? 'hidden' : '' }}"
-               placeholder="Especifique la especialidad"
-               value="{{ !in_array(old('especialidad', $cita->especialidad), $especialidades) ? old('especialidad', $cita->especialidad) : '' }}">
-    </div>
-</div>
+                            <input type="text" name="especialidad_otra" id="input-especialidad-otra"
+                                class="w-full mt-2 p-3 rounded text-[#0C1222] text-sm {{ in_array(old('especialidad', $cita->especialidad), $especialidades) ? 'hidden' : '' }}"
+                                placeholder="Especifique la especialidad"
+                                value="{{ !in_array(old('especialidad', $cita->especialidad), $especialidades) ? old('especialidad', $cita->especialidad) : '' }}">
+                        </div>
+                    </div>
 
 
                 <!-- Observaciones -->
@@ -104,14 +103,14 @@
     </div>
 
     <script>
-function mostrarInputEspecialidad(select) {
-    const input = document.getElementById('input-especialidad-otra');
-    if (select.value === 'otra') {
-        input.classList.remove('hidden');
-    } else {
-        input.classList.add('hidden');
-    }
-}
-</script>
+        function mostrarInputEspecialidad(select) {
+            const input = document.getElementById('input-especialidad-otra');
+            if (select.value === 'otra') {
+                input.classList.remove('hidden');
+            } else {
+                input.classList.add('hidden');
+            }
+        }
+    </script>
 
 </x-layouts.authenticated>

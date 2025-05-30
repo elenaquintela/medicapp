@@ -54,6 +54,19 @@ Route::post('/planes', function (Request $request) {
     return redirect()->route('perfil.create');
 })->middleware('auth')->name('planes.store');
 
+Route::post('/cuenta/cambiar-suscripcion', function (Request $request) {
+    $request->validate([
+        'rol_global' => 'required|in:estandar,premium'
+    ]);
+    /** @var \App\Models\Usuario $usuario */
+    $usuario = Auth::user();
+    $usuario->rol_global = $request->rol_global;
+    $usuario->save();
+
+    return redirect()->route('account.edit')->with('success', 'Tu suscripción ha sido actualizada.');
+})->middleware('auth')->name('account.changePlan');
+
+
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -72,7 +85,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/citas/{cita}/editar', [CitaController::class, 'edit'])->name('cita.edit');
     Route::put('/citas/{cita}', [CitaController::class, 'update'])->name('cita.update');
-
 });
 
 Route::get('/perfil/usar/{id}', [\App\Http\Controllers\PerfilActivoController::class, 'cambiar'])

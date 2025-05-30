@@ -1,9 +1,5 @@
 <x-layouts.authenticated :perfilesUsuario="$perfilesUsuario" :perfilActivo="$perfilActivo">
     <div class="flex flex-1 h-full">
-
-        
-        
-
         <!-- Contenido principal -->
         <main class="flex-1 px-8 py-6 space-y-12">
             <!-- Sección HOY -->
@@ -35,34 +31,32 @@
             </section>
 
             <!-- Sección Próximas Citas -->
-<section>
-    <h2 class="text-orange-400 text-xl font-bold mb-4">PRÓXIMAS CITAS</h2>
+            <section>
+                <h2 class="text-orange-400 text-xl font-bold mb-4">PRÓXIMAS CITAS</h2>
 
-    @if ($perfilActivo && $perfilActivo->citas->count())
-        <table class="w-full text-center border border-white">
-            <thead>
-                <tr class="border-b border-white">
-                    <th class="p-2">Fecha</th>
-                    <th class="p-2">Hora</th>
-                    <th class="p-2">Especialidad - Lugar</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($perfilActivo->citas->sortBy(['fecha', 'hora_inicio']) as $cita)
-                    <tr class="border-b border-white">
-                        <td class="p-2">{{ \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') }}</td>
-                        <td class="p-2">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</td>
-                        <td class="p-2">{{ $cita->especialidad }} - {{ $cita->ubicacion }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p class="text-white">No hay citas registradas para este perfil.</p>
-    @endif
-</section>
-
-
+                @if ($perfilActivo && $perfilActivo->citas->count())
+                    <table class="w-full text-center border border-white">
+                        <thead>
+                            <tr class="border-b border-white">
+                                <th class="p-2">Fecha</th>
+                                <th class="p-2">Hora</th>
+                                <th class="p-2">Especialidad - Lugar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($perfilActivo->citas->sortBy(['fecha', 'hora_inicio']) as $cita)
+                                <tr class="border-b border-white">
+                                    <td class="p-2">{{ \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') }}</td>
+                                    <td class="p-2">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</td>
+                                    <td class="p-2">{{ $cita->especialidad }} - {{ $cita->ubicacion }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <p class="text-white">No hay citas registradas para este perfil.</p>
+                @endif
+            </section>
             <!-- Tratamientos activos -->
             <section>
                 <h2 class="text-orange-400 text-xl font-bold mb-4">TRATAMIENTOS ACTIVOS</h2>
@@ -84,15 +78,13 @@
                         </button>
                     </a>
                     
-                </div>
-                
+                </div>          
 
                 <!-- Contenido de la pestaña activa -->
                 <div class="bg-blue-100 text-[#0C1222] rounded-b-md p-6 shadow">
                     <p>Aquí irá la información del tratamiento seleccionado.</p>
                 </div>
             </section>
-
         </main>
     </div>
 </x-layouts.authenticated>
