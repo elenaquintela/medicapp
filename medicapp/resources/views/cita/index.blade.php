@@ -1,3 +1,7 @@
+@php
+    $rol = Auth::user()->rol_global;
+@endphp
+
 <x-layouts.authenticated :perfilesUsuario="$perfilesUsuario" :perfilActivo="$perfilActivo">
     <div class="flex flex-col px-10 pt-6 h-full">
 
@@ -72,8 +76,6 @@
                     </tbody>
                 </table>
             </div>
-
-
             <!-- Botones -->
             <div class="w-[15%] flex flex-col items-center justify-center gap-6">
                 <!-- Botón + -->
@@ -85,9 +87,15 @@
                 </a>
 
                 <!-- Google Calendar -->
-                <div class="w-20 h-20">
-                    <img src="{{ asset('google-sync.png') }}" alt="Sync Google Calendar" class="w-full h-full object-contain">
-                </div>
+                @if ($rol === 'premium')
+                    <a href="#" class="w-20 h-20 hover:opacity-80 transition">
+                        <img src="{{ asset('google-sync.png') }}" alt="Sync Google Calendar" class="w-full h-full object-contain">
+                    </a>
+                @else
+                    <div class="w-20 h-20 opacity-50 cursor-not-allowed" title="Solo disponible en el plan Premium">
+                        <img src="{{ asset('google-sync.png') }}" alt="Sync Google Calendar" class="w-full h-full object-contain grayscale">
+                    </div>
+                @endif
             </div>
 
         </div>

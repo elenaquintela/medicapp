@@ -41,7 +41,7 @@
                     <hr class="my-2 border-gray-300">
 
                     <x-dropdown-link :href="route('perfil.create')">
-                        + Crear nuevo perfil
+                        Nuevo perfil
                     </x-dropdown-link>
                 @endif
             </x-slot>
