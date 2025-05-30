@@ -28,12 +28,15 @@ class DashboardController extends Controller
         // Citas futuras del perfil activo
         $citas = $perfilActivo
             ? $perfilActivo->citas()
-                ->whereDate('fecha', '>=', now()->toDateString())
-                ->orderBy('fecha')
-                ->orderBy('hora_inicio')
-                ->get()
+            ->whereDate('fecha', '>=', now()->toDateString())
+            ->orderBy('fecha')
+            ->orderBy('hora_inicio')
+            ->get()
             : collect();
 
-        return view('dashboard', compact('perfilActivo', 'tratamientos', 'citas'));
+        // ✅ Añadir esta línea para que funcione el layout
+        $perfilesUsuario = $usuario->perfiles;
+
+        return view('dashboard', compact('perfilActivo', 'tratamientos', 'citas', 'perfilesUsuario'));
     }
 }

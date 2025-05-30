@@ -28,7 +28,7 @@
 
             <x-slot name="content">
                 @if (count($perfilesUsuario) <= 1)
-                    <x-dropdown-link :href="route('perfil.create')">
+                    <x-dropdown-link :href="route('perfil.create', ['fromDashboard' => 1])">
                         Crear nuevo perfil
                     </x-dropdown-link>
                 @else
@@ -40,7 +40,7 @@
 
                     <hr class="my-2 border-gray-300">
 
-                    <x-dropdown-link :href="route('perfil.create')">
+                    <x-dropdown-link :href="route('perfil.create', ['fromDashboard' => 1])">
                         Nuevo perfil
                     </x-dropdown-link>
                 @endif

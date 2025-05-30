@@ -55,15 +55,17 @@ class MedicacionController extends Controller
         if ($request->accion === 'done') {
             $usuario = Auth::user();
 
-            // Redirigir según si el usuario ya tiene plan
-            if ($usuario->rol_global) {
+            // Redirigir a dashboard si tiene perfil asociado
+            if ($usuario->rol_global && $tratamiento->id_perfil) {
                 return redirect()->route('dashboard', ['perfil' => $tratamiento->id_perfil])
                     ->with('success', 'Tratamiento y medicación añadidos correctamente');
-            } else {
-                return redirect()->route('planes.show')
-                    ->with('success', 'Tratamiento y medicación registrados con éxito');
             }
+
+            // Fallback si algo está mal
+            return redirect()->route('planes.show')
+                ->with('success', 'Tratamiento y medicación registrados con éxito');
         }
+
         return back()->withErrors(['accion' => 'Acción no reconocida.']);
     }
 }

@@ -9,19 +9,23 @@ use Illuminate\Support\Facades\Auth;
 
 class PerfilController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
-        return view('perfil.create');
+        $layout = $request->boolean('fromDashboard') ? 'layouts.auth' : 'layouts.registro';
+        return view('perfil.create', compact('layout'));
     }
+
+
 
     public function store(Request $request)
     {
         $request->validate([
             'nombre_paciente' => 'required|string|max:80',
-            'fecha_nacimiento' => 'required|date',
+            'fecha_nacimiento' => 'required|date|before_or_equal:today|after:1900-01-01',
             'sexo' => 'required|in:F,M,NB,O',
             'causa' => 'required|string|max:150',
         ]);
+
 
         // 1. Crear el perfil
         $perfil = Perfil::create([
@@ -44,9 +48,9 @@ class PerfilController extends Controller
             'causa' => $request->causa,
             'fecha_inicio' => now(),
         ]);
-    
+
         // 4. Redirigir a la siguiente vista
         return redirect()->route('medicacion.create', $tratamiento->id_tratamiento)
-    ->with('success', 'Perfil y tratamiento creados correctamente');
+            ->with('success', 'Perfil y tratamiento creados correctamente');
     }
 }
