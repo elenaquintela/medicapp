@@ -10,6 +10,108 @@
 ## Instalación
 > *Tarefa*: Neste apartado describe con toda precisión e, a poder ser, coa maior simplicidade/facilidade posible, como poñer en marcha a túa aplicación para probala (nun entorno local). Valorarase moi positivamente que este proceso sexa o máis fácil posible, cunha simple instrución (por exemplo, un script de instalación).
 
+Para executar esta aplicación localmente, recoméndase usar **XAMPP** como contorno de desenvolvemento (inclúe PHP, Apache e MySQL) xunto con **Composer** e **Node.js**.
+
+A continuación detállanse os pasos para poñer en marcha o proxecto:
+
+---
+
+### Requisitos previos
+
+1. **XAMPP** (https://www.apachefriends.org)  
+   Inclúe PHP, Apache e MySQL. Instala e inicia os servizos de **Apache** e **MySQL**.
+
+2. **Composer** (https://getcomposer.org/download)  
+   Instalador oficial para xestionar dependencias PHP.
+
+3. **Node.js** (https://nodejs.org)  
+   Recomendado instalar a versión LTS estable.
+
+---
+
+### Pasos para a instalación
+
+1. **Clonar ou descargar o proxecto**
+
+   Podes clonar o repositorio en calquera carpeta do teu equipo (non é necesario copialo en `htdocs`):
+
+   ```bash
+   git clone https://gitlab.com/usuario/medicapp.git
+   cd medicapp
+   ```
+
+   Pero se se descarga como ZIP, débese copiar a carpeta do proxecto en:
+
+   ```
+   C:\xampp\htdocs\medicapp
+   ```
+
+2. **Instalar as dependencias de PHP (Laravel)**
+
+   ```bash
+   composer install
+   ```
+
+3. **Instalar as dependencias de frontend (JavaScript e CSS)**
+
+   ```bash
+   npm install
+   npm run build
+   ```
+
+4. **Configurar o entorno**
+
+   Renomear o arquivo `.env.example` como `.env`:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   E xerar a chave da aplicación:
+
+   ```bash
+   php artisan key:generate
+   ```
+
+5. **Crear a base de datos**
+
+   - Accede a `http://localhost/phpmyadmin`
+   - Crea unha base de datos nova chamada `medicapp`
+   - Preme sobre a base de datos e vai á pestana **Importar**
+   - Selecciona o ficheiro `medicapp.sql` incluído na carpeta do proxecto e pulsa en **Continuar**
+
+6. **Editar o ficheiro `.env`** para engadir os datos da base de datos:
+
+   ```
+   DB_DATABASE=medicapp
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+7. **Executar migracións**
+
+   ```bash
+   php artisan migrate
+   ```
+
+8. **Iniciar o servidor de Laravel**
+
+   Laravel trae un servidor de desenvolvemento integrado. Para iniciar a aplicación, executa:
+
+   ```bash
+   php artisan serve
+   ```
+
+   Abre `http://localhost:8000` no navegador para acceder á aplicación.
+
+---
+
+**Nota**: Se se produce algún erro durante o proceso, comproba que:
+- Apache e MySQL están iniciados desde XAMPP.
+- Estás na ruta correcta do proxecto ao executar os comandos.
+- As versións de PHP, Node.js e Composer son compatibles con Laravel 10.
+
+
 ## Uso
 > *Tarefa*: Neste apartado, describe brevemente como se usará o software. Se ten unha interfaz de terminal, describe aquí a súa sintaxe. Se ten unha interfaz gráfica de usuario, describe aquí **só o uso** (a modo de sumario) **dos aspectos máis relevantes do seu funcionamento** (máxima brevidade, como se fose un anuncio reclamo ou comercial).
 
