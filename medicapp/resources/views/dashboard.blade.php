@@ -10,24 +10,43 @@
             <h3 class="text-2xl font-bold mb-4">Recordatorios</h3>
 
             <table class="w-full text-center border border-white">
-                <thead class="bg-[#0C1222]">
+                <thead class="bg-blue-400 text-black uppercase font-bold">
                     <tr class="border-b border-white">
+                        <th class="p-2">Fecha</th>
                         <th class="p-2">Hora</th>
                         <th class="p-2">Medicamento</th>
+                        <th class="p-2">Observaciones</th>
                         <th class="p-2">Tomado</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-b border-white">
-                        <td class="p-2">08:00</td>
-                        <td class="p-2">Paracetamol 1g</td>
-                        <td class="p-2 text-green-500 text-2xl">✔️</td>
-                    </tr>
-                    <tr>
-                        <td class="p-2">13:00</td>
-                        <td class="p-2">Omeprazol 20mg</td>
-                        <td class="p-2 border border-green-400 w-6 h-6 mx-auto"></td>
-                    </tr>
+                    @forelse ($recordatorios as $rec)
+                        <tr class="border-b border-white {{ $rec->tomado ? 'bg-green-100 text-[#0C1222]' : 'text-white' }}" data-row-id="{{ $rec->id }}">
+                            <td class="p-2">
+                                {{ \Carbon\Carbon::parse($rec->fecha_hora)->format('d/m/Y') }}
+                            </td>
+                            <td class="p-2">
+                                {{ \Carbon\Carbon::parse($rec->fecha_hora)->format('H:i') }}
+                            </td>
+                            <td class="p-2">
+                                {{ $rec->tratamientoMedicamento->medicamento->nombre ?? 'Desconocido' }}
+                                {{ $rec->tratamientoMedicamento->dosis ? ' ' . $rec->tratamientoMedicamento->dosis : '' }}
+                            </td>
+                            <td class="p-2 text-sm italic">
+                                {{ $rec->tratamientoMedicamento->observaciones ?? '—' }}
+                            </td>
+                            <td class="p-2">
+                                <input type="checkbox"
+                                       class="recordatorio-check h-6 w-6 accent-green-500"
+                                       data-id="{{ $rec->id }}"
+                                       {{ $rec->tomado ? 'checked' : '' }}>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="p-4 text-gray-300">No hay recordatorios para hoy.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </section>
@@ -38,7 +57,7 @@
 
             @if ($perfilActivo && $perfilActivo->citas->count())
                 <table class="w-full text-center border border-white">
-                    <thead>
+                    <thead class="bg-blue-400 text-black uppercase font-bold">
                         <tr class="border-b border-white">
                             <th class="p-2">Fecha</th>
                             <th class="p-2">Hora</th>
@@ -47,7 +66,7 @@
                     </thead>
                     <tbody>
                         @foreach ($perfilActivo->citas->sortBy(['fecha', 'hora_inicio']) as $cita)
-                            <tr class="border-b border-white">
+                            <tr class="border-b border-white text-white">
                                 <td class="p-2">{{ \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') }}</td>
                                 <td class="p-2">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</td>
                                 <td class="p-2">{{ $cita->especialidad }} - {{ $cita->ubicacion }}</td>
@@ -64,7 +83,6 @@
         <section>
             <h2 class="text-orange-400 text-xl font-bold mb-4">TRATAMIENTOS ACTIVOS</h2>
 
-            <!-- Pestañas de tratamientos -->
             <div class="flex space-x-2">
                 @forelse ($tratamientos as $key => $tratamiento)
                     <button type="button"
@@ -86,11 +104,9 @@
                 @endif
             </div>
 
-            <!-- Contenido dinámico del tratamiento -->
             @foreach ($tratamientos as $key => $tratamiento)
                 <div id="tratamiento-{{ $tratamiento->id_tratamiento }}"
                      class="tratamiento-content bg-blue-100 text-[#0C1222] rounded-b-md p-6 shadow {{ $key !== 0 ? 'hidden' : '' }}">
-
                     @if ($tratamiento->medicaciones && $tratamiento->medicaciones->isNotEmpty())
                         <ul class="list-disc pl-5 space-y-4">
                             @foreach ($tratamiento->medicaciones as $med)
@@ -138,6 +154,37 @@
         if (primeraPestaña) {
             primeraPestaña.click();
         }
+
+        document.querySelectorAll('.recordatorio-check').forEach(check => {
+            check.addEventListener('change', async (e) => {
+                const id = e.target.dataset.id;
+                const row = document.querySelector(`tr[data-row-id='${id}']`);
+
+                try {
+                    const res = await fetch(`/recordatorios/${id}/marcar`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ tomado: e.target.checked })
+                    });
+
+                    if (res.ok) {
+                        row.classList.toggle('bg-green-100', e.target.checked);
+                        row.classList.toggle('text-[#0C1222]', e.target.checked);
+                        row.classList.toggle('text-white', !e.target.checked);
+                    } else {
+                        alert('Error al actualizar el recordatorio.');
+                        e.target.checked = !e.target.checked;
+                    }
+                } catch (error) {
+                    alert('Error de conexión.');
+                    e.target.checked = !e.target.checked;
+                }
+            });
+        });
     });
 </script>
 @endsection

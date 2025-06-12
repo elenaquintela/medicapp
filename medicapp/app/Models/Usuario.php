@@ -63,7 +63,6 @@ class Usuario extends Authenticatable
         return $this->hasMany(Informe::class, 'id_usuario', 'id_usuario');
     }
 
-
     public function getPerfilActivoAttribute()
     {
         $id = session('perfil_activo_id');

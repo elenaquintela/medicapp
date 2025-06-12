@@ -115,6 +115,11 @@ Route::middleware('auth')->group(function () {
         session(['perfil_activo_id' => $request->id_perfil]);
         return redirect()->back();
     })->name('perfil.seleccionar');
+
+    // Marcar recordatorio como tomado
+    Route::post('/recordatorios/{recordatorio}/marcar', [\App\Http\Controllers\RecordatorioController::class, 'marcarComoTomado'])
+        ->name('recordatorio.marcar');
+
 });
 
 /*

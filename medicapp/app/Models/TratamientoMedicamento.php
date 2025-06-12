@@ -25,6 +25,7 @@ class TratamientoMedicamento extends Model
         'dosis',
         'pauta_intervalo',
         'pauta_unidad',
+        'fecha_hora_inicio',
         'observaciones',
         'estado',
         'sustituido_por',
@@ -38,6 +39,11 @@ class TratamientoMedicamento extends Model
     public function medicamento()
     {
         return $this->belongsTo(Medicamento::class, 'id_medicamento', 'id_medicamento');
+    }
+
+    public function recordatorios()
+    {
+        return $this->hasMany(Recordatorio::class, 'id_trat_med', 'id_trat_med');
     }
 
     public function sustituidoPor()
