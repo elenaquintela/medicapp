@@ -79,6 +79,8 @@ Route::middleware('auth')->group(function () {
     // Tratamiento
     Route::get('/tratamiento/create', [TratamientoController::class, 'create'])->name('tratamiento.create');
     Route::post('/tratamiento', [TratamientoController::class, 'store'])->name('tratamiento.store');
+    Route::get('/tratamientos', [TratamientoController::class, 'index'])->name('tratamiento.index');
+    Route::get('/tratamiento/{tratamiento}', [TratamientoController::class, 'show'])->name('tratamiento.show');
 
     // Medicación
     Route::get('/tratamiento/{tratamiento}/medicacion', [MedicacionController::class, 'create'])->name('medicacion.create');

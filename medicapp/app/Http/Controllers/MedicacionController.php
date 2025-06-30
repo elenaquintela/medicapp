@@ -49,7 +49,7 @@ class MedicacionController extends Controller
             'estado' => 'activo',
         ]);
 
-        // Generar recordatorios solo para las tomas futuras (próximas 48h)
+        // Generar recordatorios para próximas 48h
         $unidadCarbon = match ($request->pauta_unidad) {
             'horas' => 'hours',
             'dias' => 'days',
@@ -75,17 +75,31 @@ class MedicacionController extends Controller
             $actual->add($unidadCarbon, $intervalo);
         }
 
+        // Si se viene desde tratamiento/show
+        if ($request->has('volver_a_show')) {
+            return redirect()->route('tratamiento.show', $tratamiento->id_tratamiento)
+                ->with('success', 'Medicación añadida correctamente.');
+        }
+
+        // Si quiere seguir añadiendo medicaciones
         if ($request->accion === 'add') {
             return redirect()->route('medicacion.create', $tratamiento->id_tratamiento)
                 ->with('success', 'Medicación añadida correctamente');
         }
 
+        // Si finaliza
         if ($request->accion === 'done') {
+            if ($request->has('volver_a_index')) {
+                return redirect()->route('tratamiento.index')
+                    ->with('success', 'Tratamiento y medicación registrados correctamente.');
+            }
+
             $usuario = Auth::user();
             if ($usuario->rol_global && $tratamiento->id_perfil) {
                 return redirect()->route('dashboard', ['perfil' => $tratamiento->id_perfil])
                     ->with('success', 'Tratamiento y medicación añadidos correctamente');
             }
+
             return redirect()->route('planes.show')
                 ->with('success', 'Tratamiento y medicación registrados con éxito');
         }

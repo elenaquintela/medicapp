@@ -16,18 +16,18 @@
     <aside :class="menuAbierto ? 'w-56' : 'w-12'" class="bg-yellow-200 text-[#0C1222] transition-all duration-300 overflow-hidden p-6 space-y-4 h-screen">
         <nav class="flex flex-col space-y-4 font-bold text-lg">
             <a href="{{ route('dashboard') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Inicio</a>
-            <a href="#" class="hover:text-orange-600" x-show="menuAbierto">Tratamientos</a>
-            <a href="{{ route('cita.index') }}" class="hover:text-orange-600" x-show="menuAbierto">Citas</a>
-            <a href="#" class="hover:text-orange-600" x-show="menuAbierto">Perfiles</a>
+            <a href="{{ route('tratamiento.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Tratamientos</a>
+            <a href="{{ route('cita.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Citas</a>
+            <a href="#" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Perfiles</a>
 
             @if ($rol === 'premium')
-                <a href="#" class="hover:text-orange-600" x-show="menuAbierto">Informes</a>
+                <a href="#" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Informes</a>
             @else
-                <span class="text-gray-400 cursor-not-allowed" x-show="menuAbierto">Informes</span>
+                <span class="text-gray-400 cursor-not-allowed whitespace-nowrap" x-show="menuAbierto">Informes</span>
             @endif
 
-            <a href="{{ route('account.edit') }}" class="hover:text-orange-600" x-show="menuAbierto">Ajustes</a>
-            <a href="{{ url('/') }}" class="text-red-600 hover:underline mt-8" x-show="menuAbierto">SALIR</a>
+            <a href="{{ route('account.edit') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Ajustes</a>
+            <a href="{{ url('/') }}" class="text-red-600 hover:underline mt-8 whitespace-nowrap" x-show="menuAbierto">SALIR</a>
         </nav>
     </aside>
 </div>

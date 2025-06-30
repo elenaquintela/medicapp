@@ -16,6 +16,7 @@ class Tratamiento extends Model
 
     protected $fillable = [
         'id_perfil',
+        'id_usuario_creador',
         'causa',
         'fecha_inicio',
         'estado',
@@ -31,5 +32,10 @@ class Tratamiento extends Model
     public function medicaciones()
     {
         return $this->hasMany(TratamientoMedicamento::class, 'id_tratamiento', 'id_tratamiento');
+    }
+
+    public function usuarioCreador()
+    {
+        return $this->belongsTo(\App\Models\Usuario::class, 'id_usuario_creador', 'id_usuario');
     }
 }

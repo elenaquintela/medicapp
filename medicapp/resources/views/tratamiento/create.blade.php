@@ -20,6 +20,12 @@
                 @enderror
             </div>
 
+            <!-- Campo oculto para redirección -->
+            @if ($volver_a_index ?? false)
+                <input type="hidden" name="volver_a_index" value="1">
+            @endif
+
+
             <!-- Botón -->
             <div class="text-center mt-8">
                 <button type="submit" name="accion" value="done"

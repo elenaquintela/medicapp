@@ -45,9 +45,12 @@ class PerfilController extends Controller
         // 3. Crear el tratamiento con la causa inicial
         $tratamiento = Tratamiento::create([
             'id_perfil' => $perfil->id_perfil,
+            'id_usuario_creador' => $usuario->id_usuario, 
             'causa' => $request->causa,
             'fecha_inicio' => now(),
+            'estado' => 'activo', // 
         ]);
+
 
         // 4. Redirigir a la siguiente vista
         return redirect()->route('medicacion.create', $tratamiento->id_tratamiento)
