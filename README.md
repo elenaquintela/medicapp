@@ -36,7 +36,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
    Podes clonar o repositorio en calquera carpeta do teu equipo (non é necesario copialo en `htdocs`):
 
    ```bash
-   git clone https://gitlab.com/usuario/medicapp.git
+   git clone https://gitlab.iessanclemente.net/dawdu/a23elenaqb.git
    cd medicapp
    ```
 
