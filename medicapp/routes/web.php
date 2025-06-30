@@ -85,6 +85,11 @@ Route::middleware('auth')->group(function () {
     // Medicación
     Route::get('/tratamiento/{tratamiento}/medicacion', [MedicacionController::class, 'create'])->name('medicacion.create');
     Route::post('/tratamiento/{tratamiento}/medicacion', [MedicacionController::class, 'store'])->name('medicacion.store');
+    Route::get('/medicacion/{medicacion}/edit', [MedicacionController::class, 'edit'])->name('medicacion.edit');
+    Route::put('/medicacion/{medicacion}', [MedicacionController::class, 'update'])->name('medicacion.update');
+    Route::put('/medicacion/{medicacion}/archivar', [MedicacionController::class, 'archivar'])->name('medicacion.archivar');
+
+
 
     // Citas
     Route::get('/citas', [CitaController::class, 'index'])->name('cita.index');

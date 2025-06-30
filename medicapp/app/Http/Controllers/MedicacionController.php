@@ -106,4 +106,57 @@ class MedicacionController extends Controller
 
         return back()->withErrors(['accion' => 'Acción no reconocida.']);
     }
+
+    public function edit($id)
+    {
+        $medicacion = \App\Models\TratamientoMedicamento::with('medicamento')->findOrFail($id);
+        $tratamiento = $medicacion->tratamiento;
+        return view('medicacion.create', compact('medicacion', 'tratamiento'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:120',
+            'indicacion' => 'required|string|max:120',
+            'presentacion' => 'required|string',
+            'via' => 'required|string',
+            'dosis' => 'required|string|max:50',
+            'fecha_hora_inicio' => 'required|date',
+            'pauta_intervalo' => 'required|integer|min:1',
+            'pauta_unidad' => 'required|string',
+            'observaciones' => 'nullable|string|max:255',
+        ]);
+
+        $medicacion = \App\Models\TratamientoMedicamento::findOrFail($id);
+        $medicamento = \App\Models\Medicamento::firstOrCreate(
+            ['nombre' => $request->nombre],
+            ['descripcion' => null, 'id_cima' => null]
+        );
+
+        $medicacion->update([
+            'id_medicamento' => $medicamento->id_medicamento,
+            'indicacion' => $request->indicacion,
+            'presentacion' => $request->presentacion,
+            'via' => $request->via,
+            'dosis' => $request->dosis,
+            'fecha_hora_inicio' => $request->fecha_hora_inicio,
+            'pauta_intervalo' => $request->pauta_intervalo,
+            'pauta_unidad' => $request->pauta_unidad,
+            'observaciones' => $request->observaciones,
+        ]);
+
+        return redirect()->route('tratamiento.show', $medicacion->id_tratamiento)
+            ->with('success', 'Medicación actualizada correctamente.');
+    }
+
+    public function archivar($id)
+    {
+        $medicacion = \App\Models\TratamientoMedicamento::findOrFail($id);
+        $medicacion->estado = 'archivado';
+        $medicacion->save();
+
+        return redirect()->route('tratamiento.show', $medicacion->id_tratamiento)
+            ->with('success', 'Medicación archivada correctamente.');
+    }
 }
