@@ -13,7 +13,7 @@
     @include('components.auth-header')
 
     {{-- Contenedor principal: sidebar + contenido --}}
-    <div class="flex flex-1 min-h-0">
+    <div class="flex flex-1 min-h-screen">
         {{-- Sidebar a la izquierda --}}
         @include('components.sidebar')
 

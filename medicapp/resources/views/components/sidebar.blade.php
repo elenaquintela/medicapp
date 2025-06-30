@@ -2,8 +2,9 @@
     $rol = Auth::user()->rol_global;
 @endphp
 
-<!-- Menú lateral -->
-<div x-data="{ menuAbierto: false }" class="relative flex h-screen">
+<!-- Menú lateral completo -->
+<div x-data="{ menuAbierto: false }" class="relative flex flex-col min-h-screen">
+
     <!-- Botón para colapsar/desplegar -->
     <button @click="menuAbierto = !menuAbierto"
             class="absolute -right-3 top-20 z-10 bg-yellow-300 text-[#0C1222] rounded-full w-8 h-16 flex items-center justify-center shadow hover:bg-yellow-200 transition">
@@ -12,8 +13,10 @@
         </svg>
     </button>
 
-    <!-- Menú lateral -->
-    <aside :class="menuAbierto ? 'w-56' : 'w-12'" class="bg-yellow-200 text-[#0C1222] transition-all duration-300 overflow-hidden p-6 space-y-4 h-screen">
+    <!-- Sidebar -->
+    <aside :class="menuAbierto ? 'w-56' : 'w-12'"
+           class="bg-yellow-200 text-[#0C1222] transition-all duration-300 overflow-hidden p-6 space-y-4 h-full flex flex-col">
+
         <nav class="flex flex-col space-y-4 font-bold text-lg">
             <a href="{{ route('dashboard') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Inicio</a>
             <a href="{{ route('tratamiento.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Tratamientos</a>
