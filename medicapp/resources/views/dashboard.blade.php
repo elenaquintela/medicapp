@@ -4,80 +4,86 @@
 <div class="flex flex-1 h-full">
     <main class="flex-1 px-8 py-6 space-y-12">
 
-        <!-- Sección HOY -->
-        <section>
-            <h2 class="text-orange-400 text-xl font-bold mb-2">HOY</h2>
-            <h3 class="text-2xl font-bold mb-4">Recordatorios</h3>
-
-            <table class="w-full text-center border border-white">
-                <thead class="bg-blue-400 text-black uppercase font-bold">
-                    <tr class="border-b border-white">
-                        <th class="p-2">Fecha</th>
-                        <th class="p-2">Hora</th>
-                        <th class="p-2">Medicamento</th>
-                        <th class="p-2">Observaciones</th>
-                        <th class="p-2">Tomado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($recordatorios as $rec)
-                        <tr class="border-b border-white {{ $rec->tomado ? 'bg-green-100 text-[#0C1222]' : 'text-white' }}" data-row-id="{{ $rec->id }}">
-                            <td class="p-2">
-                                {{ \Carbon\Carbon::parse($rec->fecha_hora)->format('d/m/Y') }}
-                            </td>
-                            <td class="p-2">
-                                {{ \Carbon\Carbon::parse($rec->fecha_hora)->format('H:i') }}
-                            </td>
-                            <td class="p-2">
-                                {{ $rec->tratamientoMedicamento->medicamento->nombre ?? 'Desconocido' }}
-                                {{ $rec->tratamientoMedicamento->dosis ? ' ' . $rec->tratamientoMedicamento->dosis : '' }}
-                            </td>
-                            <td class="p-2 text-sm italic">
-                                {{ $rec->tratamientoMedicamento->observaciones ?? '—' }}
-                            </td>
-                            <td class="p-2">
-                                <input type="checkbox"
-                                       class="recordatorio-check h-6 w-6 accent-green-500"
-                                       data-id="{{ $rec->id }}"
-                                       {{ $rec->tomado ? 'checked' : '' }}>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="p-4 text-gray-300">No hay recordatorios para hoy.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Sección Próximas Citas -->
-        <section>
-            <h2 class="text-orange-400 text-xl font-bold mb-4">PRÓXIMAS CITAS</h2>
-
-            @if ($perfilActivo && $perfilActivo->citas->count())
-                <table class="w-full text-center border border-white">
-                    <thead class="bg-blue-400 text-black uppercase font-bold">
-                        <tr class="border-b border-white">
-                            <th class="p-2">Fecha</th>
-                            <th class="p-2">Hora</th>
-                            <th class="p-2">Especialidad - Lugar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($perfilActivo->citas->sortBy(['fecha', 'hora_inicio']) as $cita)
-                            <tr class="border-b border-white text-white">
-                                <td class="p-2">{{ \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') }}</td>
-                                <td class="p-2">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</td>
-                                <td class="p-2">{{ $cita->especialidad }} - {{ $cita->ubicacion }}</td>
+        <!-- Secciones HOY y PRÓXIMAS CITAS alineadas -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <!-- Sección HOY -->
+            <section class="flex flex-col">
+                <div class="mb-4">
+                    <h2 class="text-orange-400 text-xl font-bold mb-2">HOY</h2>
+                    <h3 class="text-2xl font-bold">Recordatorios</h3>
+                </div>
+                <div class="flex-1">
+                    <table class="w-full text-center border border-white">
+                        <thead class="bg-blue-400 text-black uppercase font-bold">
+                            <tr class="border-b border-white">
+                                <th class="p-2">Hora</th>
+                                <th class="p-2">Medicamento</th>
+                                <th class="p-2">Observaciones</th>
+                                <th class="p-2">Tomado</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @else
-                <p class="text-white">No hay citas registradas para este perfil.</p>
-            @endif
-        </section>
+                        </thead>
+                        <tbody>
+                            @forelse ($recordatorios as $rec)
+                                <tr class="border-b border-white transition-opacity duration-700 text-white" data-row-id="{{ $rec->id }}">
+                                    <td class="p-2">
+                                        {{ \Carbon\Carbon::parse($rec->fecha_hora)->format('H:i') }}
+                                    </td>
+                                    <td class="p-2">
+                                        {{ $rec->tratamientoMedicamento->medicamento->nombre ?? 'Desconocido' }}
+                                        {{ $rec->tratamientoMedicamento->dosis ? ' ' . $rec->tratamientoMedicamento->dosis : '' }}
+                                    </td>
+                                    <td class="p-2 text-sm italic">
+                                        {{ $rec->tratamientoMedicamento->observaciones ?? '—' }}
+                                    </td>
+                                    <td class="p-2">
+                                        <input type="checkbox"
+                                               class="recordatorio-check h-6 w-6 accent-green-500"
+                                               data-id="{{ $rec->id }}"
+                                               {{ $rec->tomado ? 'checked' : '' }}>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="p-4 text-gray-300">No hay recordatorios para hoy.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sección Próximas Citas -->
+            <section class="flex flex-col">
+                <div class="mb-4">
+                    <h2 class="text-orange-400 text-xl font-bold mb-2">PRÓXIMAS CITAS</h2>
+                    <h3 class="text-2xl font-bold invisible lg:visible">&nbsp;</h3>
+                </div>
+                <div class="flex-1">
+                    @if ($perfilActivo && $perfilActivo->citas->count())
+                        <table class="w-full text-center border border-white">
+                            <thead class="bg-blue-400 text-black uppercase font-bold">
+                                <tr class="border-b border-white">
+                                    <th class="p-2">Fecha</th>
+                                    <th class="p-2">Hora</th>
+                                    <th class="p-2">Especialidad - Lugar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($perfilActivo->citas->sortBy(['fecha', 'hora_inicio']) as $cita)
+                                    <tr class="border-b border-white text-white">
+                                        <td class="p-2">{{ \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') }}</td>
+                                        <td class="p-2">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</td>
+                                        <td class="p-2">{{ $cita->especialidad }} - {{ $cita->ubicacion }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-white">No hay citas registradas para este perfil.</p>
+                    @endif
+                </div>
+            </section>
+        </div>
 
         <!-- Tratamientos activos -->
         <section>
@@ -133,6 +139,8 @@
 </div>
 
 <script>
+    const timeouts = {};
+
     function mostrarTratamiento(id) {
         const contenidos = document.querySelectorAll('.tratamiento-content');
         const pestañas = document.querySelectorAll('.tratamiento-tab');
@@ -151,9 +159,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const primeraPestaña = document.querySelector('.tratamiento-tab');
-        if (primeraPestaña) {
-            primeraPestaña.click();
-        }
+        if (primeraPestaña) primeraPestaña.click();
 
         document.querySelectorAll('.recordatorio-check').forEach(check => {
             check.addEventListener('change', async (e) => {
@@ -171,16 +177,21 @@
                         body: JSON.stringify({ tomado: e.target.checked })
                     });
 
-                    if (res.ok) {
-                        row.classList.toggle('bg-green-100', e.target.checked);
-                        row.classList.toggle('text-[#0C1222]', e.target.checked);
-                        row.classList.toggle('text-white', !e.target.checked);
+                    if (!res.ok) throw new Error();
+
+                    if (e.target.checked) {
+                        row.classList.add('transition-opacity', 'duration-700');
+                        timeouts[id] = setTimeout(() => {
+                            row.classList.add('opacity-0');
+                            setTimeout(() => row.remove(), 700);
+                        }, 2000);
                     } else {
-                        alert('Error al actualizar el recordatorio.');
-                        e.target.checked = !e.target.checked;
+                        clearTimeout(timeouts[id]);
+                        delete timeouts[id];
                     }
+
                 } catch (error) {
-                    alert('Error de conexión.');
+                    alert('Error al actualizar el recordatorio.');
                     e.target.checked = !e.target.checked;
                 }
             });

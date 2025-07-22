@@ -38,7 +38,20 @@ class TratamientoController extends Controller
         }
 
         $request->validate([
-            'causa' => 'required|string|max:150',
+            'causa' => [
+                'required',
+                'string',
+                'max:150',
+                function ($attribute, $value, $fail) use ($perfilActivo) {
+                    $existe = Tratamiento::where('id_perfil', $perfilActivo->id_perfil)
+                        ->where('causa', $value)
+                        ->exists();
+
+                    if ($existe) {
+                        $fail('Este perfil ya tiene un tratamiento con la causa "' . $value . '". Usa otro nombre.');
+                    }
+                }
+            ],
         ]);
 
         $tratamiento = Tratamiento::create([
@@ -63,9 +76,24 @@ class TratamientoController extends Controller
         $usuario = Auth::user();
         $perfilActivo = $usuario->perfilActivo;
 
-        $tratamientos = $perfilActivo
-            ? $perfilActivo->tratamientos()->with('usuarioCreador')->get()
-            : collect();
+        $tratamientos = collect();
+
+        if ($perfilActivo) {
+            $query = $perfilActivo->tratamientos()->with('usuarioCreador');
+
+            if ($busqueda = request('busqueda')) {
+                $query->where(function ($q) use ($busqueda) {
+                    $q->where('causa', 'like', "%{$busqueda}%")
+                      ->orWhere('estado', 'like', "%{$busqueda}%")
+                      ->orWhereDate('fecha_inicio', $busqueda)
+                      ->orWhereHas('usuarioCreador', function ($subquery) use ($busqueda) {
+                          $subquery->where('nombre', 'like', "%{$busqueda}%");
+                      });
+                });
+            }
+
+            $tratamientos = $query->get();
+        }
 
         return view('tratamiento.index', compact('tratamientos'));
     }

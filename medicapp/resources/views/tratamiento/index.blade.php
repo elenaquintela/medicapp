@@ -13,14 +13,17 @@
     <h2 class="text-3xl font-bold mb-8 text-center">Tratamientos</h2>
 
     <!-- Filtro -->
-    <div class="flex items-center gap-3 mb-6 w-full max-w-[85%]">
+    <form method="GET" action="{{ route('tratamiento.index') }}" class="flex items-center gap-3 mb-6 w-full max-w-[85%]">
         <img src="{{ asset('filtro.png') }}" alt="Filtro"
              class="h-12 aspect-auto object-contain brightness-0 invert" />
 
         <input type="text"
+               name="busqueda"
+               id="busqueda"
+               value="{{ request('busqueda') }}"
                class="w-full p-3 rounded-md text-black placeholder-gray-600 text-sm"
                placeholder="Filtre por causa, estado, fecha o creador" />
-    </div>
+    </form>
 
     <!-- Contenedor tabla + botones -->
     <div class="flex w-full items-start">
@@ -37,16 +40,15 @@
                         <th class="py-3 px-4">Ver detalles</th>
                     </tr>
                 </thead>
-                <tbody class="text-center">
+                <tbody id="tabla-tratamientos" class="text-center">
                     @forelse ($tratamientos as $tratamiento)
-                        <tr class="border-t border-white">
+                        <tr class="border-t border-white tratamiento-fila">
                             <td class="py-3">{{ $tratamiento->causa }}</td>
                             <td class="py-3">{{ ucfirst($tratamiento->estado) }}</td>
                             <td class="py-3">{{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d / m / Y') }}</td>
                             <td class="py-3 font-semibold">
                                 {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}
                             </td>
-
                             <td class="py-3">
                                 <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}" class="hover:opacity-80 inline-block">
                                     <img src="{{ asset('detalles.png') }}" alt="Detalles" class="w-6 h-6 object-contain invert mx-auto">
@@ -74,4 +76,47 @@
 
     </div>
 </div>
+
+<style>
+    .resaltado {
+        background-color: #bfdbfe; 
+        color: #0c1222;             
+        font-weight: bold;
+        padding: 0 2px;
+        border-radius: 3px;
+    }
+</style>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('busqueda');
+        const filas = document.querySelectorAll('.tratamiento-fila');
+
+        input.addEventListener('input', function () {
+            const texto = input.value.toLowerCase().trim();
+
+            filas.forEach(fila => {
+                const celdas = fila.querySelectorAll('td');
+                let coincide = false;
+
+                celdas.forEach(celda => {
+                    const contenidoOriginal = celda.getAttribute('data-original') || celda.textContent;
+                    celda.setAttribute('data-original', contenidoOriginal);
+
+                    const contenido = contenidoOriginal.toLowerCase();
+                    if (texto && contenido.includes(texto)) {
+                        coincide = true;
+                        const regex = new RegExp(`(${texto})`, 'gi');
+                        celda.innerHTML = contenidoOriginal.replace(regex, '<span class="resaltado">$1</span>');
+                    } else {
+                        celda.innerHTML = contenidoOriginal;
+                    }
+                });
+
+                fila.style.display = coincide || texto === '' ? '' : 'none';
+            });
+        });
+    });
+</script>
 @endsection

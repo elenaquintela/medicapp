@@ -14,6 +14,7 @@
             <div>
                 <label for="causa" class="block mb-1 text-lg">Causa de tratamiento</label>
                 <input id="causa" name="causa" type="text" required
+                       value="{{ old('causa') }}"
                        class="w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222] focus:outline-none focus:ring-2 focus:ring-blue-400">
                 @error('causa')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -25,7 +26,6 @@
                 <input type="hidden" name="volver_a_index" value="1">
             @endif
 
-
             <!-- Botón -->
             <div class="text-center mt-8">
                 <button type="submit" name="accion" value="done"
@@ -36,4 +36,31 @@
         </form>
     </div>
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const causasExistentes = @json($perfilActivo->tratamientos->pluck('causa')->map(fn($c) => mb_strtolower(trim($c))));
+        const form = document.querySelector('form');
+        const inputCausa = document.getElementById('causa');
+
+        form.addEventListener('submit', function (e) {
+            const causaIngresada = inputCausa.value.trim().toLowerCase();
+
+            if (causasExistentes.includes(causaIngresada)) {
+                e.preventDefault();
+
+                // Eliminar error anterior si lo hubiera
+                let error = inputCausa.parentElement.querySelector('.js-error');
+                if (error) error.remove();
+
+                // Crear nuevo mensaje
+                const mensaje = document.createElement('p');
+                mensaje.textContent = 'Este perfil ya tiene un tratamiento con esa causa. Usa otro nombre.';
+                mensaje.classList.add('text-red-500', 'text-sm', 'mt-1', 'js-error');
+
+                inputCausa.parentElement.appendChild(mensaje);
+            }
+        });
+    });
+</script>
+
 @endsection

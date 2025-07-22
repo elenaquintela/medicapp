@@ -12,6 +12,8 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        
+
         /** @var \App\Models\Usuario $usuario */
         $usuario = Auth::user();
         $usuario->load('perfiles');
@@ -83,20 +85,21 @@ class DashboardController extends Controller
         $recordatorios = collect();
         if ($perfilActivo) {
             $tratMedIds = $tratamientos
-                ->flatMap(fn ($t) => $t->medicaciones->pluck('id_trat_med'))
+                ->flatMap(fn($t) => $t->medicaciones->pluck('id_trat_med'))
                 ->unique();
 
             $recordatorios = Recordatorio::with('tratamientoMedicamento.medicamento')
                 ->whereIn('id_trat_med', $tratMedIds)
                 ->whereDate('fecha_hora', Carbon::today())
+                ->where('tomado', false)
                 ->orderBy('fecha_hora')
                 ->get();
         }
 
-        // Citas futuras
+        // Citas futuras (desde hoy)
         $citas = $perfilActivo
             ? $perfilActivo->citas()
-                ->whereDate('fecha', '>=', now()->toDateString())
+                ->whereDate('fecha', '>=', Carbon::today())
                 ->orderBy('fecha')
                 ->orderBy('hora_inicio')
                 ->get()

@@ -22,11 +22,12 @@
     <!-- Filtro con icono -->
     <div class="flex items-center gap-3 mb-6 w-full max-w-[85%]">
         <img src="{{ asset('filtro.png') }}" alt="Filtro"
-            class="h-12 aspect-auto object-contain brightness-0 invert" />
+             class="h-12 aspect-auto object-contain brightness-0 invert" />
 
         <input type="text"
-            class="w-full p-3 rounded-md text-black placeholder-gray-600 text-sm"
-            placeholder="Filtre por fecha, hora, especialista-lugar, motivo o creador" />
+               id="filtro-citas"
+               class="w-full p-3 rounded-md text-black placeholder-gray-600 text-sm"
+               placeholder="Filtre por fecha, hora, especialista-lugar, motivo o creador" />
     </div>
 
     <!-- Contenedor tabla + botones -->
@@ -46,25 +47,18 @@
                         <th class="py-3 px-4">Editar</th>
                     </tr>
                 </thead>
-                <tbody class="text-center">
+                <tbody id="tabla-citas" class="text-center">
                     @forelse ($citas as $cita)
-                        <tr class="border-t border-white">
-                            <td class="py-3">
-                                {{ \Carbon\Carbon::parse($cita->fecha)->format('d / m / Y') }}
-                            </td>
-                            <td class="py-3">
-                                {{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}
-                            </td>
+                        <tr class="border-t border-white cita-fila">
+                            <td class="py-3">{{ \Carbon\Carbon::parse($cita->fecha)->format('d / m / Y') }}</td>
+                            <td class="py-3">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</td>
                             <td class="py-3">
                                 {{ $cita->especialidad ? $cita->especialidad . ' - ' : '' }}
                                 {{ $cita->ubicacion }}
                             </td>
                             <td class="py-3">{{ $cita->motivo }}</td>
                             <td class="py-3">{{ $cita->observaciones }}</td> 
-                            <td class="py-3">
-                                {{ $cita->usuarioCreador->nombre ?? 'Desconocido' }}
-                            </td>
-                            
+                            <td class="py-3">{{ $cita->usuarioCreador->nombre ?? 'Desconocido' }}</td>
                             <td class="py-3">
                                 <a href="{{ route('cita.edit', $cita->id_cita) }}" class="hover:opacity-80 inline-block">
                                     <img src="{{ asset('editar.png') }}" alt="Editar" class="w-6 h-6 object-contain invert mx-auto">
@@ -104,4 +98,46 @@
 
     </div>
 </div>
+
+<style>
+    .resaltado {
+        background-color: #bfdbfe;
+        color: #0c1222;
+        font-weight: bold;
+        padding: 0 2px;
+        border-radius: 3px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('filtro-citas');
+        const filas = document.querySelectorAll('.cita-fila');
+
+        input.addEventListener('input', function () {
+            const texto = input.value.toLowerCase().trim();
+
+            filas.forEach(fila => {
+                const celdas = fila.querySelectorAll('td');
+                let coincide = false;
+
+                celdas.forEach(celda => {
+                    const contenidoOriginal = celda.getAttribute('data-original') || celda.textContent;
+                    celda.setAttribute('data-original', contenidoOriginal);
+
+                    const contenido = contenidoOriginal.toLowerCase();
+                    if (texto && contenido.includes(texto)) {
+                        coincide = true;
+                        const regex = new RegExp(`(${texto})`, 'gi');
+                        celda.innerHTML = contenidoOriginal.replace(regex, '<span class="resaltado">$1</span>');
+                    } else {
+                        celda.innerHTML = contenidoOriginal;
+                    }
+                });
+
+                fila.style.display = coincide || texto === '' ? '' : 'none';
+            });
+        });
+    });
+</script>
 @endsection
