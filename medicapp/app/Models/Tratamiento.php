@@ -22,6 +22,15 @@ class Tratamiento extends Model
         'estado',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'id_tratamiento';
+    }
+
+    protected $casts = [
+        'fecha_inicio' => 'datetime',
+    ];
+
     // Relación con Perfil: un tratamiento pertenece a un perfil
     public function perfil()
     {

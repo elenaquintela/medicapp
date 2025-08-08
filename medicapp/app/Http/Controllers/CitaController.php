@@ -10,11 +10,10 @@ class CitaController extends Controller
 {
     public function index()
     {
-        /** @var \App\Models\Usuario $user */
-        $user = Auth::user();
-        $user->load('perfiles');
-
-        $perfilActivo = $user->perfilActivo;
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
 
         if (!$perfilActivo) {
             return redirect()->route('dashboard')->withErrors(['Debes seleccionar un perfil antes de ver las citas.']);
@@ -26,7 +25,7 @@ class CitaController extends Controller
             ->get();
 
         return view('cita.index', [
-            'perfilesUsuario' => $user->perfiles,
+            'perfilesUsuario' => $usuario->perfiles,
             'perfilActivo' => $perfilActivo,
             'citas' => $citas
         ]);
@@ -34,11 +33,10 @@ class CitaController extends Controller
 
     public function create()
     {
-        /** @var \App\Models\Usuario $user */
-        $user = Auth::user();
-        $user->load('perfiles');
-
-        $perfilActivo = $user->perfilActivo;
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
 
         if (!$perfilActivo) {
             return redirect()->route('dashboard')->withErrors(['Debes seleccionar un perfil antes de crear una cita.']);
@@ -65,7 +63,7 @@ class CitaController extends Controller
         ];
 
         return view('cita.create', [
-            'perfilesUsuario' => $user->perfiles,
+            'perfilesUsuario' => $usuario->perfiles,
             'perfilActivo' => $perfilActivo,
             'especialidades' => $especialidades,
         ]);
@@ -83,21 +81,18 @@ class CitaController extends Controller
             'recordatorio' => 'nullable|boolean',
             'observaciones' => 'nullable|string'
         ]);
-
-        /** @var \App\Models\Usuario $user */
-        $user = Auth::user();
-        $user->load('perfiles');
-
-        $perfilActivo = $user->perfilActivo;
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
 
         if (!$perfilActivo) {
             return redirect()->back()->withErrors(['No hay perfil activo seleccionado.']);
         }
 
         $cita = new Cita();
-
         $cita->id_perfil = $perfilActivo->id_perfil;
-        $cita->id_usuario_crea = $user->id_usuario;
+        $cita->id_usuario_crea = $usuario->id_usuario;
         $cita->fecha = $request->fecha;
         $cita->hora_inicio = $request->hora_inicio;
         $cita->hora_fin = $request->hora_fin;
@@ -115,11 +110,10 @@ class CitaController extends Controller
 
     public function edit(Cita $cita)
     {
-        /** @var \App\Models\Usuario $user */
-        $user = Auth::user();
-        $user->load('perfiles');
-
-        $perfilActivo = $user->perfilActivo;
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
 
         if (!$perfilActivo || $cita->id_perfil !== $perfilActivo->id_perfil) {
             return redirect()->route('cita.index')->withErrors(['No tienes permiso para editar esta cita.']);
@@ -146,13 +140,12 @@ class CitaController extends Controller
         ];
 
         return view('cita.edit', [
-            'perfilesUsuario' => $user->perfiles,
+            'perfilesUsuario' => $usuario->perfiles,
             'perfilActivo' => $perfilActivo,
             'cita' => $cita,
             'especialidades' => $especialidades,
         ]);
     }
-
 
     public function update(Request $request, Cita $cita)
     {
@@ -167,9 +160,10 @@ class CitaController extends Controller
             'observaciones' => 'nullable|string'
         ]);
 
-        /** @var \App\Models\Usuario $user */
-        $user = Auth::user();
-        $perfilActivo = $user->perfilActivo;
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
 
         if (!$perfilActivo || $cita->id_perfil !== $perfilActivo->id_perfil) {
             return redirect()->route('cita.index')->withErrors(['No tienes permiso para actualizar esta cita.']);

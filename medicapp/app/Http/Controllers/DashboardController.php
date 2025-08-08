@@ -12,8 +12,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        
-
         /** @var \App\Models\Usuario $usuario */
         $usuario = Auth::user();
         $usuario->load('perfiles');

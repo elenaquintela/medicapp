@@ -13,11 +13,29 @@ class MedicacionController extends Controller
 {
     public function create(Tratamiento $tratamiento)
     {
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
+
+        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
+            return redirect()->route('dashboard')->withErrors(['No tienes permiso para acceder a esta medicación.']);
+        }
+
         return view('medicacion.create', compact('tratamiento'));
     }
 
     public function store(Request $request, Tratamiento $tratamiento)
     {
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
+
+        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
+            return redirect()->route('dashboard')->withErrors(['No tienes permiso para añadir medicación a este tratamiento.']);
+        }
+
         $request->validate([
             'nombre' => 'required|string|max:120',
             'indicacion' => 'required|string|max:120',
@@ -49,7 +67,7 @@ class MedicacionController extends Controller
             'estado' => 'activo',
         ]);
 
-        // Generar recordatorios para próximas 48h
+        // Generar recordatorios
         $unidadCarbon = match ($request->pauta_unidad) {
             'horas' => 'hours',
             'dias' => 'days',
@@ -75,26 +93,23 @@ class MedicacionController extends Controller
             $actual->add($unidadCarbon, $intervalo);
         }
 
-        // Si se viene desde tratamiento/show
+        // Redirecciones según el botón
         if ($request->has('volver_a_show')) {
             return redirect()->route('tratamiento.show', $tratamiento->id_tratamiento)
                 ->with('success', 'Medicación añadida correctamente.');
         }
 
-        // Si quiere seguir añadiendo medicaciones
         if ($request->accion === 'add') {
             return redirect()->route('medicacion.create', $tratamiento->id_tratamiento)
                 ->with('success', 'Medicación añadida correctamente');
         }
 
-        // Si finaliza
         if ($request->accion === 'done') {
             if ($request->has('volver_a_index')) {
                 return redirect()->route('tratamiento.index')
                     ->with('success', 'Tratamiento y medicación registrados correctamente.');
             }
 
-            $usuario = Auth::user();
             if ($usuario->rol_global && $tratamiento->id_perfil) {
                 return redirect()->route('dashboard', ['perfil' => $tratamiento->id_perfil])
                     ->with('success', 'Tratamiento y medicación añadidos correctamente');
@@ -109,13 +124,35 @@ class MedicacionController extends Controller
 
     public function edit($id)
     {
-        $medicacion = \App\Models\TratamientoMedicamento::with('medicamento')->findOrFail($id);
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
+
+        $medicacion = TratamientoMedicamento::with('medicamento')->findOrFail($id);
         $tratamiento = $medicacion->tratamiento;
+
+        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
+            return redirect()->route('dashboard')->withErrors(['No tienes permiso para editar esta medicación.']);
+        }
+
         return view('medicacion.create', compact('medicacion', 'tratamiento'));
     }
 
     public function update(Request $request, $id)
     {
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
+
+        $medicacion = TratamientoMedicamento::findOrFail($id);
+        $tratamiento = $medicacion->tratamiento;
+
+        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
+            return redirect()->route('dashboard')->withErrors(['No tienes permiso para actualizar esta medicación.']);
+        }
+
         $request->validate([
             'nombre' => 'required|string|max:120',
             'indicacion' => 'required|string|max:120',
@@ -128,7 +165,6 @@ class MedicacionController extends Controller
             'observaciones' => 'nullable|string|max:255',
         ]);
 
-        $medicacion = \App\Models\TratamientoMedicamento::findOrFail($id);
         $medicamento = \App\Models\Medicamento::firstOrCreate(
             ['nombre' => $request->nombre],
             ['descripcion' => null, 'id_cima' => null]
@@ -152,7 +188,18 @@ class MedicacionController extends Controller
 
     public function archivar($id)
     {
-        $medicacion = \App\Models\TratamientoMedicamento::findOrFail($id);
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+        $perfilActivo = $usuario->perfilActivo;
+
+        $medicacion = TratamientoMedicamento::findOrFail($id);
+        $tratamiento = $medicacion->tratamiento;
+
+        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
+            return redirect()->route('dashboard')->withErrors(['No tienes permiso para archivar esta medicación.']);
+        }
+
         $medicacion->estado = 'archivado';
         $medicacion->save();
 

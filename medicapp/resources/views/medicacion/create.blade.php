@@ -8,7 +8,7 @@
         </h2>
 
         <form method="POST"
-              action="{{ isset($medicacion) ? route('medicacion.update', $medicacion->id_trat_med) : route('medicacion.store', $tratamiento->id_tratamiento) }}"
+              action="{{ isset($medicacion) ? route('medicacion.update', $medicacion->id_trat_med) : route('medicacion.store', ['tratamiento' => $tratamiento->id_tratamiento]) }}"
               class="grid grid-cols-1 md:grid-cols-2 gap-8">
             @csrf
             @if (isset($medicacion))
@@ -105,11 +105,47 @@
                 </label>
             </div>
 
-            <div class="col-span-2 mt-8 text-center">
-                <button type="submit"
-                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
-                    {{ isset($medicacion) ? 'Actualizar medicación' : 'Guardar medicación' }}
-                </button>
+                <div class="col-span-2 mt-8 flex flex-wrap gap-4 justify-center">
+
+                    @if (isset($medicacion))
+                        {{-- MODO EDICIÓN: un solo botón; el controller ya redirige a tratamiento.show --}}
+                        <button type="submit"
+                                class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
+                            Actualizar medicación
+                        </button>
+
+                        <a href="{{ route('tratamiento.show', $medicacion->id_tratamiento) }}"
+                        class="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-3 px-8 rounded-full shadow transition">
+                            Cancelar
+                        </a>
+                    @else
+                        {{-- MODO CREACIÓN: 3 caminos soportados por tu MedicacionController@store --}}
+
+                        {{-- 1) Guardar y añadir otra (se queda aquí, formulario limpio) --}}
+                        <button type="submit" name="accion" value="add"
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
+                            Guardar y añadir otra
+                        </button>
+
+                        {{-- 2) Guardar y finalizar (salir de esta vista) --}}
+                        <button type="submit" name="accion" value="done"
+                                class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
+                            Guardar y finalizar
+                        </button>
+
+                        {{-- 3) Guardar y ver tratamiento (detalle del tratamiento) --}}
+                        <button type="submit" name="volver_a_show" value="1"
+                                class="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-3 px-8 rounded-full shadow transition">
+                            Guardar y ver tratamiento
+                        </button>
+
+                        {{-- (Opcional) Botón Cancelar para salir sin guardar --}}
+                        <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}"
+                        class="bg-gray-200 hover:bg-gray-300 text-black font-semibold py-3 px-8 rounded-full shadow transition">
+                            Cancelar
+                        </a>
+                    @endif
+                </div>
             </div>
         </form>
     </div>

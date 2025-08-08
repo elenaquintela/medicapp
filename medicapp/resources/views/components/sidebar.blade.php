@@ -21,7 +21,7 @@
             <a href="{{ route('dashboard') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Inicio</a>
             <a href="{{ route('tratamiento.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Tratamientos</a>
             <a href="{{ route('cita.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Citas</a>
-            <a href="#" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Perfiles</a>
+            <a href="{{ route('perfil.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Perfiles</a>
 
             @if ($rol === 'premium')
                 <a href="#" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Informes</a>

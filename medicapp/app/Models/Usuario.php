@@ -66,6 +66,14 @@ class Usuario extends Authenticatable
     public function getPerfilActivoAttribute()
     {
         $id = session('perfil_activo_id');
-        return $this->perfiles->firstWhere('id_perfil', $id);
+        if (!$id) {
+            return null;
+        }
+        return $this->perfiles()->whereKey($id)->first();
+    }
+
+    public function setPerfilActivo(int $idPerfil)
+    {
+        session(['perfil_activo_id' => $idPerfil]);
     }
 }

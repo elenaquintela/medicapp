@@ -33,10 +33,15 @@
                     </x-dropdown-link>
                 @else
                     @foreach ($perfilesUsuario as $perfil)
-                    <x-dropdown-link :href="route('dashboard', ['perfil' => $perfil->id_perfil])">
-                        {{ $perfil->nombre_paciente }}
-                    </x-dropdown-link>
+                        <form method="POST" action="{{ route('perfil.seleccionar', $perfil) }}">
+                            @csrf
+                            <input type="hidden" name="redirect_to" value="{{ request()->fullUrl() }}">
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+                                {{ $perfil->nombre_paciente }}
+                            </button>
+                        </form>
                     @endforeach
+
 
                     <hr class="my-2 border-gray-300">
 

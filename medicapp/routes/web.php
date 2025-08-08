@@ -75,6 +75,22 @@ Route::middleware('auth')->group(function () {
     // Perfil
     Route::get('/perfil/crear', [PerfilController::class, 'create'])->name('perfil.create');
     Route::post('/perfil', [PerfilController::class, 'store'])->name('perfil.store');
+    Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
+    Route::put('/perfil/{perfil}', [PerfilController::class, 'update'])->name('perfil.update');
+    Route::delete('/perfil/{perfil}', [PerfilController::class, 'destroy'])->name('perfil.destroy');
+    Route::post('/perfil/seleccionar', function (Request $request) {
+        $request->validate([
+            'id_perfil' => 'required|integer',
+            'redirect_to' => 'nullable|string'
+        ]);
+
+        session(['perfil_activo_id' => $request->id_perfil]);
+
+        return $request->filled('redirect_to')
+            ? redirect($request->redirect_to)
+            : redirect()->back();
+    })->name('perfil.seleccionar');
+
 
     // Tratamiento
     Route::get('/tratamiento/create', [TratamientoController::class, 'create'])->name('tratamiento.create');
@@ -115,18 +131,12 @@ Route::middleware('auth')->group(function () {
     })->name('account.changePlan');
 
     // Cambio de perfil activo
-    Route::get('/perfil/usar/{id}', [PerfilActivoController::class, 'cambiar'])->name('perfil.cambiar');
-
-    Route::post('/perfil/seleccionar', function (Request $request) {
-        $request->validate(['id_perfil' => 'required|integer']);
-        session(['perfil_activo_id' => $request->id_perfil]);
-        return redirect()->back();
-    })->name('perfil.seleccionar');
+    Route::post('/perfil/activo/{perfil}', [PerfilActivoController::class, 'cambiar'])
+        ->name('perfil.activo.cambiar');
 
     // Marcar recordatorio como tomado
     Route::post('/recordatorios/{recordatorio}/marcar', [\App\Http\Controllers\RecordatorioController::class, 'marcarComoTomado'])
         ->name('recordatorio.marcar');
-
 });
 
 /*

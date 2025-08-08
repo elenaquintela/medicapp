@@ -31,6 +31,11 @@ class TratamientoMedicamento extends Model
         'sustituido_por',
     ];
 
+    protected $casts = [
+        'fecha_hora_inicio' => 'datetime',
+        'pauta_intervalo' => 'integer'
+    ];
+
     public function tratamiento()
     {
         return $this->belongsTo(Tratamiento::class, 'id_tratamiento', 'id_tratamiento');
