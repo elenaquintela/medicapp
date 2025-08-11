@@ -1,5 +1,7 @@
 @extends('layouts.registro')
 
+@section('title', 'Nueva medicación – MedicApp')
+
 @section('content')
 <main class="flex-grow px-4 py-10 flex justify-center">
     <div class="w-full max-w-3xl pb-32">
@@ -27,14 +29,6 @@
                            value="{{ old('nombre', $medicacion->medicamento->nombre ?? '') }}"
                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
                 </label>
-
-                <label class="block">
-                    <span class="text-lg">Indicación</span>
-                    <input name="indicacion" type="text" required
-                           value="{{ old('indicacion', $medicacion->indicacion ?? '') }}"
-                           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
-                </label>
-
                 <label class="block">
                     <span class="text-lg">Presentación</span>
                     <select name="presentacion" required
@@ -45,6 +39,18 @@
                             </option>
                         @endforeach
                     </select>
+                </label>     
+                <label class="block">
+                    <span class="text-lg">Inicio</span>
+                    <input name="fecha_hora_inicio" type="datetime-local" required
+                           value="{{ old('fecha_hora_inicio', isset($medicacion) ? \Carbon\Carbon::parse($medicacion->fecha_hora_inicio)->format('Y-m-d\TH:i') : '') }}"
+                           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
+                </label>
+                 <label class="block">
+                    <span class="text-lg">Frecuencia (cada...)</span>
+                    <input name="pauta_intervalo" type="number" required min="1"
+                           value="{{ old('pauta_intervalo', $medicacion->pauta_intervalo ?? '') }}"
+                           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
                 </label>
             </div>
 
@@ -63,28 +69,19 @@
                 </label>
 
                 <label class="block">
+                    <span class="text-lg">Indicación</span>
+                    <input name="indicacion" type="text" placeholder="Dolor, náuseas ..." required
+                           value="{{ old('indicacion', $medicacion->indicacion ?? '') }}"
+                           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
+                </label>
+
+                 <label class="block">
                     <span class="text-lg">Dosis</span>
-                    <input name="dosis" type="text" required
+                    <input name="dosis" type="text" placeholder="1g, 50mg ..." required
                            value="{{ old('dosis', $medicacion->dosis ?? '') }}"
                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
                 </label>
 
-                <label class="block">
-                    <span class="text-lg">Inicio</span>
-                    <input name="fecha_hora_inicio" type="datetime-local" required
-                           value="{{ old('fecha_hora_inicio', isset($medicacion) ? \Carbon\Carbon::parse($medicacion->fecha_hora_inicio)->format('Y-m-d\TH:i') : '') }}"
-                           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
-                </label>
-            </div>
-
-            {{-- Pauta y observaciones --}}
-            <div class="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                <label class="block">
-                    <span class="text-lg">Cada cuántos</span>
-                    <input name="pauta_intervalo" type="number" required min="1"
-                           value="{{ old('pauta_intervalo', $medicacion->pauta_intervalo ?? '') }}"
-                           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
-                </label>
 
                 <label class="block">
                     <span class="text-lg">Unidad de tiempo</span>
@@ -97,13 +94,15 @@
                         @endforeach
                     </select>
                 </label>
+            </div>
 
-                <label class="block col-span-2">
+            <label class="block col-span-2">
                     <span class="text-lg">Observaciones</span>
                     <textarea name="observaciones" rows="3"
                               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">{{ old('observaciones', $medicacion->observaciones ?? '') }}</textarea>
-                </label>
-            </div>
+            </label>
+
+        
 
                 <div class="col-span-2 mt-8 flex flex-wrap gap-4 justify-center">
 
@@ -121,6 +120,11 @@
                     @else
                         {{-- MODO CREACIÓN: 3 caminos soportados por tu MedicacionController@store --}}
 
+                        {{-- (Opcional) Botón Cancelar para salir sin guardar --}}
+                        <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow transition">
+                            Cancelar
+                        </a>
                         {{-- 1) Guardar y añadir otra (se queda aquí, formulario limpio) --}}
                         <button type="submit" name="accion" value="add"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
@@ -134,16 +138,11 @@
                         </button>
 
                         {{-- 3) Guardar y ver tratamiento (detalle del tratamiento) --}}
-                        <button type="submit" name="volver_a_show" value="1"
-                                class="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-3 px-8 rounded-full shadow transition">
-                            Guardar y ver tratamiento
-                        </button>
+                        {{-- <button type="submit" name="volver_a_show" value="1"
+                                class="bg-yellow-300 hover:bg-gray-400 text-white font-semibold py-3 px-8 rounded-full shadow transition">
+                           Ver tratamiento
+                        </button> --}}
 
-                        {{-- (Opcional) Botón Cancelar para salir sin guardar --}}
-                        <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}"
-                        class="bg-gray-200 hover:bg-gray-300 text-black font-semibold py-3 px-8 rounded-full shadow transition">
-                            Cancelar
-                        </a>
                     @endif
                 </div>
             </div>

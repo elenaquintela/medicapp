@@ -67,31 +67,67 @@ class MedicacionController extends Controller
             'estado' => 'activo',
         ]);
 
-        // Generar recordatorios
-        $unidadCarbon = match ($request->pauta_unidad) {
-            'horas' => 'hours',
-            'dias' => 'days',
-            'semanas' => 'weeks',
-            'meses' => 'months',
-            default => 'hours',
-        };
-
+        // Generar recordatorios (desde inicio de hoy hasta +48h), normalizando unidad y TZ
+        $unidadRaw = mb_strtolower($request->pauta_unidad, 'UTF-8');
+        $unidadRaw = str_replace(['día', 'días'], ['dia', 'dias'], $unidadRaw); // quitar acento si llega
         $intervalo = (int) $request->pauta_intervalo;
-        $inicio = Carbon::parse($request->fecha_hora_inicio);
-        $ahora = now();
-        $limite = $ahora->copy()->addHours(48);
-        $actual = $inicio->copy();
 
-        while ($actual->lte($limite)) {
-            if ($actual->gte($ahora)) {
-                Recordatorio::create([
-                    'id_trat_med' => $tratMed->id_trat_med,
-                    'fecha_hora' => $actual,
-                    'tomado' => false,
-                ]);
+        // datetime-local no trae TZ -> parsea en la TZ de la app
+        $inicioOriginal = Carbon::parse($request->fecha_hora_inicio, config('app.timezone'));
+        $inicioDia      = now()->copy()->startOfDay();
+        $finVentana     = now()->copy()->addHours(48);
+
+        // Cursor: primera ocurrencia >= inicio del día (para NO perder recordatorios de esta mañana)
+        $cursor = $inicioOriginal->copy();
+        while ($cursor->lt($inicioDia)) {
+            switch ($unidadRaw) {
+                case 'horas':
+                    $cursor->addHours($intervalo);
+                    break;
+                case 'dias':
+                    $cursor->addDays($intervalo);
+                    break;
+                case 'semanas':
+                    $cursor->addWeeks($intervalo);
+                    break;
+                case 'meses':
+                    $cursor->addMonths($intervalo);
+                    break;
+                default:
+                    $cursor->addHours($intervalo);
+                    break;
             }
-            $actual->add($unidadCarbon, $intervalo);
         }
+
+        // Crear recordatorios desde el inicio del día hasta +48h (incluye “atrasados” de hoy)
+        while ($cursor->lte($finVentana)) {
+            Recordatorio::firstOrCreate(
+                [
+                    'id_trat_med' => $tratMed->id_trat_med,
+                    'fecha_hora'  => $cursor->toDateTimeString(), // igualdad exacta
+                ],
+                ['tomado' => false]
+            );
+
+            switch ($unidadRaw) {
+                case 'horas':
+                    $cursor->addHours($intervalo);
+                    break;
+                case 'dias':
+                    $cursor->addDays($intervalo);
+                    break;
+                case 'semanas':
+                    $cursor->addWeeks($intervalo);
+                    break;
+                case 'meses':
+                    $cursor->addMonths($intervalo);
+                    break;
+                default:
+                    $cursor->addHours($intervalo);
+                    break;
+            }
+        }
+
 
         // Redirecciones según el botón
         if ($request->has('volver_a_show')) {
