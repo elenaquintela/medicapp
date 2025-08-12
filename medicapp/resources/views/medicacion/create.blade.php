@@ -136,13 +136,6 @@
                                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
                             Guardar y finalizar
                         </button>
-
-                        {{-- 3) Guardar y ver tratamiento (detalle del tratamiento) --}}
-                        {{-- <button type="submit" name="volver_a_show" value="1"
-                                class="bg-yellow-300 hover:bg-gray-400 text-white font-semibold py-3 px-8 rounded-full shadow transition">
-                           Ver tratamiento
-                        </button> --}}
-
                     @endif
                 </div>
             </div>

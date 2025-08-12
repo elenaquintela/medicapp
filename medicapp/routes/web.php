@@ -23,7 +23,7 @@ Route::get('/', function () {
         return redirect()->route('dashboard');
     }
     return view('auth.welcome');
-});
+})->name('welcome');
 
 Route::get('/login', function () {
     return redirect('/');

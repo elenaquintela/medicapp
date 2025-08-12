@@ -12,38 +12,73 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Mostrar (o redirigir) la vista de login.
+     * Tu flujo empieza en welcome, así que mandamos ahí.
      */
-    public function create(): View
+    public function create(): RedirectResponse
     {
-        return view('auth.welcome');
+        return to_route('welcome'); // asegúrate de tener Route::view('/', 'welcome')->name('welcome');
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Login.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
-        session(['perfil_activo_id' => Auth::user()->perfiles->first()?->id_perfil]);
 
+        $user = Auth::user();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // tu lógica actual de perfil activo
+        session(['perfil_activo_id' => $user->perfiles->first()?->id_perfil]);
+
+        // CLAVE: no usar intended. Decide siempre el siguiente paso del onboarding.
+        return redirect()->route($this->nextRouteFor($user));
     }
 
     /**
-     * Destroy an authenticated session.
+     * Logout.
      */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return to_route('welcome');
+    }
+
+    /**
+     * Decide el siguiente paso del onboarding.
+     * Ajusta los nombres de rutas/relaciones si en tu proyecto se llaman distinto.
+     */
+    private function nextRouteFor($user): string
+    {
+        // 1) Plan elegido (usa aquí tu condición real: rol_global/plan en DB)
+        if (empty($user->rol_global) || !in_array($user->rol_global, ['estandar','premium'])) {
+            return 'planes.show'; // o 'planes'
+        }
+
+        // 2) Primer perfil creado
+        if (!$user->perfiles()->exists()) {
+            return 'perfil.create';
+        }
+
+        // 3) Primer tratamiento creado (si lo creas junto con el perfil, puedes obviar este bloque)
+        $perfil = $user->perfiles()->first();
+        $trat = $perfil->tratamientos()->latest()->first();
+        if (!$trat) {
+            // si creas tratamiento dentro de perfil.store, elimina este return
+            return 'perfil.create'; // o una ruta específica para crear tratamiento, si la tienes
+        }
+
+        // 4) Primera medicación
+        if (!$trat->medicaciones()->exists()) {
+            return 'medicacion.create';
+        }
+
+        // 5) Todo completo → dashboard
+        return 'dashboard';
     }
 }
