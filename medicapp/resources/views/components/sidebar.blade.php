@@ -30,7 +30,10 @@
             @endif
 
             <a href="{{ route('account.edit') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Ajustes</a>
-            <a href="{{ url('/') }}" class="text-red-600 hover:underline mt-8 whitespace-nowrap" x-show="menuAbierto">SALIR</a>
+            <form method="POST" action="{{ route('logout') }}" x-show="menuAbierto" class="mt-8">
+                @csrf
+                <button type="submit" class="text-red-600 hover:underline whitespace-nowrap">SALIR</button>
+            </form>
         </nav>
     </aside>
 </div>

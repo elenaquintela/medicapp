@@ -26,7 +26,11 @@
                             @forelse ($recordatorios as $rec)
                                 <tr class="border-b border-white transition-opacity duration-700 text-white" data-row-id="{{ $rec->id }}">
                                     <td class="p-2">
-                                        {{ \Carbon\Carbon::parse($rec->fecha_hora)->format('H:i') }}
+                                        @if($rec->fecha_hora->isToday())
+                                            {{ $rec->fecha_hora->format('H:i') }}
+                                        @else
+                                            {{ $rec->fecha_hora->format('d/m H:i') }}
+                                        @endif
                                     </td>
                                     <td class="p-2">
                                         {{ $rec->tratamientoMedicamento->medicamento->nombre ?? 'Desconocido' }}
