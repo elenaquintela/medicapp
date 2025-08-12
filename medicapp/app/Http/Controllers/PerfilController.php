@@ -54,14 +54,24 @@ class PerfilController extends Controller
     public function index()
     {
         /** @var \App\Models\Usuario $usuario */
-        $usuario = Auth::user();
-        $usuario->load('perfiles');
+        $usuario   = Auth::user();
+        $perfiles  = $usuario->perfiles()->latest('id_perfil')->get();
 
-        return view('perfil.index', [
-            'perfilActivo' => $usuario->perfilActivo,
-            'usuario' => $usuario
-        ]);
+        $perfilActivo = null;
+        if ($id = session('perfil_activo_id')) {
+            $perfilActivo = $perfiles->firstWhere('id_perfil', $id);
+        }
+        if (!$perfilActivo && $perfiles->count()) {
+            $perfilActivo = $perfiles->first();
+            session(['perfil_activo_id' => $perfilActivo->id_perfil]);
+        }
+        if (!$perfiles->count()) {
+            session()->forget('perfil_activo_id');
+        }
+
+        return view('perfil.index', compact('usuario', 'perfiles', 'perfilActivo'));
     }
+
 
 
     public function update(Request $request, Perfil $perfil)
@@ -95,6 +105,8 @@ class PerfilController extends Controller
             session()->forget('perfil_activo_id');
         }
 
+        $eraActivo = session('perfil_activo_id') == $perfil->id_perfil;
+
         // Eliminar citas asociadas
         $perfil->citas()->delete();
 
@@ -116,6 +128,16 @@ class PerfilController extends Controller
 
         // Finalmente, eliminar el perfil
         $perfil->delete();
+
+        // REASIGNAR PERFIL ACTIVO O LIMPIAR SESIÓN
+        if ($eraActivo) {
+            $nuevo = $usuario->perfiles()->latest('id_perfil')->first();
+            if ($nuevo) {
+                session(['perfil_activo_id' => $nuevo->id_perfil]);
+            } else {
+                session()->forget('perfil_activo_id');
+            }
+        }
 
         return redirect()->route('perfil.index')->with('success', 'Perfil eliminado correctamente.');
     }
