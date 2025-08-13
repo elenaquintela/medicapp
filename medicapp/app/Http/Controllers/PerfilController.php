@@ -6,6 +6,8 @@ use App\Models\Perfil;
 use App\Models\Tratamiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PerfilInvitacion;
+
 
 class PerfilController extends Controller
 {
@@ -57,6 +59,7 @@ class PerfilController extends Controller
         $usuario   = Auth::user();
         $perfiles  = $usuario->perfiles()->latest('id_perfil')->get();
 
+        // Resolver perfil activo (y sincronizar sesión)
         $perfilActivo = null;
         if ($id = session('perfil_activo_id')) {
             $perfilActivo = $perfiles->firstWhere('id_perfil', $id);
@@ -69,8 +72,48 @@ class PerfilController extends Controller
             session()->forget('perfil_activo_id');
         }
 
-        return view('perfil.index', compact('usuario', 'perfiles', 'perfilActivo'));
+        // === Datos para el panel "Accesos compartidos" (premium + propietario) ===
+        $esPremium     = $usuario->rol_global === 'premium';
+        $esPropietario = false;
+        $invitados     = collect();
+        $creador       = null;
+        $pendientes    = collect();
+
+        if ($perfilActivo) {
+            // ¿el usuario actual es propietario del perfil activo?
+            $esPropietario = $usuario->perfiles()
+                ->wherePivot('rol_en_perfil', 'creador')
+                ->where('perfil.id_perfil', $perfilActivo->id_perfil)
+                ->exists();
+
+            // invitados actuales de ese perfil
+            $invitados = $perfilActivo->usuarios()
+                ->wherePivot('rol_en_perfil', 'invitado')
+                ->get();
+
+            // creador (para mostrar su email)
+            $creador = $perfilActivo->usuarios()
+                ->wherePivot('rol_en_perfil', 'creador')
+                ->first();
+
+            // invitaciones pendientes (para listar debajo)
+            $pendientes = PerfilInvitacion::where('id_perfil', $perfilActivo->id_perfil)
+                ->where('estado', 'pendiente')
+                ->get();
+        }
+
+        return view('perfil.index', compact(
+            'usuario',
+            'perfiles',
+            'perfilActivo',
+            'esPremium',
+            'esPropietario',
+            'invitados',
+            'creador',
+            'pendientes',
+        ));
     }
+
 
 
 
@@ -100,12 +143,12 @@ class PerfilController extends Controller
         if (!$usuario->perfiles->contains('id_perfil', $perfil->id_perfil)) {
             return redirect()->route('perfil.index')->withErrors(['No tienes permiso para eliminar este perfil.']);
         }
+        $eraActivo = session('perfil_activo_id') == $perfil->id_perfil;
 
-        if (session('perfil_activo_id') == $perfil->id_perfil) {
+        // limpiar si era el activo
+        if ($eraActivo) {
             session()->forget('perfil_activo_id');
         }
-
-        $eraActivo = session('perfil_activo_id') == $perfil->id_perfil;
 
         // Eliminar citas asociadas
         $perfil->citas()->delete();

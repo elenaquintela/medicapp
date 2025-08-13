@@ -11,6 +11,8 @@ use App\Http\Controllers\TratamientoController;
 use App\Http\Controllers\MedicacionController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\PerfilActivoController;
+use App\Http\Controllers\PerfilInvitacionController;
+use App\Http\Controllers\PerfilMiembrosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,13 @@ Route::post('/planes', function (Request $request) {
     $usuario->save();
     return redirect()->route('perfil.create');
 })->middleware('auth')->name('planes.store');
+
+// aceptar invitación (pública: llega por email)
+Route::get('/invitaciones/aceptar/{token}', [PerfilInvitacionController::class, 'accept'])
+    ->middleware('throttle:20,1')
+    ->name('invitaciones.accept');
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -137,6 +146,14 @@ Route::middleware('auth')->group(function () {
     // Marcar recordatorio como tomado
     Route::post('/recordatorios/{recordatorio}/marcar', [\App\Http\Controllers\RecordatorioController::class, 'marcarComoTomado'])
         ->name('recordatorio.marcar');
+
+    // enviar invitación (solo premium + propietario)
+    Route::post('/perfil/{perfil}/invitaciones', [PerfilInvitacionController::class, 'store'])
+        ->name('perfil.invitaciones.store');
+
+    // quitar acceso (solo premium + propietario) — ya lo tenías como “miembros”
+    Route::delete('/perfil/{perfil}/miembros/{usuario}', [PerfilMiembrosController::class, 'destroy'])
+        ->name('perfil.miembros.destroy');
 });
 
 /*
