@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 
 class AccountController extends Controller
@@ -54,21 +55,74 @@ class AccountController extends Controller
             'contrasena' => ['required'],
         ]);
 
+        /** @var \App\Models\Usuario $user */
         $user = $request->user();
 
-        // Verificar la contraseña 
         if (!Hash::check($request->contrasena, $user->contrasena)) {
-            return back()->withErrors([
-                'contrasena' => 'La contraseña es incorrecta.',
-            ])->with('openDeleteModal', true);
+            return back()
+                ->withErrors(['contrasena' => 'La contraseña es incorrecta.'], 'userDeletion')
+                ->with('openDeleteModal', true);
         }
 
+        // Cerrar sesión y limpiar sesión ANTES de tocar la BD
         Auth::logout();
-        $user->delete();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        DB::transaction(function () use ($user) {
+            // 1) BORRAR los perfiles donde este usuario es PROPIETARIO (rol_en_perfil='creador')
+            foreach ($user->perfilesCreados as $perfil) {
+                // Quita a todos los usuarios vinculados a ese perfil (incluido el creador)
+                $perfil->usuarios()->detach();
+
+                // Borrados asociados (mantén estos si no tienes ON DELETE CASCADE en BD)
+                if (method_exists($perfil, 'citas')) {
+                    $perfil->citas()->delete();
+                }
+
+                if (method_exists($perfil, 'tratamientos')) {
+                    foreach ($perfil->tratamientos as $tratamiento) {
+                        if (method_exists($tratamiento, 'medicaciones')) {
+                            foreach ($tratamiento->medicaciones as $medicacion) {
+                                if (method_exists($medicacion, 'recordatorios')) {
+                                    $medicacion->recordatorios()->delete();
+                                }
+                                $medicacion->delete();
+                            }
+                        }
+                        $tratamiento->delete();
+                    }
+                }
+
+                if (method_exists($perfil, 'notificaciones')) {
+                    $perfil->notificaciones()->delete();
+                }
+                if (method_exists($perfil, 'informes')) {
+                    $perfil->informes()->delete();
+                }
+
+                // Finalmente, borrar el perfil
+                $perfil->delete();
+            }
+
+            // 2) En perfiles donde es INVITADO (rol_en_perfil='invitado'), solo quitar acceso
+            $user->perfilesInvitado()->detach();
+
+            // 3) (Opcional) limpiar recursos propios del usuario
+            if (method_exists($user, 'notificaciones')) {
+                $user->notificaciones()->delete();
+            }
+            if (method_exists($user, 'informes')) {
+                $user->informes()->delete();
+            }
+            if (method_exists($user, 'citasCreadas')) {
+                $user->citasCreadas()->delete();
+            }
+
+            // 4) Borrar al usuario
+            $user->delete();
+        });
+
+        return to_route('welcome')->with('status', 'account-deleted');
     }
 }

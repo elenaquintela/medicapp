@@ -76,4 +76,26 @@ class Usuario extends Authenticatable
     {
         session(['perfil_activo_id' => $idPerfil]);
     }
+
+    // Perfiles donde este usuario es el PROPIETARIO (rol_en_perfil = 'creador')
+    public function perfilesCreados()
+    {
+        return $this->belongsToMany(Perfil::class, 'usuario_perfil', 'id_usuario', 'id_perfil')
+            ->withPivot('rol_en_perfil', 'fecha_inv', 'estado')
+            ->wherePivot('rol_en_perfil', 'creador');
+    }
+
+    // Perfiles donde este usuario es INVITADO (rol_en_perfil = 'invitado')
+    public function perfilesInvitado()
+    {
+        return $this->belongsToMany(Perfil::class, 'usuario_perfil', 'id_usuario', 'id_perfil')
+            ->withPivot('rol_en_perfil', 'fecha_inv', 'estado')
+            ->wherePivot('rol_en_perfil', 'invitado');
+    }
+
+    // (Opcional) útil para lógica de planes
+    public function isPremium(): bool
+    {
+        return $this->rol_global === 'premium';
+    }
 }
