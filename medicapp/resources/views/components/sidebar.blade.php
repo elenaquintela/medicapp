@@ -24,10 +24,11 @@
             <a href="{{ route('perfil.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Perfiles</a>
 
             @if ($rol === 'premium')
-                <a href="#" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Informes</a>
+                <a href="{{ route('informe.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Informes</a>
             @else
                 <span class="text-gray-400 cursor-not-allowed whitespace-nowrap" x-show="menuAbierto">Informes</span>
             @endif
+
 
             <a href="{{ route('account.edit') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Ajustes</a>
             <form method="POST" action="{{ route('logout') }}" x-show="menuAbierto" class="mt-8">

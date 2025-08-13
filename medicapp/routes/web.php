@@ -13,6 +13,7 @@ use App\Http\Controllers\CitaController;
 use App\Http\Controllers\PerfilActivoController;
 use App\Http\Controllers\PerfilInvitacionController;
 use App\Http\Controllers\PerfilMiembrosController;
+use App\Http\Controllers\InformeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,14 +115,19 @@ Route::middleware('auth')->group(function () {
     Route::put('/medicacion/{medicacion}', [MedicacionController::class, 'update'])->name('medicacion.update');
     Route::put('/medicacion/{medicacion}/archivar', [MedicacionController::class, 'archivar'])->name('medicacion.archivar');
 
-
-
     // Citas
     Route::get('/citas', [CitaController::class, 'index'])->name('cita.index');
     Route::get('/citas/crear', [CitaController::class, 'create'])->name('cita.create');
     Route::post('/citas', [CitaController::class, 'store'])->name('cita.store');
     Route::get('/citas/{cita}/editar', [CitaController::class, 'edit'])->name('cita.edit');
     Route::put('/citas/{cita}', [CitaController::class, 'update'])->name('cita.update');
+
+    // Informes
+
+    Route::get('/informes', [InformeController::class, 'index'])->name('informe.index');
+    Route::post('/informes', [InformeController::class, 'store'])->name('informe.store');
+    Route::get('/informes/{informe}/descargar', [InformeController::class, 'download'])->name('informe.download');
+    Route::delete('/informes/{informe}', [InformeController::class, 'destroy'])->name('informe.destroy');
 
     // Cuenta
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');
