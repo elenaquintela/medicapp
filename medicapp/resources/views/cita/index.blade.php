@@ -12,13 +12,6 @@
     <!-- Título centrado -->
     <h2 class="text-3xl font-bold mb-8 text-center">Citas médicas</h2>
 
-    <!-- Mensaje de éxito -->
-    @if (session('success'))
-        <div class="mb-6 bg-green-500 text-white px-4 py-3 rounded shadow text-center">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <!-- Filtro con icono -->
     <div class="flex items-center gap-3 mb-6 w-full max-w-[85%]">
         <img src="{{ asset('filtro.png') }}" alt="Filtro"
