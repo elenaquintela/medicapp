@@ -14,6 +14,7 @@ use App\Http\Controllers\PerfilActivoController;
 use App\Http\Controllers\PerfilInvitacionController;
 use App\Http\Controllers\PerfilMiembrosController;
 use App\Http\Controllers\InformeController;
+use App\Http\Controllers\GoogleCalendarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -157,9 +158,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/perfil/{perfil}/invitaciones', [PerfilInvitacionController::class, 'store'])
         ->name('perfil.invitaciones.store');
 
-    // quitar acceso (solo premium + propietario) — ya lo tenías como “miembros”
+    // quitar acceso (solo premium + propietario) 
     Route::delete('/perfil/{perfil}/miembros/{usuario}', [PerfilMiembrosController::class, 'destroy'])
         ->name('perfil.miembros.destroy');
+
+    // Google Calendar (solo autenticados; la comprobación de premium la hace el controlador)
+    Route::get('/google/connect',  [GoogleCalendarController::class, 'connect'])->name('google.connect');
+    Route::get('/google/callback', [GoogleCalendarController::class, 'callback'])->name('google.callback');
+    Route::post('/google/sync-citas', [GoogleCalendarController::class, 'syncAll'])->name('google.syncAll');
+    Route::get('/google/reconnect', [GoogleCalendarController::class, 'reconnect'])->name('google.reconnect');
+
+
 });
 
 /*

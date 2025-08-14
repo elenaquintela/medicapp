@@ -4,6 +4,8 @@
 
 @section('content')
 <div class="px-10 pt-6 h-full">
+
+    <!-- Título centrado -->
     <h2 class="text-3xl font-bold mb-10 text-center">Editar cita</h2>
 
     <form method="POST" action="{{ route('cita.update', $cita->id_cita) }}"
@@ -14,52 +16,54 @@
         <!-- Columna izquierda -->
         <div class="flex flex-col gap-6">
             <!-- Fecha -->
-            <div>
-                <label for="fecha" class="block mb-1 text-lg text-white">Fecha</label>
-                <input id="fecha" name="fecha" type="date" required
+            <div class="flex items-center gap-4">
+                <label class="w-24 text-white">Fecha</label>
+                <input type="date" name="fecha" required
                        value="{{ old('fecha', $cita->fecha) }}"
-                       class="w-full px-4 py-3 rounded text-[#0C1222] text-sm">
+                       class="p-3 rounded-md text-black text-sm" />
             </div>
 
-            <!-- Hora inicio y fin -->
-            <div>
-                <label class="block mb-1 text-lg text-white">Hora</label>
+            <!-- Hora -->
+            <div class="flex items-center gap-4">
+                <label class="w-32 text-white">Hora</label>
                 <div class="flex gap-3 w-full">
                     <input type="time" name="hora_inicio" required
                            value="{{ old('hora_inicio', $cita->hora_inicio) }}"
-                           class="p-2 rounded-md text-[#0C1222] text-sm w-[90px]">
+                           class="p-2 rounded-md text-black text-sm w-[90px]">
                     <span class="text-white">-</span>
                     <input type="time" name="hora_fin"
                            value="{{ old('hora_fin', $cita->hora_fin) }}"
-                           class="p-2 rounded-md text-[#0C1222] text-sm w-[90px]">
+                           class="p-2 rounded-md text-black text-sm w-[90px]">
                 </div>
             </div>
 
             <!-- Lugar -->
-            <div>
-                <label for="ubicacion" class="block mb-1 text-lg text-white">Lugar</label>
-                <input id="ubicacion" name="ubicacion" type="text" required maxlength="120"
+            <div class="flex items-center gap-4">
+                <label class="w-32 text-white">Lugar</label>
+                <input type="text" name="ubicacion" required maxlength="120"
                        value="{{ old('ubicacion', $cita->ubicacion) }}"
-                       class="w-full px-4 py-3 rounded text-[#0C1222] text-sm">
+                       class="w-full p-3 rounded-md text-black text-sm"
+                       placeholder="Centro de salud de Fontiñas">
             </div>
 
             <!-- Motivo -->
-            <div>
-                <label for="motivo" class="block mb-1 text-lg text-white">Motivo</label>
-                <input id="motivo" name="motivo" type="text" required maxlength="150"
+            <div class="flex items-center gap-4">
+                <label class="w-32 text-white">Motivo</label>
+                <input type="text" name="motivo" required maxlength="150"
                        value="{{ old('motivo', $cita->motivo) }}"
-                       class="w-full px-4 py-3 rounded text-[#0C1222] text-sm">
+                       class="w-full p-3 rounded-md text-black text-sm"
+                       placeholder="Renovación de Alta">
             </div>
         </div>
 
         <!-- Columna derecha -->
         <div class="flex flex-col gap-6">
             <!-- Especialidad -->
-            <div>
-                <label for="especialidad" class="block mb-1 text-lg text-white">Especialidad</label>
+            <div class="flex items-center gap-4">
+                <label for="especialidad" class="w-32 text-white">Especialidad</label>
                 <div class="w-full">
                     <select name="especialidad" id="especialidad"
-                            class="w-full p-3 rounded text-[#0C1222] text-sm"
+                            class="w-full p-3 rounded-md text-black text-sm"
                             onchange="mostrarInputEspecialidad(this)">
                         <option value="">Seleccione una especialidad</option>
                         @foreach ($especialidades as $esp)
@@ -73,32 +77,25 @@
                     </select>
 
                     <input type="text" name="especialidad_otra" id="input-especialidad-otra"
-                           class="w-full mt-2 p-3 rounded text-[#0C1222] text-sm {{ in_array(old('especialidad', $cita->especialidad), $especialidades) ? 'hidden' : '' }}"
+                           class="w-full mt-2 p-3 rounded-md text-black text-sm {{ in_array(old('especialidad', $cita->especialidad), $especialidades) ? 'hidden' : '' }}"
                            placeholder="Especifique la especialidad"
                            value="{{ !in_array(old('especialidad', $cita->especialidad), $especialidades) ? old('especialidad', $cita->especialidad) : '' }}">
                 </div>
             </div>
 
             <!-- Observaciones -->
-            <div>
-                <label for="observaciones" class="block mb-1 text-lg text-white">Observaciones</label>
-                <textarea id="observaciones" name="observaciones" rows="6"
-                          class="w-full px-4 py-3 rounded text-[#0C1222] text-sm resize-none">{{ old('observaciones', $cita->observaciones) }}</textarea>
-            </div>
-
-            <!-- Recordatorio -->
-            <div class="flex items-center gap-3 mt-3">
-                <input type="checkbox" id="recordatorio" name="recordatorio"
-                       {{ old('recordatorio', $cita->recordatorio) ? 'checked' : '' }}
-                       class="h-5 w-5 text-green-500 accent-green-500">
-                <label for="recordatorio" class="text-white text-lg">¿Enviar recordatorio?</label>
+            <div class="flex flex-col gap-2">
+                <label class="text-white">Observaciones</label>
+                <textarea name="observaciones" rows="6"
+                          class="w-full p-3 rounded-md text-black text-sm resize-none"
+                          placeholder="Añade información adicional si es necesario...">{{ old('observaciones', $cita->observaciones) }}</textarea>
             </div>
         </div>
 
         <!-- Botón Guardar -->
         <div class="md:col-span-2 flex justify-center mt-6">
             <button type="submit"
-                    class="bg-yellow-200 hover:bg-yellow-300 text-[#0C1222] font-bold py-3 px-10 rounded-full text-lg shadow-md">
+                    class="bg-yellow-200 hover:bg-yellow-300 text-black font-bold py-3 px-10 rounded-full text-lg shadow-md">
                 Guardar cambios
             </button>
         </div>
@@ -106,13 +103,13 @@
 </div>
 
 <script>
-    function mostrarInputEspecialidad(select) {
-        const input = document.getElementById('input-especialidad-otra');
-        if (select.value === 'otra') {
-            input.classList.remove('hidden');
-        } else {
-            input.classList.add('hidden');
-        }
+function mostrarInputEspecialidad(select) {
+    const input = document.getElementById('input-especialidad-otra');
+    if (select.value === 'otra') {
+        input.classList.remove('hidden');
+    } else {
+        input.classList.add('hidden');
     }
+}
 </script>
 @endsection

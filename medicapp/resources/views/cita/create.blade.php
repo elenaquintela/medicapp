@@ -80,13 +80,6 @@
                     class="w-full p-3 rounded-md text-black text-sm resize-none"
                     placeholder="Añade información adicional si es necesario..."></textarea>
             </div>
-
-            <!-- Recordatorio -->
-            {{-- <div class="flex items-center gap-4">
-                <label class="text-white">Notifícame</label>
-                <input type="checkbox" name="recordatorio" value="1"
-                    class="w-6 h-6 text-green-500 accent-green-500">
-            </div> --}}
         </div>
 
         <!-- Botón Crear -->

@@ -32,6 +32,10 @@ class Usuario extends Authenticatable
         'remember_token',
     ];
 
+    protected $casts = [
+        'google_oauth_tokens' => 'array',
+    ];
+
     public function getAuthPassword()
     {
         return $this->contrasena;

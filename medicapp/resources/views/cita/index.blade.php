@@ -35,7 +35,7 @@
                         <th class="py-3 px-4">Hora</th>
                         <th class="py-3 px-4">Especialista - Lugar</th>
                         <th class="py-3 px-4">Motivo</th>
-                        <th class="py-3 px-4">Observaciones</th> 
+                        <th class="py-3 px-4">Observaciones</th>
                         <th class="py-3 px-4">Creado por</th>
                         <th class="py-3 px-4">Editar</th>
                     </tr>
@@ -50,7 +50,7 @@
                                 {{ $cita->ubicacion }}
                             </td>
                             <td class="py-3">{{ $cita->motivo }}</td>
-                            <td class="py-3">{{ $cita->observaciones }}</td> 
+                            <td class="py-3">{{ $cita->observaciones }}</td>
                             <td class="py-3">{{ $cita->usuarioCreador->nombre ?? 'Desconocido' }}</td>
                             <td class="py-3">
                                 <a href="{{ route('cita.edit', $cita->id_cita) }}" class="hover:opacity-80 inline-block">
@@ -67,7 +67,7 @@
             </table>
         </div>
 
-        <!-- Botones -->
+        <!-- Botones laterales -->
         <div class="w-[15%] flex flex-col items-center justify-center gap-6">
             <!-- Botón + -->
             <a href="{{ route('cita.create') }}"
@@ -77,11 +77,19 @@
                 </svg>
             </a>
 
-            <!-- Google Calendar -->
-            @if ($rol === 'premium')
-                <a href="#" class="w-20 h-20 hover:opacity-80 transition">
-                    <img src="{{ asset('google-sync.png') }}" alt="Sync Google Calendar" class="w-full h-full object-contain">
-                </a>
+            <!-- Único botón: sincronizar todas las citas del perfil ACTIVO -->
+            @if ($rol === 'premium' && $citas->isNotEmpty())
+                <form action="{{ route('google.syncAll') }}" method="POST" class="w-20 h-20">
+                    @csrf
+                    <input type="hidden" name="perfil_id" value="{{ $citas->first()->id_perfil }}">
+                    <button type="submit" class="w-full h-full hover:opacity-90 transition" title="Sincronizar todas las citas del perfil activo">
+                        <img src="{{ asset('google-sync.png') }}" alt="Sync Google Calendar" class="w-full h-full object-contain">
+                    </button>
+                </form>
+            @elseif ($rol === 'premium' && $citas->isEmpty())
+                <div class="w-20 h-20 opacity-50 cursor-not-allowed" title="No hay citas que sincronizar">
+                    <img src="{{ asset('google-sync.png') }}" alt="Sync Google Calendar" class="w-full h-full object-contain grayscale">
+                </div>
             @else
                 <div class="w-20 h-20 opacity-50 cursor-not-allowed" title="Solo disponible en el plan Premium">
                     <img src="{{ asset('google-sync.png') }}" alt="Sync Google Calendar" class="w-full h-full object-contain grayscale">
@@ -121,7 +129,7 @@
                     const contenido = contenidoOriginal.toLowerCase();
                     if (texto && contenido.includes(texto)) {
                         coincide = true;
-                        const regex = new RegExp(`(${texto})`, 'gi');
+                        const regex = new RegExp(`(${texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
                         celda.innerHTML = contenidoOriginal.replace(regex, '<span class="resaltado">$1</span>');
                     } else {
                         celda.innerHTML = contenidoOriginal;
