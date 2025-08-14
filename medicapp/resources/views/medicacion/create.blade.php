@@ -102,8 +102,6 @@
                               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">{{ old('observaciones', $medicacion->observaciones ?? '') }}</textarea>
             </label>
 
-        
-
                 <div class="col-span-2 mt-8 flex flex-wrap gap-4 justify-center">
 
                     @if (isset($medicacion))
