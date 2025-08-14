@@ -92,7 +92,7 @@
                             <td class="px-3 py-2">{{ \Illuminate\Support\Carbon::parse($inf->ts_creacion)->format('d/m/Y H:i') }}</td>
                             <td class="px-3 py-2">
                                 @if($inf->tratamiento)
-                                    #{{ $inf->tratamiento->id_tratamiento }} — {{ $inf->tratamiento->causa }}
+                                    {{ $inf->tratamiento->causa }}
                                 @else
                                     <em>Tratamiento eliminado</em>
                                 @endif
