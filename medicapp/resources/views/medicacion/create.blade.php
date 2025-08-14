@@ -116,7 +116,7 @@
                             Cancelar
                         </a>
                     @else
-                        {{-- MODO CREACIÓN: 3 caminos soportados por tu MedicacionController@store --}}
+                        {{-- MODO CREACIÓN: 2 caminos soportados por tu MedicacionController@store --}}
 
                         {{-- (Opcional) Botón Cancelar para salir sin guardar --}}
                         <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}"
