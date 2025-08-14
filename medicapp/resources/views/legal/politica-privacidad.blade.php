@@ -5,8 +5,12 @@
 @section('content')
 <main class="flex-grow flex items-center justify-center">
     <div class="w-full max-w-2xl px-8">
-        <h2 class="text-3xl font-bold text-center mb-10">Política de Privacidad</h2>
-        @include('components.legal-back')
+        
+        {{-- Título + Botón volver en la misma línea --}}
+        <div class="flex items-center justify-between mb-10">
+            <h2 class="text-3xl font-bold text-center flex-1">Política de Privacidad</h2>
+            @include('components.legal-back')
+        </div>
 
         <div class="prose prose-invert max-w-none text-white/90">
             <p class="mt-6">En esta Política de Privacidad te explicamos cómo recopilamos, usamos y protegemos tus datos personales al utilizar <strong>MedicApp</strong>. Esta aplicación es un <strong>proyecto académico</strong> desarrollado con fines educativos, que simula el funcionamiento de un servicio real de gestión de tratamientos y medicación.</p>

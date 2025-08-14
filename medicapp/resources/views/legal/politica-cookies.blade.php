@@ -5,8 +5,12 @@
 @section('content')
 <main class="flex-grow flex items-center justify-center">
     <div class="w-full max-w-2xl px-8">
-        <h2 class="text-3xl font-bold text-center mb-10">Política de Cookies</h2>
-        @include('components.legal-back')
+
+        {{-- Título + Botón volver en la misma línea --}}
+        <div class="flex items-center justify-between mb-10">
+            <h2 class="text-3xl font-bold text-center flex-1">Política de Cookies</h2>
+            @include('components.legal-back')
+        </div>
 
         <div class="prose prose-invert max-w-none text-white/90">
             <p class="mt-6">En esta Política de Cookies te explicamos qué son las cookies, qué tipos utiliza este sitio y cómo puedes gestionarlas. En la configuración actual de la plataforma <strong>solo se usan cookies técnicas o necesarias</strong> para el funcionamiento básico; no empleamos cookies de analítica, publicidad ni perfiles de terceros.</p>

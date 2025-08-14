@@ -49,6 +49,10 @@
                     placeholder="Renovación de Alta">
             </div>
 
+        </div>
+        
+        <!-- Columna derecha -->
+        <div class="flex flex-col gap-6">
             <!-- Especialidad -->
             <div class="flex items-center gap-4">
                 <label for="especialidad" class="w-32 text-white">Especialidad</label>
@@ -62,16 +66,12 @@
                         @endforeach
                         <option value="otra">Otra</option>
                     </select>
-
+    
                     <input type="text" name="especialidad_otra" id="input-especialidad-otra"
                         class="w-full mt-2 p-3 rounded-md text-black text-sm hidden"
                         placeholder="Especifique la especialidad" />
                 </div>
             </div>
-        </div>
-
-        <!-- Columna derecha -->
-        <div class="flex flex-col gap-6">
 
             <!-- Observaciones -->
             <div class="flex flex-col gap-2">
@@ -82,11 +82,11 @@
             </div>
 
             <!-- Recordatorio -->
-            <div class="flex items-center gap-4">
+            {{-- <div class="flex items-center gap-4">
                 <label class="text-white">Notifícame</label>
                 <input type="checkbox" name="recordatorio" value="1"
                     class="w-6 h-6 text-green-500 accent-green-500">
-            </div>
+            </div> --}}
         </div>
 
         <!-- Botón Crear -->
