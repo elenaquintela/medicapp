@@ -8,7 +8,7 @@
     <!-- Título centrado -->
     <h2 class="text-3xl font-bold mb-10 text-center">Editar cita</h2>
 
-    <form method="POST" action="{{ route('cita.update', $cita->id_cita) }}"
+    <form id="form-editar-cita" method="POST" action="{{ route('cita.update', $cita->id_cita) }}"
           class="mx-auto w-[75%] grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
         @csrf
         @method('PUT')
@@ -92,10 +92,22 @@
             </div>
         </div>
 
-        <!-- Botón Guardar -->
-        <div class="md:col-span-2 flex justify-center mt-6">
-            <button type="submit"
-                    class="bg-yellow-200 hover:bg-yellow-300 text-black font-bold py-3 px-10 rounded-full text-lg shadow-md">
+        <!-- Botones: Cancelar (izq) / Guardar (dcha) -->
+        <div class="md:col-span-2 flex items-center justify-center gap-x-8 mt-6">
+            <!-- Cancelar cita -->
+            <form action="{{ route('cita.destroy', $cita->id_cita) }}" method="POST"
+                  onsubmit="return confirm('¿Está seguro de que desea cancelar esta cita? Esta acción no se puede deshacer.');">
+                @csrf
+                @method('DELETE')
+                <button type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-full text-lg shadow-md">
+                    Cancelar cita
+                </button>
+            </form>
+
+            <!-- Guardar cambios -->
+            <button type="submit" form="form-editar-cita"
+                    class="bg-yellow-200 hover:bg-yellow-300 text-black font-bold py-3 px-8 rounded-full text-lg shadow-md">
                 Guardar cambios
             </button>
         </div>

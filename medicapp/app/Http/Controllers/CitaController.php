@@ -186,4 +186,12 @@ class CitaController extends Controller
 
         return redirect()->route('cita.index');
     }
+
+    public function destroy($id)
+    {
+        $cita = Cita::findOrFail($id);
+        $cita->delete();
+
+        return redirect()->route('cita.index')->with('success', 'Cita cancelada correctamente.');
+    }
 }

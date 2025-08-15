@@ -132,6 +132,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/citas', [CitaController::class, 'store'])->name('cita.store');
     Route::get('/citas/{cita}/editar', [CitaController::class, 'edit'])->name('cita.edit');
     Route::put('/citas/{cita}', [CitaController::class, 'update'])->name('cita.update');
+    Route::delete('/citas/{cita}', [CitaController::class, 'destroy'])->name('cita.destroy');
+
 
     // Informes
 
