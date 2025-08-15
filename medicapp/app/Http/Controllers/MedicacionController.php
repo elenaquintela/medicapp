@@ -38,13 +38,12 @@ class MedicacionController extends Controller
 
         $request->validate([
             'nombre' => 'required|string|max:120',
-            'indicacion' => 'required|string|max:120',
-            'presentacion' => 'required|string',
-            'via' => 'required|string',
+            'presentacion' => 'required|in:comprimidos,jarabe,gotas,inyeccion,pomada,parche,polvo,spray,otro',
+            'via' => 'required|in:oral,topica,nasal,ocular,otica,intravenosa,intramuscular,subcutanea,rectal,inhalatoria,otro',
             'dosis' => 'required|string|max:50',
             'fecha_hora_inicio' => 'required|date',
             'pauta_intervalo' => 'required|integer|min:1',
-            'pauta_unidad' => 'required|string',
+            'pauta_unidad' => 'required|in:horas,dias,semanas,meses',
             'observaciones' => 'nullable|string|max:255',
         ]);
 
@@ -192,12 +191,12 @@ class MedicacionController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:120',
             'indicacion' => 'required|string|max:120',
-            'presentacion' => 'required|string',
-            'via' => 'required|string',
+            'presentacion' => 'required|in:comprimidos,jarabe,gotas,inyeccion,pomada,parche,polvo,spray,otro',
+            'via' => 'required|in:oral,topica,nasal,ocular,otica,intravenosa,intramuscular,subcutanea,rectal,inhalatoria,otro',
             'dosis' => 'required|string|max:50',
             'fecha_hora_inicio' => 'required|date',
             'pauta_intervalo' => 'required|integer|min:1',
-            'pauta_unidad' => 'required|string',
+            'pauta_unidad' => 'required|in:horas,dias,semanas,meses',
             'observaciones' => 'nullable|string|max:255',
         ]);
 
@@ -222,6 +221,36 @@ class MedicacionController extends Controller
             ->with('success', 'Medicación actualizada correctamente.');
     }
 
+    public function destroy($id)
+    {
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
+        $usuario->load('perfiles');
+
+        $med = \App\Models\TratamientoMedicamento::findOrFail($id);
+        $tratamiento = $med->tratamiento;
+
+        // Solo permitir si pertenece al perfil activo del usuario
+        $perfilActivo = $usuario->perfilActivo;
+        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
+            return redirect()->route('dashboard')->withErrors(['No tienes permiso para eliminar esta medicación.']);
+        }
+
+        // Por seguridad, solo permitir borrar si está archivada
+        if ($med->estado !== 'archivado') {
+            return back()->withErrors(['Solo puedes eliminar medicaciones archivadas.']);
+        }
+
+        // Eliminar recordatorios asociados
+        $med->recordatorios()->delete();
+
+        $med->delete();
+
+        return redirect()->route('tratamiento.show', $tratamiento->id_tratamiento)
+            ->with('success', 'Medicación archivada eliminada correctamente.');
+    }
+
+
     public function archivar($id)
     {
         /** @var \App\Models\Usuario $usuario */
@@ -241,5 +270,46 @@ class MedicacionController extends Controller
 
         return redirect()->route('tratamiento.show', $medicacion->id_tratamiento)
             ->with('success', 'Medicación archivada correctamente.');
+    }
+
+    public function replaceForm(Tratamiento $tratamiento, TratamientoMedicamento $tratMed)
+    {
+        abort_if($tratMed->id_tratamiento !== $tratamiento->id_tratamiento, 404);
+
+        return view('medicacion.replace', [
+            'tratamiento' => $tratamiento,
+            'original'    => $tratMed->load('medicamento'),
+        ]);
+    }
+
+    public function replace(Request $request, Tratamiento $tratamiento, TratamientoMedicamento $tratMed)
+    {
+        abort_if($tratMed->id_tratamiento !== $tratamiento->id_tratamiento, 404);
+
+        $request->validate([
+            'nombre'           => 'required|string|max:120',
+            'presentacion'     => 'required|in:comprimidos,jarabe,gotas,inyeccion,pomada,parche,polvo,spray,otro',
+            'via'              => 'required|in:oral,topica,nasal,ocular,otica,intravenosa,intramuscular,subcutanea,rectal,inhalatoria,otro',
+            'dosis'            => 'required|string|max:50',
+            'pauta_intervalo'  => 'required|integer|min:1',
+            'pauta_unidad'     => 'required|in:horas,dias,semanas,meses',
+            'fecha_hora_inicio' => 'nullable|date',
+            'observaciones'    => 'nullable|string|max:255',
+        ]);
+
+        $tratMed->sustituir($request->only([
+            'nombre',
+            'presentacion',
+            'via',
+            'dosis',
+            'pauta_intervalo',
+            'pauta_unidad',
+            'fecha_hora_inicio',
+            'observaciones'
+        ]));
+
+        return redirect()
+            ->route('tratamiento.show', $tratamiento->id_tratamiento)
+            ->with('success', 'Medicación sustituida correctamente.');
     }
 }

@@ -114,7 +114,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/tratamiento/{tratamiento}/medicacion', [MedicacionController::class, 'store'])->name('medicacion.store');
     Route::get('/medicacion/{medicacion}/edit', [MedicacionController::class, 'edit'])->name('medicacion.edit');
     Route::put('/medicacion/{medicacion}', [MedicacionController::class, 'update'])->name('medicacion.update');
+    Route::delete('/medicacion/{medicacion}', [MedicacionController::class, 'destroy'])->name('medicacion.destroy');
     Route::put('/medicacion/{medicacion}/archivar', [MedicacionController::class, 'archivar'])->name('medicacion.archivar');
+    Route::get('/tratamiento/{tratamiento}/medicacion/{tratMed}/sustituir', [MedicacionController::class, 'replaceForm'])->name('medicacion.replace.form');
+    Route::post('/tratamiento/{tratamiento}/medicacion/{tratMed}/sustituir', [MedicacionController::class, 'replace'])->name('medicacion.replace');
 
     // Citas
     Route::get('/citas', [CitaController::class, 'index'])->name('cita.index');

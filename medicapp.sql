@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-08-2025 a las 12:35:06
+-- Tiempo de generación: 14-08-2025 a las 18:23:51
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -32,18 +32,6 @@ CREATE TABLE `cache` (
   `value` mediumtext NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `cache`
---
-
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('laravel_cache_5c785c036466adea360111aa28563bfd556b5fba', 'i:1;', 1755105386),
-('laravel_cache_5c785c036466adea360111aa28563bfd556b5fba:timer', 'i:1755105386;', 1755105386),
-('laravel_cache_c1dfd96eea8cc2b62785275bca38ac261256e278', 'i:1;', 1755105269),
-('laravel_cache_c1dfd96eea8cc2b62785275bca38ac261256e278:timer', 'i:1755105269;', 1755105269),
-('laravel_cache_proba@proba.com|127.0.0.1', 'i:1;', 1755099521),
-('laravel_cache_proba@proba.com|127.0.0.1:timer', 'i:1755099521;', 1755099521);
 
 -- --------------------------------------------------------
 
@@ -75,9 +63,18 @@ CREATE TABLE `cita` (
   `especialidad` varchar(80) DEFAULT NULL,
   `recordatorio` tinyint(1) DEFAULT 1,
   `observaciones` text DEFAULT NULL,
+  `google_event_id` varchar(128) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `cita`
+--
+
+INSERT INTO `cita` (`id_cita`, `id_perfil`, `id_usuario_crea`, `fecha`, `hora_inicio`, `hora_fin`, `motivo`, `ubicacion`, `especialidad`, `recordatorio`, `observaciones`, `google_event_id`, `created_at`, `updated_at`) VALUES
+(5, 5, 4, '2025-08-28', '15:30:00', NULL, 'Consulta', 'CHUS', 'Medicina de familia', 0, NULL, 'loc08e0eusti4ql629rp03r4rg', '2025-08-14 14:25:55', '2025-08-14 15:45:57'),
+(6, 5, 4, '2025-08-15', '20:40:00', NULL, 'Renovación de alta', 'CHUS', 'Dermatología', 0, NULL, '82j26clkhihagp37ir3mpo78vo', '2025-08-14 15:36:58', '2025-08-14 16:01:25');
 
 -- --------------------------------------------------------
 
@@ -333,7 +330,11 @@ INSERT INTO `recordatorio` (`id`, `id_trat_med`, `fecha_hora`, `tomado`, `create
 (205, 17, '2025-08-14 15:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
 (206, 17, '2025-08-15 03:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
 (207, 17, '2025-08-15 15:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
-(208, 17, '2025-08-16 03:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16');
+(208, 17, '2025-08-16 03:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
+(209, 17, '2025-08-16 15:55:00', 0, '2025-08-14 13:57:08', '2025-08-14 13:57:08'),
+(210, 5, '2025-08-16 17:00:00', 0, '2025-08-14 16:12:24', '2025-08-14 16:12:24'),
+(211, 18, '2025-08-14 20:15:00', 0, '2025-08-14 16:14:56', '2025-08-14 16:14:56'),
+(212, 18, '2025-08-15 20:15:00', 0, '2025-08-14 16:14:56', '2025-08-14 16:14:56');
 
 -- --------------------------------------------------------
 
@@ -392,11 +393,12 @@ CREATE TABLE `tratamiento_medicamento` (
 --
 
 INSERT INTO `tratamiento_medicamento` (`id_trat_med`, `id_tratamiento`, `id_medicamento`, `indicacion`, `presentacion`, `via`, `dosis`, `pauta_intervalo`, `pauta_unidad`, `fecha_hora_inicio`, `observaciones`, `estado`, `sustituido_por`, `created_at`, `updated_at`) VALUES
-(5, 6, 1, 'Dolor', 'comprimidos', 'oral', '1g', 8, 'horas', '2025-08-10 09:00:00', NULL, 'activo', NULL, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
+(5, 6, 1, 'Dolor', 'comprimidos', 'topica', '1g', 8, 'horas', '2025-08-10 09:00:00', NULL, 'activo', NULL, '2025-08-12 17:05:52', '2025-08-14 16:14:02'),
 (6, 7, 1, 'Tiroides', 'comprimidos', 'oral', '1g', 9, 'horas', '2025-06-06 08:00:00', NULL, 'activo', NULL, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
 (7, 7, 1, 'Control azucar', 'comprimidos', 'oral', '23mg', 8, 'horas', '2025-07-07 05:06:00', NULL, 'activo', NULL, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
 (16, 17, 2, 'Náuseas', 'comprimidos', 'oral', '1mg', 7, 'horas', '2025-02-22 03:03:00', NULL, 'activo', NULL, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(17, 18, 5, 'Tos', 'inyeccion', 'intravenosa', '1mg', 12, 'horas', '2025-04-04 15:55:00', NULL, 'activo', NULL, '2025-08-14 10:33:16', '2025-08-14 10:33:16');
+(17, 18, 5, 'Tos', 'inyeccion', 'intravenosa', '1mg', 12, 'horas', '2025-04-04 15:55:00', NULL, 'activo', NULL, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
+(18, 6, 3, 'Tos', 'gotas', 'ocular', '30ml', 1, 'dias', '2025-08-08 20:15:00', NULL, 'activo', NULL, '2025-08-14 16:14:56', '2025-08-14 16:14:56');
 
 -- --------------------------------------------------------
 
@@ -411,6 +413,7 @@ CREATE TABLE `usuario` (
   `contrasena` varchar(255) NOT NULL,
   `rol_global` enum('estandar','premium') DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
+  `google_oauth_tokens` longtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -419,10 +422,10 @@ CREATE TABLE `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `nombre`, `email`, `contrasena`, `rol_global`, `remember_token`, `created_at`, `updated_at`) VALUES
-(4, 'proba4', 'proba4@proba.com', '$2y$12$1/WTKNueLY/JWwxwHg8oP.XzrM2vVz1B1D6X6EQWuBuAiXbb7RWZy', 'premium', NULL, '2025-08-12 17:05:04', '2025-08-14 09:26:05'),
-(5, 'proba5', 'proba5@proba.com', '$2y$12$bNMdEXw1mDijreUW/ZKcr.4doP9GDWDG3Kb.3r/1kM7ZXrneyRAGu', 'premium', NULL, '2025-08-12 17:18:21', '2025-08-12 17:18:25'),
-(6, 'elena', 'a23elenaqb@iessanclemente.net', '$2y$12$Yn/YhgXoOkIMyzq5A.sQwOHy/oXTR.GvR1bG3jtTSoyrDZHvvVk9u', 'premium', NULL, '2025-08-13 17:05:09', '2025-08-13 17:08:44');
+INSERT INTO `usuario` (`id_usuario`, `nombre`, `email`, `contrasena`, `rol_global`, `remember_token`, `google_oauth_tokens`, `created_at`, `updated_at`) VALUES
+(4, 'proba4', 'proba4@proba.com', '$2y$12$1/WTKNueLY/JWwxwHg8oP.XzrM2vVz1B1D6X6EQWuBuAiXbb7RWZy', 'premium', NULL, NULL, '2025-08-12 17:05:04', '2025-08-14 15:53:51'),
+(5, 'proba5', 'proba5@proba.com', '$2y$12$bNMdEXw1mDijreUW/ZKcr.4doP9GDWDG3Kb.3r/1kM7ZXrneyRAGu', 'premium', NULL, NULL, '2025-08-12 17:18:21', '2025-08-12 17:18:25'),
+(6, 'elena', 'a23elenaqb@iessanclemente.net', '$2y$12$Yn/YhgXoOkIMyzq5A.sQwOHy/oXTR.GvR1bG3jtTSoyrDZHvvVk9u', 'premium', NULL, NULL, '2025-08-13 17:05:09', '2025-08-13 17:08:44');
 
 -- --------------------------------------------------------
 
@@ -470,7 +473,8 @@ ALTER TABLE `cache_locks`
 ALTER TABLE `cita`
   ADD PRIMARY KEY (`id_cita`),
   ADD KEY `fk_cita_perfil` (`id_perfil`),
-  ADD KEY `fk_cita_usuario` (`id_usuario_crea`);
+  ADD KEY `fk_cita_usuario` (`id_usuario_crea`),
+  ADD KEY `idx_cita_google_event` (`google_event_id`);
 
 --
 -- Indices de la tabla `failed_jobs`
@@ -583,7 +587,7 @@ ALTER TABLE `usuario_perfil`
 -- AUTO_INCREMENT de la tabla `cita`
 --
 ALTER TABLE `cita`
-  MODIFY `id_cita` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_cita` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -637,7 +641,7 @@ ALTER TABLE `perfil_invitacion`
 -- AUTO_INCREMENT de la tabla `recordatorio`
 --
 ALTER TABLE `recordatorio`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=213;
 
 --
 -- AUTO_INCREMENT de la tabla `tratamiento`
@@ -649,7 +653,7 @@ ALTER TABLE `tratamiento`
 -- AUTO_INCREMENT de la tabla `tratamiento_medicamento`
 --
 ALTER TABLE `tratamiento_medicamento`
-  MODIFY `id_trat_med` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_trat_med` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
