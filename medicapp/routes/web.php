@@ -109,6 +109,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/tratamiento', [TratamientoController::class, 'store'])->name('tratamiento.store');
     Route::get('/tratamientos', [TratamientoController::class, 'index'])->name('tratamiento.index');
     Route::get('/tratamiento/{tratamiento}', [TratamientoController::class, 'show'])->name('tratamiento.show');
+    Route::put('/tratamiento/{tratamiento}/archivar', [TratamientoController::class, 'archivar'])->name('tratamiento.archivar');
+    Route::delete('/tratamiento/{tratamiento}', [TratamientoController::class, 'destroy'])->name('tratamiento.destroy');
+    Route::put('/tratamientos/{tratamiento}/reactivar', [TratamientoController::class, 'reactivar'])
+    ->name('tratamiento.reactivar');
 
     // Medicación
     Route::get('/tratamiento/{tratamiento}/medicacion', [MedicacionController::class, 'create'])->name('medicacion.create');
@@ -117,6 +121,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/medicacion/{medicacion}', [MedicacionController::class, 'update'])->name('medicacion.update');
     Route::delete('/medicacion/{medicacion}', [MedicacionController::class, 'destroy'])->name('medicacion.destroy');
     Route::put('/medicacion/{medicacion}/archivar', [MedicacionController::class, 'archivar'])->name('medicacion.archivar');
+    Route::put('/medicacion/{id}/reactivar', [MedicacionController::class, 'reactivar'])
+    ->name('medicacion.reactivar');
     Route::get('/tratamiento/{tratamiento}/medicacion/{tratMed}/sustituir', [MedicacionController::class, 'replaceForm'])->name('medicacion.replace.form');
     Route::post('/tratamiento/{tratamiento}/medicacion/{tratMed}/sustituir', [MedicacionController::class, 'replace'])->name('medicacion.replace');
 

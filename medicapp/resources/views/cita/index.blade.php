@@ -111,34 +111,57 @@
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const input = document.getElementById('filtro-citas');
-        const filas = document.querySelectorAll('.cita-fila');
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('filtro-citas');
+  const filas = document.querySelectorAll('.cita-fila');
 
-        input.addEventListener('input', function () {
-            const texto = input.value.toLowerCase().trim();
-
-            filas.forEach(fila => {
-                const celdas = fila.querySelectorAll('td');
-                let coincide = false;
-
-                celdas.forEach(celda => {
-                    const contenidoOriginal = celda.getAttribute('data-original') || celda.textContent;
-                    celda.setAttribute('data-original', contenidoOriginal);
-
-                    const contenido = contenidoOriginal.toLowerCase();
-                    if (texto && contenido.includes(texto)) {
-                        coincide = true;
-                        const regex = new RegExp(`(${texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-                        celda.innerHTML = contenidoOriginal.replace(regex, '<span class="resaltado">$1</span>');
-                    } else {
-                        celda.innerHTML = contenidoOriginal;
-                    }
-                });
-
-                fila.style.display = coincide || texto === '' ? '' : 'none';
-            });
-        });
+  // Guardar HTML original de celdas de texto (no acciones)
+  filas.forEach(fila => {
+    fila.querySelectorAll('td').forEach(td => {
+      const esAccion = td.querySelector('a,button,form,img,svg');
+      if (!esAccion && !td.hasAttribute('data-original-html')) {
+        td.setAttribute('data-original-html', td.innerHTML);
+      }
     });
+  });
+
+  function resaltarEnCelda(td, texto) {
+    const htmlBase = td.getAttribute('data-original-html');
+    if (!htmlBase) return;
+    if (!texto) { td.innerHTML = htmlBase; return; }
+
+    const regex = new RegExp(`(${texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    td.innerHTML = htmlBase.replace(regex, '<span class="resaltado">$1</span>');
+  }
+
+  input.addEventListener('input', function () {
+    const texto = (input.value || '').toLowerCase().trim();
+
+    filas.forEach(fila => {
+      const celdas = fila.querySelectorAll('td');
+      let coincide = false;
+
+      celdas.forEach(td => {
+        const esAccion = td.querySelector('a,button,form,img,svg');
+        const contenido = (td.textContent || '').toLowerCase();
+
+        if (!esAccion) {
+          if (texto && contenido.includes(texto)) {
+            coincide = true;
+            resaltarEnCelda(td, texto);
+          } else {
+            resaltarEnCelda(td, '');
+            if (texto && !coincide && contenido.includes(texto)) coincide = true;
+          }
+        } else {
+          if (texto && contenido.includes(texto)) coincide = true;
+        }
+      });
+
+      fila.style.display = (coincide || texto === '') ? '' : 'none';
+    });
+  });
+});
 </script>
+
 @endsection

@@ -131,7 +131,8 @@
                         <th class="py-3 px-4">Dosis</th>
                         <th class="py-3 px-4">Pauta</th>
                         <th class="py-3 px-4">Observaciones</th>
-                        <th class="py-3 px-4">Estado</th> 
+                        <th class="py-3 px-4">Estado</th>
+                        <th class="py-3 px-4">Reactivar</th> {{-- Nueva columna --}}
                         <th class="py-3 px-4 w-16">Eliminar</th>
                     </tr>
                 </thead>
@@ -149,20 +150,37 @@
                             <td class="py-3 px-4">cada {{ $med->pauta_intervalo }} {{ $med->pauta_unidad }}</td>
                             <td class="py-3 px-4">{{ $med->observaciones ?? '—' }}</td>
 
-                            {{-- Indicador visual de "Sustituida" / "Archivada" --}}
+                            {{-- Indicador visual --}}
                             <td class="py-3 px-4">
                                 @if($fueSustituida)
-                                    <span class="inline-block px-2 py-1">
-                                        Sustituida
-                                    </span>
+                                    <span class="inline-block px-2 py-1">Sustituida</span>
                                 @else
-                                    <span class="inline-block px-2 py-1">
-                                        Archivada
-                                    </span>
+                                    <span class="inline-block px-2 py-1">Archivada</span>
                                 @endif
                             </td>
 
-                            {{-- Acciones: eliminar activo/deshabilitado --}}
+                            {{-- Botón reactivar --}}
+                            <td class="py-3 px-4">
+                                @if(!$fueSustituida)
+                                    <form method="POST" action="{{ route('medicacion.reactivar', $med->id_trat_med) }}">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit"
+                                                class="bg-green-400 hover:bg-green-500 text-black font-bold py-1.5 px-4 rounded-full shadow">
+                                            Reactivar
+                                        </button>
+                                    </form>
+                                @else
+                                    <button type="button"
+                                            class="bg-gray-400 text-white p-2 rounded-full shadow inline-flex items-center justify-center cursor-not-allowed opacity-70"
+                                            title="No se puede reactivar: medicación sustituida"
+                                            aria-disabled="true" disabled>
+                                        —
+                                    </button>
+                                @endif
+                            </td>
+
+                            {{-- Acciones: eliminar --}}
                             <td class="py-3 px-4 text-center align-middle">
                                 @if($fueSustituida)
                                     <button type="button"
@@ -196,6 +214,7 @@
             </table>
         </div>
     @endif
+
 
     
 </div>

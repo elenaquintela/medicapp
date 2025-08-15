@@ -277,6 +277,16 @@ class MedicacionController extends Controller
             ->with('success', 'Medicación archivada correctamente.');
     }
 
+    public function reactivar($id)
+    {
+        $medicacion = TratamientoMedicamento::findOrFail($id);
+        $medicacion->estado = 'activo';
+        $medicacion->save();
+
+        return redirect()->back()->with('success', 'Medicamento reactivado correctamente.');
+    }
+
+
     public function replaceForm(Tratamiento $tratamiento, TratamientoMedicamento $tratMed)
     {
         abort_if($tratMed->id_tratamiento !== $tratamiento->id_tratamiento, 404);
@@ -319,76 +329,91 @@ class MedicacionController extends Controller
     }
 
     private function regenerarRecordatoriosDeHoy(TratamientoMedicamento $tm): void
-{
-    $todayStart = Carbon::today();
-    $endOfDay   = Carbon::today()->endOfDay();
-    $now        = Carbon::now();
+    {
+        $todayStart = Carbon::today();
+        $endOfDay   = Carbon::today()->endOfDay();
+        $now        = Carbon::now();
 
-    // --- 0) Guardar HORAS antiguas de HOY (antes de borrar recordatorios) ---
-    $horasAntiguas = Recordatorio::where('id_trat_med', $tm->id_trat_med)
-        ->where('fecha_hora', '>=', $todayStart)
-        ->pluck('fecha_hora');
+        // --- 0) Guardar HORAS antiguas de HOY (antes de borrar recordatorios) ---
+        $horasAntiguas = Recordatorio::where('id_trat_med', $tm->id_trat_med)
+            ->where('fecha_hora', '>=', $todayStart)
+            ->pluck('fecha_hora');
 
-    // PERFIL asociado a esta medicación (para filtrar notifs)
-    $perfilId = optional($tm->tratamiento)->id_perfil;
+        // PERFIL asociado a esta medicación (para filtrar notifs)
+        $perfilId = optional($tm->tratamiento)->id_perfil;
 
-    // --- 0bis) Borrar NOTIFICACIONES de "toma" de HOY con esas horas antiguas ---
-    if ($perfilId && $horasAntiguas->isNotEmpty()) {
-        DB::table('notificacion')
-            ->where('categoria', 'toma')
-            ->where('id_perfil', $perfilId)
-            ->whereIn('ts_programada', $horasAntiguas)
+        // --- 0bis) Borrar NOTIFICACIONES de "toma" de HOY con esas horas antiguas ---
+        if ($perfilId && $horasAntiguas->isNotEmpty()) {
+            DB::table('notificacion')
+                ->where('categoria', 'toma')
+                ->where('id_perfil', $perfilId)
+                ->whereIn('ts_programada', $horasAntiguas)
+                ->delete();
+        }
+
+        // --- 1) Borrar RECORDATORIOS no tomados de HOY en adelante ---
+        Recordatorio::where('id_trat_med', $tm->id_trat_med)
+            ->where('tomado', 0)
+            ->where('fecha_hora', '>=', $todayStart)
             ->delete();
-    }
 
-    // --- 1) Borrar RECORDATORIOS no tomados de HOY en adelante ---
-    Recordatorio::where('id_trat_med', $tm->id_trat_med)
-        ->where('tomado', 0)
-        ->where('fecha_hora', '>=', $todayStart)
-        ->delete();
+        // --- 2) Preparar pauta ---
+        $unidadRaw = mb_strtolower((string) $tm->pauta_unidad, 'UTF-8');
+        $unidadRaw = str_replace(['día', 'días'], ['dia', 'dias'], $unidadRaw);
+        $intervalo = (int) $tm->pauta_intervalo;
 
-    // --- 2) Preparar pauta ---
-    $unidadRaw = mb_strtolower((string) $tm->pauta_unidad, 'UTF-8');
-    $unidadRaw = str_replace(['día', 'días'], ['dia', 'dias'], $unidadRaw);
-    $intervalo = (int) $tm->pauta_intervalo;
-
-    if ($intervalo <= 0 || !in_array($unidadRaw, ['horas', 'dias', 'semanas', 'meses'])) {
-        return; // pauta inválida: no generamos
-    }
-
-    // --- 3) Cursor desde la nueva fecha de inicio, alineado a HOY ---
-    $inicioOriginal = Carbon::parse($tm->fecha_hora_inicio, config('app.timezone'));
-    $cursor = $inicioOriginal->copy();
-
-    // Alinear a la primera ocurrencia de HOY si el inicio fue antes
-    while ($cursor->lt($todayStart)) {
-        switch ($unidadRaw) {
-            case 'horas':   $cursor->addHours($intervalo);   break;
-            case 'dias':    $cursor->addDays($intervalo);    break;
-            case 'semanas': $cursor->addWeeks($intervalo);   break;
-            case 'meses':   $cursor->addMonths($intervalo);  break;
-        }
-    }
-
-    // --- 4) Generar ocurrencias >= ahora y <= fin de HOY ---
-    while ($cursor->lte($endOfDay)) {
-        if ($cursor->gte($now)) {
-            Recordatorio::firstOrCreate(
-                [
-                    'id_trat_med' => $tm->id_trat_med,
-                    'fecha_hora'  => $cursor->toDateTimeString(),
-                ],
-                ['tomado' => false]
-            );
+        if ($intervalo <= 0 || !in_array($unidadRaw, ['horas', 'dias', 'semanas', 'meses'])) {
+            return; // pauta inválida: no generamos
         }
 
-        switch ($unidadRaw) {
-            case 'horas':   $cursor->addHours($intervalo);   break;
-            case 'dias':    $cursor->addDays($intervalo);    break;
-            case 'semanas': $cursor->addWeeks($intervalo);   break;
-            case 'meses':   $cursor->addMonths($intervalo);  break;
+        // --- 3) Cursor desde la nueva fecha de inicio, alineado a HOY ---
+        $inicioOriginal = Carbon::parse($tm->fecha_hora_inicio, config('app.timezone'));
+        $cursor = $inicioOriginal->copy();
+
+        // Alinear a la primera ocurrencia de HOY si el inicio fue antes
+        while ($cursor->lt($todayStart)) {
+            switch ($unidadRaw) {
+                case 'horas':
+                    $cursor->addHours($intervalo);
+                    break;
+                case 'dias':
+                    $cursor->addDays($intervalo);
+                    break;
+                case 'semanas':
+                    $cursor->addWeeks($intervalo);
+                    break;
+                case 'meses':
+                    $cursor->addMonths($intervalo);
+                    break;
+            }
+        }
+
+        // --- 4) Generar ocurrencias >= ahora y <= fin de HOY ---
+        while ($cursor->lte($endOfDay)) {
+            if ($cursor->gte($now)) {
+                Recordatorio::firstOrCreate(
+                    [
+                        'id_trat_med' => $tm->id_trat_med,
+                        'fecha_hora'  => $cursor->toDateTimeString(),
+                    ],
+                    ['tomado' => false]
+                );
+            }
+
+            switch ($unidadRaw) {
+                case 'horas':
+                    $cursor->addHours($intervalo);
+                    break;
+                case 'dias':
+                    $cursor->addDays($intervalo);
+                    break;
+                case 'semanas':
+                    $cursor->addWeeks($intervalo);
+                    break;
+                case 'meses':
+                    $cursor->addMonths($intervalo);
+                    break;
+            }
         }
     }
-}
-
 }

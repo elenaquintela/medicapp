@@ -84,11 +84,11 @@ class TratamientoController extends Controller
             if ($busqueda = request('busqueda')) {
                 $query->where(function ($q) use ($busqueda) {
                     $q->where('causa', 'like', "%{$busqueda}%")
-                      ->orWhere('estado', 'like', "%{$busqueda}%")
-                      ->orWhereDate('fecha_inicio', $busqueda)
-                      ->orWhereHas('usuarioCreador', function ($subquery) use ($busqueda) {
-                          $subquery->where('nombre', 'like', "%{$busqueda}%");
-                      });
+                        ->orWhere('estado', 'like', "%{$busqueda}%")
+                        ->orWhereDate('fecha_inicio', $busqueda)
+                        ->orWhereHas('usuarioCreador', function ($subquery) use ($busqueda) {
+                            $subquery->where('nombre', 'like', "%{$busqueda}%");
+                        });
                 });
             }
 
@@ -102,5 +102,40 @@ class TratamientoController extends Controller
     {
         $tratamiento->load('medicaciones.medicamento');
         return view('tratamiento.show', compact('tratamiento'));
+    }
+
+    public function archivar(\App\Models\Tratamiento $tratamiento)
+    {
+        $usuario = Auth::user();
+        $perfilActivo = $usuario->perfilActivo;
+        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
+            return back()->withErrors(['No tienes permiso para archivar este tratamiento.']);
+        }
+        $tratamiento->estado = 'archivado';
+        $tratamiento->save();
+        return back()->with('success', 'Tratamiento archivado.');
+    }
+
+    public function reactivar($id)
+    {
+        $tratamiento = Tratamiento::findOrFail($id);
+        $tratamiento->estado = 'activo';
+        $tratamiento->save();
+
+        return redirect()->route('tratamiento.index')->with('success', 'Tratamiento reactivado correctamente.');
+    }
+
+    public function destroy(\App\Models\Tratamiento $tratamiento)
+    {
+        $usuario = Auth::user();
+        $perfilActivo = $usuario->perfilActivo;
+        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
+            return back()->withErrors(['No tienes permiso para eliminar este tratamiento.']);
+        }
+        if ($tratamiento->estado !== 'archivado') {
+            return back()->withErrors(['Solo puedes eliminar tratamientos archivados.']);
+        }
+        $tratamiento->delete();
+        return back()->with('success', 'Tratamiento eliminado.');
     }
 }
