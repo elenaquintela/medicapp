@@ -31,6 +31,10 @@ class DashboardController extends Controller
             ])->get()
             : collect();
 
+        $ahora     = Carbon::now();
+        $inicioDia = $ahora->copy()->startOfDay();
+        $finDia    = $ahora->copy()->endOfDay();
+
         if ($tratamientos->isNotEmpty()) {
             foreach ($tratamientos as $tratamiento) {
                 foreach ($tratamiento->medicaciones as $medicacion) {
@@ -46,15 +50,17 @@ class DashboardController extends Controller
                     };
 
                     $intervalo = (int) $medicacion->pauta_intervalo;
-                    $inicio = Carbon::parse($medicacion->fecha_hora_inicio)->copy();
-                    $ahora  = Carbon::now();
-                    $fin    = $ahora->copy()->addHours(48);
+                    $inicio    = Carbon::parse($medicacion->fecha_hora_inicio)->copy();
+
+                    while ($inicio->lt($inicioDia)) {
+                        $inicio->add($unidad, $intervalo);
+                    }
 
                     while ($inicio->lt($ahora)) {
                         $inicio->add($unidad, $intervalo);
                     }
 
-                    while ($inicio->lte($fin)) {
+                    while ($inicio->lte($finDia)) {
                         $yaExiste = Recordatorio::where('id_trat_med', $medicacion->id_trat_med)
                             ->where('fecha_hora', $inicio)
                             ->exists();
