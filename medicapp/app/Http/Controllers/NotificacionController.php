@@ -10,27 +10,19 @@ use Carbon\Carbon;
 
 class NotificacionController extends Controller
 {
-    // GET /notificaciones → genera (si toca) y devuelve JSON para el dropdown
     public function index(Request $request)
     {
         /** @var \App\Models\Usuario $usuario */
         $usuario = Auth::user();
-
-        // IDs de perfiles a los que tiene acceso
-        // (importante: usa la colección o pluck simple, no 'perfil.id_perfil')
         $perfilIds = $usuario->perfiles->pluck('id_perfil');
 
         $tz    = config('app.timezone');
         $today = \Carbon\Carbon::today($tz);
         $now   = \Carbon\Carbon::now($tz);
 
-        // Ventana "debido AHORA": [ahora-30s, ahora]
         $from = (clone $now)->subSeconds(30);
         $to   = (clone $now);
 
-        /* ===========================
-         * TOMAS (igual que tenías)
-         * =========================== */
         $debidos = DB::table('recordatorio as r')
             ->join('tratamiento_medicamento as tm', 'tm.id_trat_med', '=', 'r.id_trat_med')
             ->join('tratamiento as t', 't.id_tratamiento', '=', 'tm.id_tratamiento')
@@ -45,7 +37,7 @@ class NotificacionController extends Controller
             ->whereIn('p.id_perfil', $perfilIds)
             ->where('tm.estado', 'activo')
             ->whereDate('r.fecha_hora', $today)
-            ->whereBetween('r.fecha_hora', [$from, $to])  // 👈 ya vencidas (hasta 30s)
+            ->whereBetween('r.fecha_hora', [$from, $to]) 
             ->where('r.tomado', 0)
             ->whereNull('n.id_notif')
             ->select(['r.fecha_hora', 'p.id_perfil', 'p.nombre_paciente as perfil', 'm.nombre as med', 'tm.dosis'])
@@ -63,14 +55,8 @@ class NotificacionController extends Controller
             ]);
         }
 
-        /* ===========================
-         * CITAS (30 min antes)
-         * =========================== */
-        // Disparar si: ts_programada = c.fecha + c.hora_inicio - 30min ∈ [now-30s, now]
-        // Solo citas de HOY y perfiles accesibles.
         $debidosCita = DB::table('cita as c')
             ->join('perfil as p', 'p.id_perfil', '=', 'c.id_perfil')
-            // evitar duplicados: left join por mismo ts_programada/perfil/categoria/usuario
             ->leftJoin('notificacion as n2', function ($join) use ($usuario) {
                 $join->on('n2.id_perfil', '=', 'p.id_perfil')
                     ->where('n2.categoria', 'cita')
@@ -104,7 +90,6 @@ class NotificacionController extends Controller
             ]);
         }
 
-        // Solo NO leídas (sin "recientes") de TOMA + CITA
         $noLeidas = \App\Models\Notificacion::where('id_usuario_dest', $usuario->id_usuario)
             ->whereIn('categoria', ['toma', 'cita'])
             ->whereIn('id_perfil', $perfilIds)
@@ -120,11 +105,10 @@ class NotificacionController extends Controller
                 'msg'    => $n->mensaje,
                 'hora'   => \Carbon\Carbon::parse($n->ts_programada, $tz)->format('H:i'),
             ]),
-            'recent' => [], // vacío
+            'recent' => [], 
         ]);
     }
 
-    // POST /notificaciones/{notificacion}/leer
     public function marcarLeida(Notificacion $notificacion)
     {
         $this->autorizar($notificacion);
@@ -133,7 +117,6 @@ class NotificacionController extends Controller
         return response()->json(['ok' => true]);
     }
 
-    // POST /notificaciones/leer-todas
     public function marcarTodasLeidas()
     {
         /** @var \App\Models\Usuario $usuario */

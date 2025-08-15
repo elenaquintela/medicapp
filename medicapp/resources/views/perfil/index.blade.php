@@ -16,100 +16,71 @@
         </div>
     @else
         @php
-            // <- Si aún no añadiste $esPremium / $esPropietario / $invitados / $creador / $pendientes en el controller,
-            //    puedes dejar estos defaults para que no rompa (idealmente vienen del controlador).
-            $esPremium   = $esPremium   ?? (Auth::user()->rol_global === 'premium');
-            $esPropietario = $esPropietario ?? false;
-            $invitados   = $invitados   ?? collect();
-            $creador     = $creador     ?? null;
-            $pendientes  = $pendientes  ?? collect();
-
-            // Detectar si YO soy invitado en este perfil (solo para mostrar en modo lectura)
-            $soyInvitado = false;
-            try {
-                $soyInvitado = Auth::user()->perfiles()
-                    ->wherePivot('rol_en_perfil', 'invitado')
-                    ->where('perfil.id_perfil', $perfilActivo->id_perfil)
-                    ->exists();
-            } catch (\Throwable $e) {}
+            $soyInvitado = Auth::user()->perfiles()
+                ->wherePivot('rol_en_perfil', 'invitado')
+                ->where('perfil.id_perfil', $perfilActivo->id_perfil)
+                ->exists();
         @endphp
 
         <div class="grid grid-cols-1 lg:grid-cols-2 items-start gap-12 w-full max-w-6xl">
-
-            
-            {{-- Columna izquierda: panel + botones centrados dentro --}}
             <div class="space-y-6">
                 <div class="bg-transparent border-2 border-gray-500 rounded-lg p-8 w-full text-white">
                     <h3 class="text-xl font-bold mb-6 text-center text-yellow-200">Datos del paciente</h3>
 
                     <form id="form-perfil" method="POST" action="{{ route('perfil.update', $perfilActivo->id_perfil) }}">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="mb-6">
-                        <label class="block mb-2" for="nombre_paciente">Nombre</label>
-                        <input type="text" id="nombre_paciente" name="nombre_paciente"
-                            class="w-full p-2 rounded text-black"
-                            value="{{ old('nombre_paciente', $perfilActivo->nombre_paciente) }}" required>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block mb-2" for="fecha_nacimiento">Fecha de nacimiento</label>
-                        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento"
-                            class="w-full p-2 rounded text-black"
-                            value="{{ old('fecha_nacimiento', $perfilActivo->fecha_nacimiento) }}" required>
-                    </div>
-
-                    <div>
-                        <label class="block mb-2" for="sexo">Género</label>
-                        <select id="sexo" name="sexo" class="w-full p-2 rounded text-black" required>
-                        <option value="F" @selected($perfilActivo->sexo === 'F')>Mujer</option>
-                        <option value="M" @selected($perfilActivo->sexo === 'M')>Hombre</option>
-                        <option value="NB" @selected($perfilActivo->sexo === 'NB')>No binario</option>
-                        <option value="O" @selected($perfilActivo->sexo === 'O')>Otro</option>
-                        </select>
-                    </div>
-                    </form>
-
-                    {{-- Botonera centrada, dentro del mismo panel --}}
-                    <div class="mt-8 flex items-center justify-center gap-4">
-                    <button form="form-perfil"
-                            class="bg-green-500 hover:bg-green-600 text-black font-bold px-6 py-3 rounded-full shadow">
-                        Guardar cambios
-                    </button>
-
-                    <form method="POST" action="{{ route('perfil.destroy', $perfilActivo->id_perfil) }}"
-                            onsubmit="return confirm('¿Está seguro de que desea eliminar este perfil? Esta acción no se puede deshacer.');">
                         @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                                class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-full shadow">
-                        Eliminar perfil
-                        </button>
+                        @method('PUT')
+
+                        <div class="mb-6">
+                            <label class="block mb-2" for="nombre_paciente">Nombre</label>
+                            <input type="text" id="nombre_paciente" name="nombre_paciente"
+                                class="w-full p-2 rounded text-black"
+                                value="{{ old('nombre_paciente', $perfilActivo->nombre_paciente) }}" required>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block mb-2" for="fecha_nacimiento">Fecha de nacimiento</label>
+                            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento"
+                                class="w-full p-2 rounded text-black"
+                                value="{{ old('fecha_nacimiento', $perfilActivo->fecha_nacimiento) }}" required>
+                        </div>
+
+                        <div>
+                            <label class="block mb-2" for="sexo">Género</label>
+                            <select id="sexo" name="sexo" class="w-full p-2 rounded text-black" required>
+                                <option value="F" @selected($perfilActivo->sexo === 'F')>Mujer</option>
+                                <option value="M" @selected($perfilActivo->sexo === 'M')>Hombre</option>
+                                <option value="NB" @selected($perfilActivo->sexo === 'NB')>No binario</option>
+                                <option value="O" @selected($perfilActivo->sexo === 'O')>Otro</option>
+                            </select>
+                        </div>
                     </form>
+
+                    <div class="mt-8 flex items-center justify-center gap-4">
+                        <button form="form-perfil"
+                                class="bg-green-500 hover:bg-green-600 text-black font-bold px-6 py-3 rounded-full shadow">
+                            Guardar cambios
+                        </button>
+
+                        <form method="POST" action="{{ route('perfil.destroy', $perfilActivo->id_perfil) }}"
+                              onsubmit="return confirm('¿Está seguro de que desea eliminar este perfil? Esta acción no se puede deshacer.');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-full shadow">
+                                Eliminar perfil
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
-
-            {{-- Columna derecha: Accesos compartidos (igual que antes, pero sin los botones arriba) --}}
-            @php
-                $esPremium     = $esPremium     ?? (Auth::user()->rol_global === 'premium');
-                $esPropietario = $esPropietario ?? false;
-                $invitados     = $invitados     ?? collect();
-                $creador       = $creador       ?? null;
-                $pendientes    = $pendientes    ?? collect();
-                $soyInvitado   = Auth::user()->perfiles()
-                                    ->wherePivot('rol_en_perfil', 'invitado')
-                                    ->where('perfil.id_perfil', $perfilActivo->id_perfil)
-                                    ->exists();
-            @endphp
-
-            @if($perfilActivo && ( ($esPremium && $esPropietario) || $soyInvitado ))
+            @if($perfilActivo && (($esPremium && $esPropietario) || $soyInvitado))
                 <div class="bg-[#0C1222] border border-gray-500 rounded-xl p-6 text-white">
                     <h3 class="text-yellow-200 font-bold text-xl mb-4">Accesos compartidos</h3>
 
                     <p class="mb-4">
-                        Usuario creador: <span class="text-gray-300 font-mono">{{ $creador?->email ?? Auth::user()->email }}</span>
+                        Usuario creador:
+                        <span class="text-gray-300 font-mono">{{ $creador?->email ?? Auth::user()->email }}</span>
                     </p>
 
                     @if(($esPremium && $esPropietario) && $pendientes->count())
@@ -169,7 +140,6 @@
                 </div>
             @endif
         </div>
-
     @endif
 </div>
 @endsection

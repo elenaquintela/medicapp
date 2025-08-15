@@ -64,7 +64,7 @@ Route::post('/planes', function (Request $request) {
     return redirect()->route('perfil.create');
 })->middleware('auth')->name('planes.store');
 
-// aceptar invitación (pública: llega por email)
+
 Route::get('/invitaciones/aceptar/{token}', [PerfilInvitacionController::class, 'accept'])
     ->middleware('throttle:20,1')
     ->name('invitaciones.accept');
@@ -102,7 +102,6 @@ Route::middleware('auth')->group(function () {
             ? redirect($request->redirect_to)
             : redirect()->back();
     })->name('perfil.seleccionar');
-
 
     // Tratamiento
     Route::get('/tratamiento/create', [TratamientoController::class, 'create'])->name('tratamiento.create');
@@ -167,23 +166,23 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('account.edit')->with('success', 'Tu suscripción ha sido actualizada.');
     })->name('account.changePlan');
 
-    // Cambio de perfil activo
+    // PerfilActivo
     Route::post('/perfil/activo/{perfil}', [PerfilActivoController::class, 'cambiar'])
         ->name('perfil.activo.cambiar');
 
-    // Marcar recordatorio como tomado
+    // Recordatorios
     Route::post('/recordatorios/{recordatorio}/marcar', [\App\Http\Controllers\RecordatorioController::class, 'marcarComoTomado'])
         ->name('recordatorio.marcar');
 
-    // enviar invitación (solo premium + propietario)
+    // Invitaciones
     Route::post('/perfil/{perfil}/invitaciones', [PerfilInvitacionController::class, 'store'])
         ->name('perfil.invitaciones.store');
 
-    // quitar acceso (solo premium + propietario) 
+    // PerfilMiembros
     Route::delete('/perfil/{perfil}/miembros/{usuario}', [PerfilMiembrosController::class, 'destroy'])
         ->name('perfil.miembros.destroy');
 
-    // Google Calendar (solo autenticados; la comprobación de premium la hace el controlador)
+    // Google Calendar 
     Route::get('/google/connect',  [GoogleCalendarController::class, 'connect'])->name('google.connect');
     Route::get('/google/callback', [GoogleCalendarController::class, 'callback'])->name('google.callback');
     Route::post('/google/sync-citas', [GoogleCalendarController::class, 'syncAll'])->name('google.syncAll');

@@ -24,18 +24,14 @@ class InformeController extends Controller
             return redirect()->route('perfil.index')->withErrors('Selecciona o crea un perfil primero.');
         }
 
-        // Tratamientos del perfil activo (para el <select>)
         $tratamientos = $perfil->tratamientos()->latest('id_tratamiento')->get();
 
-        // Listado de informes del usuario actual sobre este perfil
         $informes = Informe::with(['tratamiento'])
             ->where('id_usuario', $user->id_usuario)
             ->where('id_perfil', $perfil->id_perfil)
             ->orderByDesc('ts_creacion')
             ->get();
 
-        // Rango por defecto (inicio = fecha_inicio del último tratamiento o hoy; fin = hoy)
-        // InformeController@index
         $defInicio = optional($tratamientos->first())->fecha_inicio
             ? \Illuminate\Support\Carbon::parse($tratamientos->first()->fecha_inicio)->toDateString()
             : now()->toDateString();
@@ -59,14 +55,12 @@ class InformeController extends Controller
             'rango_fin'      => ['required', 'date', 'after_or_equal:rango_inicio'],
         ]);
 
-        // Validar que el tratamiento pertenece al perfil activo
         /** @var Tratamiento $trat */
         $trat = $perfil->tratamientos()->where('id_tratamiento', $request->id_tratamiento)->first();
         if (!$trat) return back()->withErrors(['id_tratamiento' => 'Tratamiento inválido para este perfil.']);
 
-        // Reunir datos para el PDF
-        $perfil->load('citas');             // por si quieres añadir citas del perfil
-        $trat->load(['medicaciones.medicamento']); // meds del tratamiento (ajusta nombres si difieren)
+        $perfil->load('citas');             
+        $trat->load(['medicaciones.medicamento']); 
 
         $data = [
             'perfil' => $perfil,
@@ -77,15 +71,12 @@ class InformeController extends Controller
             'generado_en' => now(),
         ];
 
-        // Renderizar PDF desde una vista Blade
         $pdf = Pdf::loadView('informe.pdf', $data)->setPaper('a4');
 
-        // Guardar en storage público
         $filename = 'informe_' . $perfil->id_perfil . '_t' . $trat->id_tratamiento . '_' . now()->format('Ymd_His') . '.pdf';
         $relative = 'informes/' . $filename;
         Storage::disk('public')->put($relative, $pdf->output());
 
-        // Registrar fila
         Informe::create([
             'id_usuario'     => $user->id_usuario,
             'id_perfil'      => $perfil->id_perfil,

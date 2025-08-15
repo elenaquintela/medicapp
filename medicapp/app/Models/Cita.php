@@ -25,13 +25,13 @@ class Cita extends Model
         'observaciones', 
     ];
 
-    // Relación con Perfil: una cita pertenece a un perfil
+    public $timestamps = false;
+
     public function perfil()
     {
         return $this->belongsTo(Perfil::class, 'id_perfil', 'id_perfil');
     }
 
-    // Relación con Usuario: una cita es creada por un usuario
     public function usuarioCreador()
     {
         return $this->belongsTo(Usuario::class, 'id_usuario_crea', 'id_usuario');

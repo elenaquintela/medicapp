@@ -8,8 +8,6 @@
         <h2 class="text-3xl font-bold text-center mb-10">
             Sustituir medicación ({{ $tratamiento->causa }})
         </h2>
-
-        {{-- Resumen de la línea original --}}
         <div class="mb-8 p-4 border border-gray-300 rounded text-[#0C1222] bg-white/80">
             <p class="mb-1"><strong>Indicación:</strong> {{ $original->indicacion }}</p>
             <p class="mb-1"><strong>Medicamento actual:</strong> {{ $original->medicamento->nombre }}</p>
@@ -20,8 +18,6 @@
               action="{{ route('medicacion.replace', [$tratamiento->id_tratamiento, $original->id_trat_med]) }}"
               class="grid grid-cols-1 md:grid-cols-2 gap-8">
             @csrf
-
-            {{-- Columna izquierda --}}
             <div class="space-y-4">
                 <label class="block">
                     <span class="text-lg">Nombre</span>
@@ -29,7 +25,6 @@
                            value="{{ old('nombre') }}"
                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
                 </label>
-
                 <label class="block">
                     <span class="text-lg">Presentación</span>
                     <select name="presentacion" required
@@ -39,7 +34,6 @@
                         @endforeach
                     </select>
                 </label>
-
                 <label class="block">
                     <span class="text-lg">Frecuencia (cada...)</span>
                     <input name="pauta_intervalo" type="number" required min="1"
@@ -52,11 +46,8 @@
                            value="{{ old('fecha_hora_inicio') }}"
                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">
                 </label>
-
-                
             </div>
 
-            {{-- Columna derecha --}}
             <div class="space-y-4">
                 <label class="block">
                     <span class="text-lg">Vía</span>
@@ -88,14 +79,12 @@
                 
             </div>
 
-            {{-- Observaciones (a dos columnas) --}}
             <label class="block col-span-2">
                 <span class="text-lg">Observaciones</span>
                 <textarea name="observaciones" rows="3"
                           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222]">{{ old('observaciones') }}</textarea>
             </label>
 
-            {{-- Botones --}}
             <div class="col-span-2 mt-8 flex flex-wrap gap-4 justify-center">
                 <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}"
                    class="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-3 px-8 rounded-full shadow transition">

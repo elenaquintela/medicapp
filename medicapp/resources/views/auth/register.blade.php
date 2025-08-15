@@ -8,7 +8,6 @@
         <form method="POST" action="{{ route('register') }}" class="space-y-6">
             @csrf
 
-            <!-- Nombre -->
             <div>
                 <label for="name" class="block mb-1 text-lg">Nombre</label>
                 <input id="name" name="name" type="text" required autofocus value="{{ old('name') }}"
@@ -17,8 +16,6 @@
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
-
-            <!-- Email -->
             <div>
                 <label for="email" class="block mb-1 text-lg">Correo electrónico</label>
                 <input id="email" name="email" type="email" required value="{{ old('email') }}"
@@ -27,8 +24,6 @@
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
-
-            <!-- Contraseña -->
             <div>
                 <label for="password" class="block mb-1 text-lg">Contraseña</label>
                 <input id="password" name="password" type="password" required
@@ -37,15 +32,11 @@
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
-
-            <!-- Confirmar contraseña -->
             <div>
                 <label for="password_confirmation" class="block mb-1 text-lg">Confirmar contraseña</label>
                 <input id="password_confirmation" name="password_confirmation" type="password" required
                        class="w-full px-4 py-3 border border-gray-300 rounded text-[#0C1222] focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
-
-            <!-- Botón -->
             <div class="text-center">
                 <button type="submit"
                         class="bg-yellow-300 text-[#0C1222] font-bold text-lg px-8 py-3 rounded-full hover:bg-yellow-200 transition mt-8">

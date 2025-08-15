@@ -67,17 +67,14 @@ class MedicacionController extends Controller
             'estado' => 'activo',
         ]);
 
-        // Generar recordatorios (desde inicio de hoy hasta +48h), normalizando unidad y TZ
         $unidadRaw = mb_strtolower($request->pauta_unidad, 'UTF-8');
-        $unidadRaw = str_replace(['día', 'días'], ['dia', 'dias'], $unidadRaw); // quitar acento si llega
+        $unidadRaw = str_replace(['día', 'días'], ['dia', 'dias'], $unidadRaw); 
         $intervalo = (int) $request->pauta_intervalo;
 
-        // datetime-local no trae TZ -> parsea en la TZ de la app
         $inicioOriginal = Carbon::parse($request->fecha_hora_inicio, config('app.timezone'));
         $inicioDia      = now()->copy()->startOfDay();
         $finVentana     = now()->copy()->addHours(48);
 
-        // Cursor: primera ocurrencia >= inicio del día (para NO perder recordatorios de esta mañana)
         $cursor = $inicioOriginal->copy();
         while ($cursor->lt($inicioDia)) {
             switch ($unidadRaw) {
@@ -99,12 +96,11 @@ class MedicacionController extends Controller
             }
         }
 
-        // Crear recordatorios desde el inicio del día hasta +48h (incluye “atrasados” de hoy)
         while ($cursor->lte($finVentana)) {
             Recordatorio::firstOrCreate(
                 [
                     'id_trat_med' => $tratMed->id_trat_med,
-                    'fecha_hora'  => $cursor->toDateTimeString(), // igualdad exacta
+                    'fecha_hora'  => $cursor->toDateTimeString(), 
                 ],
                 ['tomado' => false]
             );
@@ -128,8 +124,6 @@ class MedicacionController extends Controller
             }
         }
 
-
-        // Redirecciones según el botón
         if ($request->has('volver_a_show')) {
             return redirect()->route('tratamiento.show', $tratamiento->id_tratamiento)
                 ->with('success', 'Medicación añadida correctamente.');
@@ -206,7 +200,6 @@ class MedicacionController extends Controller
             ['descripcion' => null, 'id_cima' => null]
         );
 
-        // 1) Actualizar medicación
         $medicacion->update([
             'id_medicamento'     => $medicamento->id_medicamento,
             'indicacion'         => $request->indicacion,
@@ -219,7 +212,6 @@ class MedicacionController extends Controller
             'observaciones'      => $request->observaciones,
         ]);
 
-        // 2) Regenerar recordatorios de HOY (elimino los no tomados de hoy y creo con la nueva hora)
         $this->regenerarRecordatoriosDeHoy($medicacion);
 
         return redirect()->route('tratamiento.show', $medicacion->id_tratamiento)
@@ -235,18 +227,15 @@ class MedicacionController extends Controller
         $med = \App\Models\TratamientoMedicamento::findOrFail($id);
         $tratamiento = $med->tratamiento;
 
-        // Solo permitir si pertenece al perfil activo del usuario
         $perfilActivo = $usuario->perfilActivo;
         if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
             return redirect()->route('dashboard')->withErrors(['No tienes permiso para eliminar esta medicación.']);
         }
 
-        // Por seguridad, solo permitir borrar si está archivada
         if ($med->estado !== 'archivado') {
             return back()->withErrors(['Solo puedes eliminar medicaciones archivadas.']);
         }
 
-        // Eliminar recordatorios asociados
         $med->recordatorios()->delete();
 
         $med->delete();
@@ -334,15 +323,12 @@ class MedicacionController extends Controller
         $endOfDay   = Carbon::today()->endOfDay();
         $now        = Carbon::now();
 
-        // --- 0) Guardar HORAS antiguas de HOY (antes de borrar recordatorios) ---
         $horasAntiguas = Recordatorio::where('id_trat_med', $tm->id_trat_med)
             ->where('fecha_hora', '>=', $todayStart)
             ->pluck('fecha_hora');
 
-        // PERFIL asociado a esta medicación (para filtrar notifs)
         $perfilId = optional($tm->tratamiento)->id_perfil;
 
-        // --- 0bis) Borrar NOTIFICACIONES de "toma" de HOY con esas horas antiguas ---
         if ($perfilId && $horasAntiguas->isNotEmpty()) {
             DB::table('notificacion')
                 ->where('categoria', 'toma')
@@ -351,26 +337,22 @@ class MedicacionController extends Controller
                 ->delete();
         }
 
-        // --- 1) Borrar RECORDATORIOS no tomados de HOY en adelante ---
         Recordatorio::where('id_trat_med', $tm->id_trat_med)
             ->where('tomado', 0)
             ->where('fecha_hora', '>=', $todayStart)
             ->delete();
 
-        // --- 2) Preparar pauta ---
         $unidadRaw = mb_strtolower((string) $tm->pauta_unidad, 'UTF-8');
         $unidadRaw = str_replace(['día', 'días'], ['dia', 'dias'], $unidadRaw);
         $intervalo = (int) $tm->pauta_intervalo;
 
         if ($intervalo <= 0 || !in_array($unidadRaw, ['horas', 'dias', 'semanas', 'meses'])) {
-            return; // pauta inválida: no generamos
+            return; 
         }
 
-        // --- 3) Cursor desde la nueva fecha de inicio, alineado a HOY ---
         $inicioOriginal = Carbon::parse($tm->fecha_hora_inicio, config('app.timezone'));
         $cursor = $inicioOriginal->copy();
 
-        // Alinear a la primera ocurrencia de HOY si el inicio fue antes
         while ($cursor->lt($todayStart)) {
             switch ($unidadRaw) {
                 case 'horas':
@@ -388,7 +370,6 @@ class MedicacionController extends Controller
             }
         }
 
-        // --- 4) Generar ocurrencias >= ahora y <= fin de HOY ---
         while ($cursor->lte($endOfDay)) {
             if ($cursor->gte($now)) {
                 Recordatorio::firstOrCreate(

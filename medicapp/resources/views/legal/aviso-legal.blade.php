@@ -4,9 +4,7 @@
 
 @section('content')
 <main class="flex-grow flex items-center justify-center">
-    <div class="w-full max-w-2xl px-8">
-        
-        {{-- Título + Botón volver en la misma línea --}}
+    <div class="w-full max-w-2xl px-8">   
         <div class="flex items-center justify-between mb-10">
             <h2 class="text-3xl font-bold text-center flex-1">Aviso Legal</h2>
             @include('components.legal-back')

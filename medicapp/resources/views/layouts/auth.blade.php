@@ -10,21 +10,15 @@
 </head>
 <body class="bg-[#0C1222] text-white min-h-screen flex flex-col">
 
-    {{-- Header arriba del todo --}}
     @include('components.auth-header')
 
-    {{-- Contenedor principal: sidebar + contenido --}}
     <div class="flex flex-1 min-h-screen">
-        {{-- Sidebar a la izquierda --}}
         @include('components.sidebar')
-
-        {{-- Contenido principal --}}
         <main class="flex-1 p-6 overflow-y-auto">
             @yield('content')
         </main>
     </div>
-
-    {{-- Footer abajo del todo --}}
+    
     @include('components.footer')
 
     @stack('scripts')

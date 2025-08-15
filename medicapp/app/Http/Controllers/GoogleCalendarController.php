@@ -22,7 +22,6 @@ class GoogleCalendarController extends Controller
         $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
         $client->setAccessType('offline');
 
-        // para que Google muestre el selector de cuentas
         $client->setPrompt($forceSelectAccount ? 'consent select_account' : 'consent');
 
         $client->setScopes(['https://www.googleapis.com/auth/calendar.events']);
@@ -44,7 +43,6 @@ class GoogleCalendarController extends Controller
 
         $client = $this->googleClient();
 
-        // Acepta tanto array (cast) como JSON string
         $tokens = is_array($user->google_oauth_tokens)
             ? $user->google_oauth_tokens
             : (json_decode((string)$user->google_oauth_tokens, true) ?: []);
@@ -52,7 +50,6 @@ class GoogleCalendarController extends Controller
         $client->setAccessToken($tokens);
 
         if ($client->isAccessTokenExpired()) {
-            // Intentar refrescar usando el refresh_token guardado (si no viene en el access token actual)
             $refreshToken = $client->getRefreshToken();
             if (!$refreshToken) {
                 $refreshToken = $tokens['refresh_token'] ?? null;
@@ -62,7 +59,6 @@ class GoogleCalendarController extends Controller
 
             $client->fetchAccessTokenWithRefreshToken($refreshToken);
 
-            // Guardar nuevos tokens, asegurando que preservamos el refresh_token
             $newTokens = $client->getAccessToken();
             if (!isset($newTokens['refresh_token'])) {
                 $newTokens['refresh_token'] = $refreshToken;
@@ -92,7 +88,6 @@ class GoogleCalendarController extends Controller
             'end'         => ['dateTime' => $endDT->toRfc3339String(),   'timeZone' => $tz],
         ];
 
-        // Si tenemos event_id, intentamos UPDATE directo; si falla por "no existe", INSERT.
         if (!empty($cita->google_event_id)) {
             try {
                 $event = new \Google\Service\Calendar\Event($payload);
@@ -100,21 +95,17 @@ class GoogleCalendarController extends Controller
                 return $updated->id;
             } catch (\Google\Service\Exception $e) {
                 if ($this->eventMissingInGoogle($e)) {
-                    // recrear
                     $created = $service->events->insert('primary', new \Google\Service\Calendar\Event($payload));
                     return $created->id;
                 }
-                throw $e; // otro error: lo propagamos
+                throw $e; 
             }
         }
 
-        // No había event_id -> crear
         $created = $service->events->insert('primary', new \Google\Service\Calendar\Event($payload));
         return $created->id;
     }
 
-
-    /** Comprobar que el usuario pertenece al perfil indicado (creador o invitado). */
     private function userOwnsPerfil(Request $request, int $perfilId): bool
     {
         return DB::table('usuario_perfil')
@@ -123,7 +114,6 @@ class GoogleCalendarController extends Controller
             ->exists();
     }
 
-    /** Sincroniza todas las citas de un perfil y devuelve cuántas. */
     private function syncPerfil(Request $request, int $perfilId): int
     {
         abort_if(!$this->userOwnsPerfil($request, $perfilId), 403);
@@ -139,14 +129,12 @@ class GoogleCalendarController extends Controller
                 }
                 $n++;
             } catch (\Throwable $e) {
-                // Opcional: deja un log para depurar si una cita concreta falla
                 Log::warning('Fallo al sincronizar cita con Google', [
                     'cita'   => $cita->id_cita,
                     'perfil' => $perfilId,
                     'msg'    => $e->getMessage(),
                 ]);
 
-                // continúa con las demás
                 continue;
             }
         }
@@ -155,11 +143,9 @@ class GoogleCalendarController extends Controller
 
     private function eventMissingInGoogle(\Google\Service\Exception $e): bool
     {
-        // Códigos típicos cuando el evento fue borrado o no existe
         if (in_array($e->getCode(), [404, 410], true)) {
             return true;
         }
-        // A veces viene como error con 'reason' => 'notFound' / 'gone'
         $errors = $e->getErrors();
         if (is_array($errors)) {
             foreach ($errors as $err) {
@@ -171,9 +157,6 @@ class GoogleCalendarController extends Controller
         }
         return false;
     }
-
-
-    // ====== Acciones ======
 
     public function connect(Request $request)
     {
@@ -189,11 +172,10 @@ class GoogleCalendarController extends Controller
 
         $perfilId = (int) $request->input('perfil_id', (int) session('perfil_activo_id'));
         session([
-            'google_sync_perfil_id' => $perfilId,   // al volver, sincronizamos ese perfil
-            'force_select_account'  => true,        // bandera para select_account
+            'google_sync_perfil_id' => $perfilId,  
+            'force_select_account'  => true,      
         ]);
 
-        // Revoca y limpia tokens
         $user = $request->user();
         $tokens = is_array($user->google_oauth_tokens)
             ? $user->google_oauth_tokens
@@ -204,13 +186,15 @@ class GoogleCalendarController extends Controller
             if (!empty($tokens['access_token']))  $client->revokeToken($tokens['access_token']);
             if (!empty($tokens['refresh_token'])) $client->revokeToken($tokens['refresh_token']);
         } catch (\Throwable $e) {
-            // ignoramos errores de revocación
+            Log::warning('Fallo al revocar token de Google', [
+                'user' => $user->id_usuario,
+                'msg'  => $e->getMessage(),
+            ]);
         }
 
         $user->google_oauth_tokens = null;
         $user->save();
 
-        // Redirige a Google con select_account
         return redirect()->away($this->googleClient(true)->createAuthUrl());
     }
 
@@ -219,7 +203,6 @@ class GoogleCalendarController extends Controller
     {
         $this->ensurePremium($request);
 
-        // Si viene error desde Google (p.ej., access_denied)
         if ($request->filled('error')) {
             return redirect()->route('cita.index')->with('error', 'Permiso denegado en Google: ' . $request->string('error'));
         }
@@ -234,11 +217,9 @@ class GoogleCalendarController extends Controller
                 }
 
                 $u = $request->user();
-                // Asegura que guardamos el refresh_token si está presente
                 $u->google_oauth_tokens = $tokens;
                 $u->save();
 
-                // Si veníamos de "Sincronizar", termina el trabajo automáticamente.
                 if (session()->has('google_sync_perfil_id')) {
                     $perfilId = (int) session()->pull('google_sync_perfil_id');
                     session()->forget('force_select_account');
@@ -261,19 +242,16 @@ class GoogleCalendarController extends Controller
         return redirect()->route('cita.index')->with('error', 'No se pudo autorizar Google.');
     }
 
-    /** Botón lateral: sincroniza SOLO las citas del PERFIL ACTIVO (las que ves en la tabla). */
     public function syncAll(Request $request)
     {
         $this->ensurePremium($request);
 
-        // Tomamos el perfil activo del hidden; si no llega, usamos el de sesión.
         $perfilId = (int) $request->input('perfil_id', (int) session('perfil_activo_id'));
 
         if ($perfilId <= 0) {
             return back()->with('error', 'No se pudo determinar el perfil activo.');
         }
 
-        // Si no hay tokens, iniciamos OAuth y, al volver, seguimos.
         if (empty($request->user()->google_oauth_tokens)) {
             session(['google_sync_perfil_id' => $perfilId]);
             return redirect()->away($this->googleClient()->createAuthUrl());

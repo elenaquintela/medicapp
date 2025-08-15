@@ -4,26 +4,19 @@
 
 @section('content')
 <div class="px-10 pt-6 h-full">
-
-    <!-- Título centrado -->
     <h2 class="text-3xl font-bold mb-10 text-center">Editar cita</h2>
-
     <form id="form-editar-cita" method="POST" action="{{ route('cita.update', $cita->id_cita) }}"
           class="mx-auto w-[75%] grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
         @csrf
         @method('PUT')
 
-        <!-- Columna izquierda -->
         <div class="flex flex-col gap-6">
-            <!-- Fecha -->
             <div class="flex items-center gap-4">
                 <label class="w-24 text-white">Fecha</label>
                 <input type="date" name="fecha" required
                        value="{{ old('fecha', $cita->fecha) }}"
                        class="p-3 rounded-md text-black text-sm" />
             </div>
-
-            <!-- Hora -->
             <div class="flex items-center gap-4">
                 <label class="w-32 text-white">Hora</label>
                 <div class="flex gap-3 w-full">
@@ -36,8 +29,6 @@
                            class="p-2 rounded-md text-black text-sm w-[90px]">
                 </div>
             </div>
-
-            <!-- Lugar -->
             <div class="flex items-center gap-4">
                 <label class="w-32 text-white">Lugar</label>
                 <input type="text" name="ubicacion" required maxlength="120"
@@ -45,8 +36,6 @@
                        class="w-full p-3 rounded-md text-black text-sm"
                        placeholder="Centro de salud de Fontiñas">
             </div>
-
-            <!-- Motivo -->
             <div class="flex items-center gap-4">
                 <label class="w-32 text-white">Motivo</label>
                 <input type="text" name="motivo" required maxlength="150"
@@ -56,9 +45,7 @@
             </div>
         </div>
 
-        <!-- Columna derecha -->
         <div class="flex flex-col gap-6">
-            <!-- Especialidad -->
             <div class="flex items-center gap-4">
                 <label for="especialidad" class="w-32 text-white">Especialidad</label>
                 <div class="w-full">
@@ -82,8 +69,6 @@
                            value="{{ !in_array(old('especialidad', $cita->especialidad), $especialidades) ? old('especialidad', $cita->especialidad) : '' }}">
                 </div>
             </div>
-
-            <!-- Observaciones -->
             <div class="flex flex-col gap-2">
                 <label class="text-white">Observaciones</label>
                 <textarea name="observaciones" rows="6"
@@ -92,9 +77,7 @@
             </div>
         </div>
 
-        <!-- Botones: Cancelar (izq) / Guardar (dcha) -->
         <div class="md:col-span-2 flex items-center justify-center gap-x-8 mt-6">
-            <!-- Cancelar cita -->
             <form action="{{ route('cita.destroy', $cita->id_cita) }}" method="POST"
                   onsubmit="return confirm('¿Está seguro de que desea cancelar esta cita? Esta acción no se puede deshacer.');">
                 @csrf
@@ -104,8 +87,6 @@
                     Cancelar cita
                 </button>
             </form>
-
-            <!-- Guardar cambios -->
             <button type="submit" form="form-editar-cita"
                     class="bg-yellow-200 hover:bg-yellow-300 text-black font-bold py-3 px-8 rounded-full text-lg shadow-md">
                 Guardar cambios

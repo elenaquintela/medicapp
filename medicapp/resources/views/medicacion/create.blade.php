@@ -8,7 +8,6 @@
         <h2 class="text-3xl font-bold text-center mb-10">
             Medicación para {{ $tratamiento->causa }}
         </h2>
-
         <form method="POST"
               action="{{ isset($medicacion) ? route('medicacion.update', $medicacion->id_trat_med) : route('medicacion.store', ['tratamiento' => $tratamiento->id_tratamiento]) }}"
               class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -20,8 +19,6 @@
             @if (request('volver_a_index'))
                 <input type="hidden" name="volver_a_index" value="1">
             @endif
-
-            {{-- Columna izquierda --}}
             <div class="space-y-4">
                 <label class="block">
                     <span class="text-lg">Nombre</span>
@@ -54,7 +51,6 @@
                 </label>
             </div>
 
-            {{-- Columna derecha --}}
             <div class="space-y-4">
                 <label class="block">
                     <span class="text-lg">Vía</span>
@@ -105,7 +101,6 @@
                 <div class="col-span-2 mt-8 flex flex-wrap gap-4 justify-center">
 
                     @if (isset($medicacion))
-                        {{-- MODO EDICIÓN: un solo botón; el controller ya redirige a tratamiento.show --}}
                         <button type="submit"
                                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
                             Actualizar medicación
@@ -116,20 +111,16 @@
                             Cancelar
                         </a>
                     @else
-                        {{-- MODO CREACIÓN: 2 caminos soportados por tu MedicacionController@store --}}
-
-                        {{-- (Opcional) Botón Cancelar para salir sin guardar --}}
                         <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}"
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow transition">
                             Cancelar
                         </a>
-                        {{-- 1) Guardar y añadir otra (se queda aquí, formulario limpio) --}}
+
                         <button type="submit" name="accion" value="add"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
                             Guardar y añadir otra
                         </button>
 
-                        {{-- 2) Guardar y finalizar (salir de esta vista) --}}
                         <button type="submit" name="accion" value="done"
                                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow transition">
                             Guardar y finalizar

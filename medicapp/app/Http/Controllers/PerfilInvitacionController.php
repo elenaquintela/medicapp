@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Mail;
 
 class PerfilInvitacionController extends Controller
 {
-    // Enviar invitación por email
     public function store(Request $request, Perfil $perfil)
     {
         $request->validate(['email' => ['required','email','max:255']]);
@@ -27,7 +26,6 @@ class PerfilInvitacionController extends Controller
             ->exists();
         if (! $esPropietario) abort(403, 'No eres el propietario del perfil.');
 
-        // Evitar duplicados pendientes al mismo email y perfil
         $yaPendiente = PerfilInvitacion::where('id_perfil', $perfil->id_perfil)
             ->where('email', $request->email)
             ->where('estado', 'pendiente')
@@ -47,14 +45,12 @@ class PerfilInvitacionController extends Controller
             'expires_at'           => now()->addDays(7),
         ]);
 
-        // Enviar email
         $link = route('invitaciones.accept', $token);
         Mail::to($inv->email)->send(new \App\Mail\InvitacionPerfilMail($inv, $link));
 
         return back()->with('success', 'Invitación enviada por email.');
     }
 
-    // Aceptar invitación (click desde email)
     public function accept(Request $request, string $token)
     {
         $inv = PerfilInvitacion::where('token', $token)->first();
@@ -64,7 +60,6 @@ class PerfilInvitacionController extends Controller
 
         $usuario = Auth::user();
 
-        // Si no autenticado → guardar token en sesión y mandar a login/registro según exista el email
         if (! $usuario) {
             $existe = Usuario::where('email', $inv->email)->exists();
             session(['pending_invitation_token' => $token, 'invited_email' => $inv->email]);
@@ -74,14 +69,12 @@ class PerfilInvitacionController extends Controller
                   ->withInput(['email' => $inv->email]);
         }
 
-        // Autenticado: forzar que coincida el email del token por seguridad
         if (strcasecmp($usuario->email, $inv->email) !== 0) {
             return redirect()->route('welcome')->withErrors([
                 'invitacion' => 'Estás autenticado como '.$usuario->email.'. Sal de la sesión e inicia con '.$inv->email.' para aceptar la invitación.'
             ]);
         }
 
-        // Conceder acceso si no lo tenía
         $yaMiembro = $inv->perfil->usuarios()
             ->where('usuario.id_usuario', $usuario->id_usuario)->exists();
 
@@ -93,14 +86,12 @@ class PerfilInvitacionController extends Controller
             ]);
         }
 
-        // Marcar invitación como aceptada
         $inv->update([
             'estado'             => 'aceptada',
             'accepted_at'        => now(),
             'id_usuario_invitado'=> $usuario->id_usuario,
         ]);
 
-        // Opcional: activar ese perfil como activo
         session(['perfil_activo_id' => $inv->id_perfil]);
 
         return redirect()->route('dashboard')->with('success', 'Invitación aceptada. Ya puedes gestionar el perfil.');

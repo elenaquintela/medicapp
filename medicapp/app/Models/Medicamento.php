@@ -18,7 +18,6 @@ class Medicamento extends Model
         'id_cima',
     ];
 
-    // Relación con Tratamiento: un medicamento puede estar en muchos tratamientos
     public function tratamientosMedicamento()
     {
         return $this->hasMany(TratamientoMedicamento::class, 'id_medicamento', 'id_medicamento');

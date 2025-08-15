@@ -3,10 +3,7 @@
 @section('content')
 <div class="flex flex-1 h-full">
     <main class="flex-1 px-8 py-6 space-y-12">
-
-        <!-- Secciones HOY y PRÓXIMAS CITAS alineadas -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <!-- Sección HOY -->
             <section class="flex flex-col">
                 <div class="mb-4">
                     <h2 class="text-orange-400 text-xl font-bold mb-2">HOY</h2>
@@ -55,8 +52,6 @@
                     </table>
                 </div>
             </section>
-
-            <!-- Sección Próximas Citas -->
             <section class="flex flex-col">
                 <div class="mb-4">
                     <h2 class="text-orange-400 text-xl font-bold mb-2">PRÓXIMAS CITAS</h2>
@@ -88,8 +83,6 @@
                 </div>
             </section>
         </div>
-
-        <!-- Tratamientos activos -->
         <section>
             <h2 class="text-orange-400 text-xl font-bold mb-4">TRATAMIENTOS ACTIVOS</h2>
 

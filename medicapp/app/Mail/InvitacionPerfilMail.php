@@ -19,8 +19,7 @@ class InvitacionPerfilMail extends Mailable
     public function build()
     {
         return $this->subject('Has sido invitado a un perfil en MedicApp')
-            ->view('emails.invitacion_perfil');
-        // Si quieres fijar el remitente:
-        // ->from('no-reply@medicapp.test', 'MedicApp')
+            ->view('emails.invitacion_perfil')
+            ->from('no-reply@medicapp.test', 'MedicApp');
     }
 }

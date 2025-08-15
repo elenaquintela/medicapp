@@ -4,12 +4,10 @@
 
 @section('content')
 <div class="flex flex-col px-10 pt-6 h-full">
-    <!-- Título -->
     <h2 class="text-3xl font-bold mb-8 text-center">
         Tratamiento para {{ $tratamiento->causa }}
     </h2>
 
-    <!-- Botón añadir medicación -->
     <div class="flex justify-center mb-6">
         <a href="{{ route('medicacion.create', $tratamiento->id_tratamiento) }}"
            class="bg-green-400 hover:bg-green-500 text-[#0C1222] font-semibold px-6 py-3 rounded-full shadow transition">
@@ -21,8 +19,6 @@
         $activas = $tratamiento->medicaciones->where('estado', 'activo');
         $archivadas = $tratamiento->medicaciones->where('estado', 'archivado');
     @endphp
-
-    {{-- MEDICACIONES ACTIVAS --}}
     @foreach ($activas as $medicacion)
         <div class="mb-12">
             <h3 class="text-2xl font-semibold text-white mb-4">{{ $medicacion->medicamento->nombre ?? '(Sin nombre)' }}</h3>
@@ -73,7 +69,6 @@
         </div>
     @endforeach
 
-    {{-- TABLA DE SUSTITUCIONES --}}
     @php
         $sustituciones = $tratamiento->medicaciones()
             ->conSustitucion()
@@ -116,7 +111,6 @@
         </table>
     @endif
 
-    {{-- MEDICACIONES ARCHIVADAS - UNA SOLA TABLA --}}
     @if($archivadas->isNotEmpty())
         <h3 class="text-2xl font-semibold text-white mt-2 mb-4">Medicaciones archivadas</h3>
 
@@ -132,7 +126,7 @@
                         <th class="py-3 px-4">Pauta</th>
                         <th class="py-3 px-4">Observaciones</th>
                         <th class="py-3 px-4">Estado</th>
-                        <th class="py-3 px-4">Reactivar</th> {{-- Nueva columna --}}
+                        <th class="py-3 px-4">Reactivar</th> 
                         <th class="py-3 px-4 w-16">Eliminar</th>
                     </tr>
                 </thead>
@@ -149,8 +143,6 @@
                             <td class="py-3 px-4">{{ $med->dosis }}</td>
                             <td class="py-3 px-4">cada {{ $med->pauta_intervalo }} {{ $med->pauta_unidad }}</td>
                             <td class="py-3 px-4">{{ $med->observaciones ?? '—' }}</td>
-
-                            {{-- Indicador visual --}}
                             <td class="py-3 px-4">
                                 @if($fueSustituida)
                                     <span class="inline-block px-2 py-1">Sustituida</span>
@@ -158,8 +150,6 @@
                                     <span class="inline-block px-2 py-1">Archivada</span>
                                 @endif
                             </td>
-
-                            {{-- Botón reactivar --}}
                             <td class="py-3 px-4">
                                 @if(!$fueSustituida)
                                     <form method="POST" action="{{ route('medicacion.reactivar', $med->id_trat_med) }}">
@@ -179,8 +169,6 @@
                                     </button>
                                 @endif
                             </td>
-
-                            {{-- Acciones: eliminar --}}
                             <td class="py-3 px-4 text-center align-middle">
                                 @if($fueSustituida)
                                     <button type="button"

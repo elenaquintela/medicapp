@@ -8,11 +8,7 @@
 @endphp
 
 <div class="flex flex-col px-10 pt-6 h-full">
-
-    <!-- Título centrado -->
     <h2 class="text-3xl font-bold mb-8 text-center">Citas médicas</h2>
-
-    <!-- Filtro con icono -->
     <div class="flex items-center gap-3 mb-6 w-full max-w-[85%]">
         <img src="{{ asset('filtro.png') }}" alt="Filtro"
              class="h-12 aspect-auto object-contain brightness-0 invert" />
@@ -23,10 +19,7 @@
                placeholder="Filtre por fecha, hora, especialista-lugar, motivo o creador" />
     </div>
 
-    <!-- Contenedor tabla + botones -->
     <div class="flex w-full items-start">
-
-        <!-- Tabla de citas -->
         <div class="max-w-[85%] w-full overflow-x-auto mx-auto">
             <table class="w-full text-sm text-white border border-white">
                 <thead class="bg-blue-400 text-black uppercase text-center">
@@ -67,17 +60,13 @@
             </table>
         </div>
 
-        <!-- Botones laterales -->
         <div class="w-[15%] flex flex-col items-center justify-center gap-6">
-            <!-- Botón + -->
             <a href="{{ route('cita.create') }}"
                class="bg-green-400 hover:bg-green-500 text-black rounded-full w-20 h-20 flex items-center justify-center shadow-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
                 </svg>
             </a>
-
-            <!-- Único botón: sincronizar todas las citas del perfil ACTIVO -->
             @if ($rol === 'premium' && $citas->isNotEmpty())
                 <form action="{{ route('google.syncAll') }}" method="POST" class="w-20 h-20">
                     @csrf
@@ -114,8 +103,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('filtro-citas');
   const filas = document.querySelectorAll('.cita-fila');
-
-  // Guardar HTML original de celdas de texto (no acciones)
   filas.forEach(fila => {
     fila.querySelectorAll('td').forEach(td => {
       const esAccion = td.querySelector('a,button,form,img,svg');

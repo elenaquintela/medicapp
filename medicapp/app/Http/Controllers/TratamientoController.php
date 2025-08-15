@@ -62,7 +62,6 @@ class TratamientoController extends Controller
             'estado' => 'activo',
         ]);
 
-        // Si viene el campo oculto, se pasa el parámetro en la redirección
         $params = ['tratamiento' => $tratamiento->id_tratamiento];
         if ($request->has('volver_a_index')) {
             $params['volver_a_index'] = 1;
@@ -91,10 +90,8 @@ class TratamientoController extends Controller
                         });
                 });
             }
-
             $tratamientos = $query->get();
         }
-
         return view('tratamiento.index', compact('tratamientos'));
     }
 

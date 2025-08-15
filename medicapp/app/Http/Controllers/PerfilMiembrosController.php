@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class PerfilMiembrosController extends Controller
 {
-    // Añadir invitado por email (usuario ya registrado)
     public function store(Request $request, Perfil $perfil)
     {
         $request->validate([
@@ -19,12 +18,10 @@ class PerfilMiembrosController extends Controller
         /** @var \App\Models\Usuario $owner */
         $owner = Auth::user();
 
-        // Solo premium
         if ($owner->rol_global !== 'premium') {
             abort(403, 'Solo los usuarios premium pueden invitar.');
         }
 
-        // Debe ser propietario (rol_en_perfil = 'creador') de este perfil
         $esPropietario = $owner->perfiles()
             ->wherePivot('rol_en_perfil', 'creador')
             ->where('perfil.id_perfil', $perfil->id_perfil)
@@ -34,7 +31,6 @@ class PerfilMiembrosController extends Controller
             abort(403, 'No eres el propietario de este perfil.');
         }
 
-        // Buscar usuario invitado por email
         $invitado = Usuario::where('email', $request->email)->first();
 
         if (! $invitado) {
@@ -47,7 +43,6 @@ class PerfilMiembrosController extends Controller
             return back()->withErrors(['email' => 'No puedes invitarte a ti mismo.'])->withInput();
         }
 
-        // ¿Ya tiene acceso?
         $yaEsMiembro = $perfil->usuarios()
             ->where('usuario.id_usuario', $invitado->id_usuario)
             ->exists();
@@ -56,7 +51,6 @@ class PerfilMiembrosController extends Controller
             return back()->with('success', 'Ese usuario ya tiene acceso a este perfil.');
         }
 
-        // Conceder acceso como invitado
         $perfil->usuarios()->attach($invitado->id_usuario, [
             'rol_en_perfil' => 'invitado',
             'estado'        => 'aceptada',
@@ -66,13 +60,11 @@ class PerfilMiembrosController extends Controller
         return back()->with('success', 'Invitación concedida. El usuario ya puede gestionar este perfil.');
     }
 
-    // Quitar acceso a un invitado
     public function destroy(Perfil $perfil, Usuario $usuario)
     {
         /** @var \App\Models\Usuario $owner */
         $owner = Auth::user();
 
-        // Solo premium y propietario
         if ($owner->rol_global !== 'premium') {
             abort(403, 'Solo los usuarios premium pueden quitar acceso.');
         }
@@ -86,7 +78,6 @@ class PerfilMiembrosController extends Controller
             abort(403, 'No eres el propietario de este perfil.');
         }
 
-        // No permitir quitarse a sí mismo si es el creador
         if ($usuario->id_usuario === $owner->id_usuario) {
             return back()->withErrors(['miembro' => 'No puedes quitarte a ti mismo como propietario.']);
         }

@@ -5,17 +5,13 @@
 @section('content')
 @php
     $rol = Auth::user()->rol_global;
-    // Separamos activos y archivados sin tocar el controlador
     $activos = $tratamientos->where('estado', 'activo');
     $archivados = $tratamientos->where('estado', 'archivado');
 @endphp
 
 <div class="flex flex-col px-10 pt-6 h-full">
-
-    <!-- Título centrado -->
     <h2 class="text-3xl font-bold mb-8 text-center">Tratamientos</h2>
 
-    <!-- Filtro -->
     <form method="GET" action="{{ route('tratamiento.index') }}" class="flex items-center gap-3 mb-6 w-full max-w-[85%]">
         <img src="{{ asset('filtro.png') }}" alt="Filtro"
              class="h-12 aspect-auto object-contain brightness-0 invert" />
@@ -27,11 +23,7 @@
                class="w-full p-3 rounded-md text-black placeholder-gray-600 text-sm"
                placeholder="Filtre por causa, estado, fecha o creador" />
     </form>
-
-    <!-- Contenedor tabla + botones -->
     <div class="flex w-full items-start">
-
-        <!-- Tabla de tratamientos ACTIVOS -->
         <div class="max-w-[85%] w-full overflow-x-auto mx-auto">
             <h3 class="text-xl font-semibold text-white mb-2">Activos</h3>
             <table class="w-full text-sm text-white border border-white">
@@ -78,7 +70,6 @@
                 </tbody>
             </table>
 
-            {{-- Tabla de TRATAMIENTOS ARCHIVADOS --}}
             <div class="mt-10">
                 <h3 class="text-xl font-semibold text-white mb-2">Archivados</h3>
                 <table class="w-full text-sm text-white border border-white">
@@ -88,7 +79,7 @@
                             <th class="py-3 px-4">Estado</th>
                             <th class="py-3 px-4">Fecha de inicio</th>
                             <th class="py-3 px-4">Creado por</th>
-                            <th class="py-3 px-4">Reactivar</th> {{-- Nueva columna --}}
+                            <th class="py-3 px-4">Reactivar</th>
                             <th class="py-3 px-4">Eliminar</th>
                         </tr>
                     </thead>
@@ -139,7 +130,6 @@
 
         </div>
 
-        <!-- Botón añadir tratamiento -->
         <div class="w-[15%] flex flex-col items-center justify-center gap-6">
             <a href="{{ route('tratamiento.create', ['volver_a_index' => 1]) }}"
                class="bg-green-400 hover:bg-green-500 text-black rounded-full w-20 h-20 flex items-center justify-center shadow-lg">
@@ -167,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('busqueda');
   const filas = document.querySelectorAll('.tratamiento-fila');
 
-  // Guardar HTML original de celdas "de texto" (no acciones)
   filas.forEach(fila => {
     fila.querySelectorAll('td').forEach(td => {
       const esAccion = td.querySelector('a,button,form,img,svg');
@@ -179,10 +168,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function resaltarEnCelda(td, texto) {
     const htmlBase = td.getAttribute('data-original-html');
-    if (!htmlBase) return; // acción o ya guardado como vacío
+    if (!htmlBase) return; 
     if (!texto) { td.innerHTML = htmlBase; return; }
 
-    // Como estas celdas son texto plano, podemos sustituir de forma segura
     const regex = new RegExp(`(${texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
     td.innerHTML = htmlBase.replace(regex, '<span class="resaltado">$1</span>');
   }
@@ -196,8 +184,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
       celdas.forEach(td => {
         const esAccion = td.querySelector('a,button,form,img,svg');
-
-        // Para detectar coincidencia usamos el texto visible (no alteramos acciones)
         const contenido = (td.textContent || '').toLowerCase();
 
         if (!esAccion) {
@@ -205,12 +191,10 @@ document.addEventListener('DOMContentLoaded', function () {
             coincide = true;
             resaltarEnCelda(td, texto);
           } else {
-            // Restaurar el HTML original (quita resaltados)
             resaltarEnCelda(td, '');
             if (texto && !coincide && contenido.includes(texto)) coincide = true;
           }
         } else {
-          // En columnas de acción nunca tocamos innerHTML
           if (texto && contenido.includes(texto)) coincide = true;
         }
       });

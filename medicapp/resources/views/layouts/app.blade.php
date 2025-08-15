@@ -10,18 +10,14 @@
 </head>
 <body class="bg-[#0C1222] text-white min-h-screen font-sans flex flex-col">
 
-    {{-- Header personalizado --}}
     <x-auth-header 
     :perfilesUsuario="$perfilesUsuario ?? []" 
     :perfilActivo="$perfilActivo ?? null" />
 
-
-    {{-- Contenido principal --}}
     <main class="flex-1">
         @yield('content')
     </main>
 
-    {{-- Footer siempre visible --}}
     <x-footer />
     
 </body>

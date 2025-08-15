@@ -5,8 +5,6 @@
 @section('content')
 <div class="px-10 py-8">
     <h2 class="text-3xl font-bold text-center mb-8">Informes</h2>
-
-    {{-- Formulario generar informe --}}
     <div class="bg-[#0C1222] border border-gray-500 rounded-xl p-6 text-white max-w-3xl mx-auto mb-10">
         <h3 class="text-yellow-200 font-bold text-xl mb-4">Generar informe</h3>
 
@@ -26,8 +24,6 @@
                         </option>
                     @endforeach
                 </select>
-
-
                 @error('id_tratamiento') <p class="text-red-400 mt-1 text-sm">{{ $message }}</p> @enderror
             </div>
 
@@ -36,13 +32,11 @@
                 <input type="date" name="rango_inicio" id="rango_inicio"
                 value="{{ old('rango_inicio', $defInicio) }}"
                 class="w-full px-3 py-2 rounded text-black" required>
-
             </div>
             <div>
                 <label class="block mb-1">Hasta</label>
                 <input type="date" name="rango_fin" value="{{ $defFin }}" class="w-full px-3 py-2 rounded text-black" required>
             </div>
-
             <div class="md:col-span-3">
                 <button type="submit" class="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-6 rounded-full">
                     Generar PDF
@@ -57,20 +51,16 @@
             function setDesdeFromSelected() {
                 const opt = select.options[select.selectedIndex];
                 const inicio = opt?.dataset?.inicio;
-                if (inicio) desde.value = inicio; // formato YYYY-MM-DD
+                if (inicio) desde.value = inicio; 
             }
 
-            // Cuando el usuario elige un tratamiento
             select.addEventListener('change', setDesdeFromSelected);
-
-            // Si ya viene seleccionado por old(...) al volver de validación, ajusta también
             if (select.value) setDesdeFromSelected();
         });
         </script>
 
     </div>
 
-    {{-- Listado de informes --}}
     <div class="bg-[#0C1222] border border-gray-500 rounded-xl p-6 text-white max-w-5xl mx-auto">
         <h3 class="text-yellow-200 font-bold text-xl mb-4">Histórico de informes</h3>
 

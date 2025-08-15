@@ -6,16 +6,13 @@
 @endphp
 
 <header class="bg-[#0C1222] text-white py-4 px-6 flex items-center justify-between shadow-md">
-    <!-- Logo + Nombre como enlace al dashboard -->
+
     <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center space-x-3 hover:opacity-90 transition">
         <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-20 h-auto">
         <span class="text-4xl font-bold text-white">MedicApp</span>
     </a>
 
-    <!-- Controles de usuario -->
     <div class="flex items-center space-x-6">
-
-        <!-- Selector de perfil activo -->
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
                 <button class="bg-yellow-300 text-[#0C1222] font-semibold px-4 py-2 rounded-full shadow hover:bg-yellow-200 transition inline-flex items-center">
@@ -52,37 +49,29 @@
             </x-slot>
         </x-dropdown>
 
-        <!-- Notificaciones (tomas) -->
         <div class="relative">
             <button type="button" class="relative inline-flex items-center" data-bell title="Notificaciones">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-400" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.684a1.5 1.5 0 1 0-1.208 0A5.002 5.002 0 0 0 3 6c0 1.098-.628 2.082-1.579 2.563A.5.5 0 0 0 1.5 9.5h13a.5.5 0 0 0 .079-.937A2.993 2.993 0 0 1 13 6a5.002 5.002 0 0 0-4.896-4.684z"/>
                 </svg>
-                <!-- Badge rojo -->
                 <span data-bell-badge class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none px-1.5 py-0.5 rounded-full">0</span>
             </button>
 
-            <!-- Dropdown -->
             <div data-bell-menu class="hidden absolute right-0 mt-2 w-80 bg-[#0C1222] border border-gray-700 rounded-xl shadow-xl overflow-hidden z-50">
                 <div class="px-4 py-3 border-b border-gray-700 flex items-center justify-between">
                     <span class="text-sm font-semibold">Tomas</span>
                     <button type="button" data-bell-markall class="text-xs text-blue-300 hover:text-blue-200">Marcar todas como leídas</button>
                 </div>
 
-                <!-- Estado vacío -->
                 <div data-bell-empty class="hidden px-4 py-8 text-sm text-gray-400 text-center">
                     No hay notificaciones que mostrar
                 </div>
-
-                <!-- Listas -->
                 <ul data-bell-list class="max-h-64 overflow-auto divide-y divide-gray-800"></ul>
-
                 <div data-bell-recent-header class="px-4 py-2 text-xs opacity-70 border-t border-gray-800">Recientes</div>
                 <ul data-bell-list-recent class="max-h-40 overflow-auto divide-y divide-gray-800"></ul>
             </div>
         </div>
 
-        <!-- Menú usuario -->
         @php
             $user = Auth::user();
             $isPremium = $user->rol_global === 'premium';
@@ -134,18 +123,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const emptyBox = document.querySelector('[data-bell-empty]');
   const recentHeader = document.querySelector('[data-bell-recent-header]');
 
-  // --- NO TOCAR SI NO EXISTE ALGÚN NODO ---
   if (!bell || !badge || !menu || !list || !listRecent) return;
 
-  // ---------- NUEVO: indicadores "no vistas" ----------
   const ORIGINAL_TITLE = document.title;
   let menuOpen = false;
   let currentUnreadCount = 0;
-  let currentMaxId = 0;   // id más alto recibido en el último fetch
-  let lastSeenMaxId = 0;  // id más alto que el usuario ya vio (al abrir menú)
+  let currentMaxId = 0;   
+  let lastSeenMaxId = 0;  
 
   function applyIndicators() {
-    // Mostrar badge y (N) SOLO si hay nuevas no vistas y el menú NO está abierto
     const hasUnseen = currentUnreadCount > 0 && currentMaxId > lastSeenMaxId && !menuOpen;
 
     if (hasUnseen) {
@@ -158,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function () {
       document.title = ORIGINAL_TITLE;
     }
   }
-  // ----------------------------------------------------
 
   function showEmptyState() {
     if (emptyBox) emptyBox.classList.remove('hidden');
@@ -172,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function showLists() {
     if (emptyBox) emptyBox.classList.add('hidden');
     list.classList.remove('hidden');
-    // No usamos recientes
     listRecent.innerHTML = '';
     listRecent.classList.add('hidden');
     if (recentHeader) recentHeader.classList.add('hidden');
@@ -193,7 +177,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ⬇️ MODIFICADO: acepta markSeen y lo manda como query (?mark_seen=1)
   async function fetchData(markSeen = false) {
     try {
       const url = new URL('{{ route('notificaciones.index') }}', window.location.origin);
@@ -218,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function () {
       currentUnreadCount = count;
       currentMaxId = unread.reduce((mx, n) => Math.max(mx, Number(n.id) || 0), 0);
 
-      // Si el menú está abierto, lo que hay en pantalla se considera "visto" (pero NO leído)
       if (menuOpen && currentMaxId > lastSeenMaxId) {
         lastSeenMaxId = currentMaxId;
       }
@@ -233,7 +215,6 @@ document.addEventListener('DOMContentLoaded', function () {
       applyIndicators();
       return { count, items: unread };
     } catch (e) {
-      // silencioso
       return { count: 0, items: [] };
     }
   }
@@ -251,24 +232,20 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch { return false; }
   }
 
-  // 🔔 Abrir/cerrar dropdown (RESTABLECIDO)
   bell.addEventListener('click', async () => {
     const willOpen = menu.classList.contains('hidden');
     menu.classList.toggle('hidden');
     menuOpen = willOpen;
 
     if (willOpen) {
-      // Al abrir: pinta lista y marca como "vistas" en servidor (persistente)
-      await fetchData(true); // 👈 ENVÍA ?mark_seen=1
+      await fetchData(true); 
       lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
-      applyIndicators(); // apaga indicadores tras verlas
+      applyIndicators(); 
     } else {
-      // Al cerrar: reevalúa (si llegaron nuevas durante la apertura, se verán)
       fetchData();
     }
   });
 
-  // Cerrar al hacer click fuera
   document.addEventListener('click', (e) => {
     if (!menu.contains(e.target) && !bell.contains(e.target)) {
       if (!menu.classList.contains('hidden')) {
@@ -279,13 +256,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Botón "Marcar todas como leídas" (mantiene la lista vacía y apaga indicadores)
   if (markAllBtn) {
     markAllBtn.addEventListener('click', async () => {
       const ok = await marcarTodasSilencioso();
       if (ok) {
         currentUnreadCount = 0;
-        // Al marcar leídas, lo visto y lo máximo coinciden
         lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
         showEmptyState();
         applyIndicators();
@@ -293,12 +268,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ▶️ Carga inicial + Poll (como antes)
   fetchData();
-  const POLL_MS = 10000; // 10 s
+  const POLL_MS = 10000; 
   setInterval(fetchData, POLL_MS);
-
-  // Refrescar al volver al tab o al recuperar conexión
   document.addEventListener('visibilitychange', () => { if (!document.hidden) fetchData(); });
   window.addEventListener('online', fetchData);
 });

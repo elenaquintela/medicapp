@@ -9,8 +9,6 @@
 
         <form method="POST" action="{{ route('tratamiento.store') }}" class="space-y-6">
             @csrf
-
-            <!-- Causa del tratamiento -->
             <div>
                 <label for="causa" class="block mb-1 text-lg">Causa de tratamiento</label>
                 <input id="causa" name="causa" type="text" required
@@ -21,12 +19,10 @@
                 @enderror
             </div>
 
-            <!-- Campo oculto para redirección -->
             @if ($volver_a_index ?? false)
                 <input type="hidden" name="volver_a_index" value="1">
             @endif
 
-            <!-- Botón -->
             <div class="text-center mt-8">
                 <button type="submit" name="accion" value="done"
                         class="bg-yellow-300 text-[#0C1222] font-bold text-lg px-10 py-3 rounded-full hover:bg-yellow-200 transition">
@@ -48,11 +44,9 @@
             if (causasExistentes.includes(causaIngresada)) {
                 e.preventDefault();
 
-                // Eliminar error anterior si lo hubiera
                 let error = inputCausa.parentElement.querySelector('.js-error');
                 if (error) error.remove();
 
-                // Crear nuevo mensaje
                 const mensaje = document.createElement('p');
                 mensaje.textContent = 'Este perfil ya tiene un tratamiento con esa causa. Usa otro nombre.';
                 mensaje.classList.add('text-red-500', 'text-sm', 'mt-1', 'js-error');

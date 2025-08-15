@@ -31,13 +31,11 @@ class Tratamiento extends Model
         'fecha_inicio' => 'datetime',
     ];
 
-    // Relación con Perfil: un tratamiento pertenece a un perfil
     public function perfil()
     {
         return $this->belongsTo(Perfil::class, 'id_perfil', 'id_perfil');
     }
 
-    // Relación con Medicamento: un tratamiento puede tener muchas medicaciones
     public function medicaciones()
     {
         return $this->hasMany(TratamientoMedicamento::class, 'id_tratamiento', 'id_tratamiento');

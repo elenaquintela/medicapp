@@ -8,8 +8,6 @@ class Informe extends Model
 {
     protected $table = 'informe';
     protected $primaryKey = 'id_informe';
-
-    // La tabla usa 'ts_creacion' y no tiene updated_at; no queremos timestamps automáticos.
     public $timestamps = false;
 
     protected $fillable = [
@@ -27,7 +25,6 @@ class Informe extends Model
         'ts_creacion'  => 'datetime',
     ];
 
-    // Relaciones
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuario', 'id_usuario');
@@ -43,17 +40,14 @@ class Informe extends Model
         return $this->belongsTo(Tratamiento::class, 'id_tratamiento', 'id_tratamiento');
     }
 
-    // URL pública del PDF: $informe->url (atributo, NO método)
     public function getUrlAttribute(): ?string
     {
         if (!$this->ruta_pdf) {
             return null;
         }
 
-        // Asegura ruta relativa sin barras dobles
         $relative = ltrim($this->ruta_pdf, '/');
 
-        // Construye la URL pública a través del symlink public/storage
         return asset('storage/' . $relative);
     }
 }

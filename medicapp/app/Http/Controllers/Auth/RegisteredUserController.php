@@ -45,17 +45,13 @@ class RegisteredUserController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        // === ACEPTACIÓN AUTOMÁTICA DE INVITACIÓN (si venimos de un enlace) ===
         if ($token = session('pending_invitation_token')) {
-            // limpiamos la sesión pase lo que pase
             $request->session()->forget(['pending_invitation_token', 'invited_email']);
 
             $inv = PerfilInvitacion::where('token', $token)->first();
 
             if ($inv && $inv->estado === 'pendiente' && ! $inv->isExpired()) {
-                // seguridad: el email registrado debe coincidir con el de la invitación
                 if (strcasecmp($user->email, $inv->email) === 0) {
-                    // ¿ya es miembro?
                     $yaMiembro = $inv->perfil->usuarios()
                         ->where('usuario.id_usuario', $user->id_usuario)
                         ->exists();
@@ -68,59 +64,47 @@ class RegisteredUserController extends Controller
                         ]);
                     }
 
-                    // marcar invitación como aceptada
                     $inv->update([
                         'estado'              => 'aceptada',
                         'accepted_at'         => now(),
                         'id_usuario_invitado' => $user->id_usuario,
                     ]);
 
-                    // activar ese perfil y enviar a dashboard (tal y como pediste)
                     session(['perfil_activo_id' => $inv->id_perfil]);
 
                     return redirect()->route('dashboard')->with('success', 'Invitación aceptada. Bienvenido/a.');
                 }
-                // si el email no coincide, ignoramos la invitación y seguimos flujo normal
             }
-            // si no es válida o está expirada, seguimos flujo normal
         }
 
-        // Si no hay invitación pendiente, seguimos tu onboarding normal
         return redirect()->route($this->nextRouteFor($user));
     }
 
 
     /**
-     * Lógica de onboarding (igual que en AuthenticatedSessionController).
-     * Ajusta los nombres de rutas/relaciones si difieren en tu app.
+     * Lógica de onboarding
      */
     private function nextRouteFor($user): string
     {
-        // 1) Elegir plan
-        if (empty($user->rol_global) || !in_array($user->rol_global, ['standard', 'estandar', 'premium'])) {
-            return 'planes.show'; // ruta de la vista de planes
+        if (empty($user->rol_global) || !in_array($user->rol_global, ['estandar', 'premium'])) {
+            return 'planes.show'; 
         }
 
-        // 2) Crear primer perfil
         if (!$user->perfiles()->exists()) {
             return 'perfil.create';
         }
 
-        // 3) Primer tratamiento (si lo creas dentro de perfil.store, puedes omitir este chequeo)
         $perfil = $user->perfiles()->first();
         $trat   = $perfil->tratamientos()->latest()->first();
+
         if (!$trat) {
-            // Si tu UX crea tratamiento junto con el perfil, elimina este return.
-            // O usa la ruta específica para crear tratamiento si la tienes.
             return 'perfil.create';
         }
 
-        // 4) Primera medicación
         if (method_exists($trat, 'medicaciones') && !$trat->medicaciones()->exists()) {
             return 'medicacion.create';
         }
 
-        // 5) Todo listo → dashboard
         return 'dashboard';
     }
 }

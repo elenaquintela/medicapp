@@ -27,7 +27,6 @@ class AppServiceProvider extends ServiceProvider
             $user = Auth::user();
 
             if ($user) {
-                // Carga explícita de la relación perfiles
                 $user->load('perfiles');
 
 

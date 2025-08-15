@@ -3,37 +3,28 @@
         <h2 class="text-3xl font-bold text-center mb-10">Ajustes de usuario</h2>
 
         <div class="flex flex-wrap gap-10 justify-center">
-            <!-- Columna izquierda: datos -->
             <form method="POST" action="{{ route('account.update') }}"
                   class="bg-[#0C1222] border border-gray-500 rounded-xl p-8 flex-1 min-w-[320px] max-w-md shadow-md">
                 @csrf
                 @method('PATCH')
 
                 <h3 class="text-yellow-200 font-bold text-xl mb-6">Tus datos</h3>
-
-                <!-- Nombre -->
                 <div class="mb-4">
                     <label for="nombre" class="block mb-2 text-white">Nuevo nombre</label>
                     <input type="text" name="nombre" id="nombre"
                            value="{{ old('nombre', $usuario->nombre) }}"
                            class="w-full px-4 py-2 rounded text-black" required>
                 </div>
-
-                <!-- Contraseña -->
                 <div class="mb-4">
                     <label for="password" class="block mb-2 text-white">Nueva contraseña</label>
                     <input type="password" name="password" id="password"
                            class="w-full px-4 py-2 rounded text-black">
                 </div>
-
-                <!-- Confirmar contraseña -->
                 <div class="mb-6">
                     <label for="password_confirmation" class="block mb-2 text-white">Confirmar contraseña</label>
                     <input type="password" name="password_confirmation" id="password_confirmation"
                            class="w-full px-4 py-2 rounded text-black">
                 </div>
-
-                <!-- Botón guardar -->
                 <div class="text-center">
                     <button type="submit"
                             class="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-6 rounded-full transition">
@@ -42,7 +33,6 @@
                 </div>
             </form>
 
-            <!-- Columna derecha: suscripción -->
             <div class="bg-[#0C1222] border border-gray-500 rounded-xl p-8 flex-1 min-w-[320px] max-w-md shadow-md flex flex-col justify-between">
                 <div>
                     <h3 class="text-yellow-200 font-bold text-xl mb-6">Tu suscripción</h3>
@@ -77,9 +67,6 @@
                     @endif
                 </div>
 
-                <!-- Eliminar cuenta -->
-               
-                <!-- Botón que abre el modal -->
                 <div class="text-center mt-10">
                     <button type="button"
                         onclick="document.getElementById('deleteModal').classList.remove('hidden')"
@@ -88,7 +75,6 @@
                     </button>
                 </div>
 
-                <!-- Modal de confirmación -->
                 <div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
                     <div class="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-md text-[#0C1222] relative">
                         <h3 class="text-xl font-bold mb-4">¿Estás seguro?</h3>
