@@ -193,9 +193,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  async function fetchData() {
+  // ⬇️ MODIFICADO: acepta markSeen y lo manda como query (?mark_seen=1)
+  async function fetchData(markSeen = false) {
     try {
-      const res = await fetch('{{ route('notificaciones.index') }}', {
+      const url = new URL('{{ route('notificaciones.index') }}', window.location.origin);
+      if (markSeen) url.searchParams.set('mark_seen', '1');
+
+      const res = await fetch(url.toString(), {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
         cache: 'no-store'
       });
@@ -254,8 +258,8 @@ document.addEventListener('DOMContentLoaded', function () {
     menuOpen = willOpen;
 
     if (willOpen) {
-      // Al abrir: pinta lista y marca como "vistas" (apaga badge y (N) para este lote)
-      await fetchData();
+      // Al abrir: pinta lista y marca como "vistas" en servidor (persistente)
+      await fetchData(true); // 👈 ENVÍA ?mark_seen=1
       lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
       applyIndicators(); // apaga indicadores tras verlas
     } else {
@@ -300,4 +304,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
-

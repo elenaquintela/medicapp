@@ -28,7 +28,9 @@ class NotificacionController extends Controller
         $from = (clone $now)->subSeconds(30);
         $to   = (clone $now);
 
-        // Crear notificaciones de TOMA que acaban de vencer (no antes de tiempo)
+        /* ===========================
+         * TOMAS (igual que tenías)
+         * =========================== */
         $debidos = DB::table('recordatorio as r')
             ->join('tratamiento_medicamento as tm', 'tm.id_trat_med', '=', 'r.id_trat_med')
             ->join('tratamiento as t', 't.id_tratamiento', '=', 'tm.id_tratamiento')
@@ -61,9 +63,50 @@ class NotificacionController extends Controller
             ]);
         }
 
-        // Solo NO leídas (sin "recientes")
+        /* ===========================
+         * CITAS (30 min antes)
+         * =========================== */
+        // Disparar si: ts_programada = c.fecha + c.hora_inicio - 30min ∈ [now-30s, now]
+        // Solo citas de HOY y perfiles accesibles.
+        $debidosCita = DB::table('cita as c')
+            ->join('perfil as p', 'p.id_perfil', '=', 'c.id_perfil')
+            // evitar duplicados: left join por mismo ts_programada/perfil/categoria/usuario
+            ->leftJoin('notificacion as n2', function ($join) use ($usuario) {
+                $join->on('n2.id_perfil', '=', 'p.id_perfil')
+                    ->where('n2.categoria', 'cita')
+                    ->where('n2.id_usuario_dest', $usuario->id_usuario)
+                    ->on('n2.ts_programada', '=', DB::raw("DATE_SUB(CONCAT(c.fecha, ' ', c.hora_inicio), INTERVAL 30 MINUTE)"));
+            })
+            ->whereIn('p.id_perfil', $perfilIds)
+            ->whereDate('c.fecha', $today)
+            ->whereBetween(
+                DB::raw("DATE_SUB(CONCAT(c.fecha, ' ', c.hora_inicio), INTERVAL 30 MINUTE)"),
+                [$from->toDateTimeString(), $to->toDateTimeString()]
+            )
+            ->whereNull('n2.id_notif')
+            ->select([
+                'p.id_perfil',
+                'p.nombre_paciente as perfil',
+                DB::raw("TIME_FORMAT(c.hora_inicio, '%H:%i') as hora_str"),
+                DB::raw("DATE_SUB(CONCAT(c.fecha, ' ', c.hora_inicio), INTERVAL 30 MINUTE) as ts_prog"),
+            ])
+            ->get();
+
+        foreach ($debidosCita as $x) {
+            \App\Models\Notificacion::create([
+                'id_usuario_dest' => $usuario->id_usuario,
+                'id_perfil'       => $x->id_perfil,
+                'categoria'       => 'cita',
+                'titulo'          => 'Recordatorio de cita',
+                'mensaje'         => "{$x->perfil} tiene cita hoy a las {$x->hora_str}.",
+                'ts_programada'   => $x->ts_prog,
+                'leida'           => 0,
+            ]);
+        }
+
+        // Solo NO leídas (sin "recientes") de TOMA + CITA
         $noLeidas = \App\Models\Notificacion::where('id_usuario_dest', $usuario->id_usuario)
-            ->where('categoria', 'toma')
+            ->whereIn('categoria', ['toma', 'cita'])
             ->whereIn('id_perfil', $perfilIds)
             ->where('leida', 0)
             ->orderByDesc('ts_programada')
@@ -81,10 +124,6 @@ class NotificacionController extends Controller
         ]);
     }
 
-
-
-
-
     // POST /notificaciones/{notificacion}/leer
     public function marcarLeida(Notificacion $notificacion)
     {
@@ -100,10 +139,8 @@ class NotificacionController extends Controller
         /** @var \App\Models\Usuario $usuario */
         $usuario = Auth::user();
 
-        // (Opcional) podrías limitar a perfiles accesibles, pero no es necesario porque
-        // todas las notificaciones de "toma" para este usuario ya cumplen esa condición de origen.
         Notificacion::where('id_usuario_dest', $usuario->id_usuario)
-            ->where('categoria', 'toma')
+            ->whereIn('categoria', ['toma', 'cita']) 
             ->where('leida', 0)
             ->update(['leida' => 1]);
 
