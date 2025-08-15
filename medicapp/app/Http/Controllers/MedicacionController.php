@@ -205,20 +205,24 @@ class MedicacionController extends Controller
             ['descripcion' => null, 'id_cima' => null]
         );
 
+        // 1) Actualizar medicación
         $medicacion->update([
-            'id_medicamento' => $medicamento->id_medicamento,
-            'indicacion' => $request->indicacion,
-            'presentacion' => $request->presentacion,
-            'via' => $request->via,
-            'dosis' => $request->dosis,
-            'fecha_hora_inicio' => $request->fecha_hora_inicio,
-            'pauta_intervalo' => $request->pauta_intervalo,
-            'pauta_unidad' => $request->pauta_unidad,
-            'observaciones' => $request->observaciones,
+            'id_medicamento'     => $medicamento->id_medicamento,
+            'indicacion'         => $request->indicacion,
+            'presentacion'       => $request->presentacion,
+            'via'                => $request->via,
+            'dosis'              => $request->dosis,
+            'fecha_hora_inicio'  => $request->fecha_hora_inicio,
+            'pauta_intervalo'    => $request->pauta_intervalo,
+            'pauta_unidad'       => $request->pauta_unidad,
+            'observaciones'      => $request->observaciones,
         ]);
 
+        // 2) Regenerar recordatorios de HOY (elimino los no tomados de hoy y creo con la nueva hora)
+        $this->regenerarRecordatoriosDeHoy($medicacion);
+
         return redirect()->route('tratamiento.show', $medicacion->id_tratamiento)
-            ->with('success', 'Medicación actualizada correctamente.');
+            ->with('success', 'Medicación actualizada y recordatorios de hoy regenerados.');
     }
 
     public function destroy($id)
@@ -311,5 +315,74 @@ class MedicacionController extends Controller
         return redirect()
             ->route('tratamiento.show', $tratamiento->id_tratamiento)
             ->with('success', 'Medicación sustituida correctamente.');
+    }
+
+    private function regenerarRecordatoriosDeHoy(TratamientoMedicamento $tm): void
+    {
+        $todayStart = Carbon::today();
+        $endOfDay   = Carbon::today()->endOfDay();
+        $now        = Carbon::now();
+
+        // Borrar recordatorios no tomados de hoy en adelante (elimina la "13:15" antigua)
+        Recordatorio::where('id_trat_med', $tm->id_trat_med)
+            ->where('tomado', 0)
+            ->where('fecha_hora', '>=', $todayStart)
+            ->delete();
+
+        $unidadRaw = mb_strtolower((string) $tm->pauta_unidad, 'UTF-8');
+        $unidadRaw = str_replace(['día', 'días'], ['dia', 'dias'], $unidadRaw);
+        $intervalo = (int) $tm->pauta_intervalo;
+
+        if ($intervalo <= 0 || !in_array($unidadRaw, ['horas', 'dias', 'semanas', 'meses'])) {
+            return; // pauta inválida: no generamos
+        }
+
+        $inicioOriginal = Carbon::parse($tm->fecha_hora_inicio, config('app.timezone'));
+        $cursor = $inicioOriginal->copy();
+
+        // Alinear a la primera ocurrencia de HOY si el inicio fue antes
+        while ($cursor->lt($todayStart)) {
+            switch ($unidadRaw) {
+                case 'horas':
+                    $cursor->addHours($intervalo);
+                    break;
+                case 'dias':
+                    $cursor->addDays($intervalo);
+                    break;
+                case 'semanas':
+                    $cursor->addWeeks($intervalo);
+                    break;
+                case 'meses':
+                    $cursor->addMonths($intervalo);
+                    break;
+            }
+        }
+
+        // Generar >= ahora y <= fin de HOY
+        while ($cursor->lte($endOfDay)) {
+            if ($cursor->gte($now)) {
+                Recordatorio::firstOrCreate(
+                    [
+                        'id_trat_med' => $tm->id_trat_med,
+                        'fecha_hora'  => $cursor->toDateTimeString(),
+                    ],
+                    ['tomado' => false]
+                );
+            }
+            switch ($unidadRaw) {
+                case 'horas':
+                    $cursor->addHours($intervalo);
+                    break;
+                case 'dias':
+                    $cursor->addDays($intervalo);
+                    break;
+                case 'semanas':
+                    $cursor->addWeeks($intervalo);
+                    break;
+                case 'meses':
+                    $cursor->addMonths($intervalo);
+                    break;
+            }
+        }
     }
 }

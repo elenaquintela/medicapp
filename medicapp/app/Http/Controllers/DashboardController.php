@@ -25,29 +25,34 @@ class DashboardController extends Controller
         // Obtener perfil activo
         $perfilActivo = $usuario->perfilActivo;
 
-        // Tratamientos con medicaciones y medicamentos precargados
+        // Tratamientos con medicaciones ACTIVAS y sus medicamentos precargados
         $tratamientos = $perfilActivo
-            ? $perfilActivo->tratamientos()->with('medicaciones.medicamento')->get()
+            ? $perfilActivo->tratamientos()->with([
+                'medicaciones' => function ($q) {
+                    $q->where('estado', 'activo')->with('medicamento');
+                }
+            ])->get()
             : collect();
 
-        // Generar nuevos recordatorios para los próximos 48h
+        // Generar nuevos recordatorios para los próximos 48h (solo para activas por seguridad)
         if ($tratamientos->isNotEmpty()) {
             foreach ($tratamientos as $tratamiento) {
                 foreach ($tratamiento->medicaciones as $medicacion) {
+                    if ($medicacion->estado !== 'activo') continue; // seguridad extra
                     if (!$medicacion->fecha_hora_inicio) continue;
 
                     $unidad = match ($medicacion->pauta_unidad) {
-                        'horas' => 'hours',
-                        'dias' => 'days',
+                        'horas'   => 'hours',
+                        'dias'    => 'days',
                         'semanas' => 'weeks',
-                        'meses' => 'months',
-                        default => 'hours',
+                        'meses'   => 'months',
+                        default   => 'hours',
                     };
 
                     $intervalo = (int) $medicacion->pauta_intervalo;
                     $inicio = Carbon::parse($medicacion->fecha_hora_inicio)->copy();
-                    $ahora = Carbon::now();
-                    $fin = $ahora->copy()->addHours(48);
+                    $ahora  = Carbon::now();
+                    $fin    = $ahora->copy()->addHours(48);
 
                     // Calcular siguiente toma igual o posterior a ahora
                     while ($inicio->lt($ahora)) {
@@ -63,8 +68,8 @@ class DashboardController extends Controller
                         if (!$yaExiste) {
                             Recordatorio::create([
                                 'id_trat_med' => $medicacion->id_trat_med,
-                                'fecha_hora' => $inicio->copy(),
-                                'tomado' => false,
+                                'fecha_hora'  => $inicio->copy(),
+                                'tomado'      => false,
                             ]);
                         }
 
@@ -79,17 +84,21 @@ class DashboardController extends Controller
                 ->delete();
         }
 
-        // Recordatorios para hoy (entre 00:00 y 23:59)
+        // Recordatorios para hoy (entre 00:00 y 23:59) — SOLO de medicaciones ACTIVAS
         $recordatorios = collect();
         if ($perfilActivo) {
             $tratMedIds = $tratamientos
-                ->flatMap(fn($t) => $t->medicaciones->pluck('id_trat_med'))
+                ->flatMap(fn($t) => $t->medicaciones->pluck('id_trat_med')) // ya son activas
                 ->unique();
 
             $recordatorios = Recordatorio::with('tratamientoMedicamento.medicamento')
                 ->whereIn('id_trat_med', $tratMedIds)
                 ->whereDate('fecha_hora', Carbon::today())
                 ->where('tomado', false)
+                // garantía adicional: que la medicación asociada esté activa
+                ->whereHas('tratamientoMedicamento', function ($q) {
+                    $q->where('estado', 'activo');
+                })
                 ->orderBy('fecha_hora')
                 ->get();
         }

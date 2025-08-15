@@ -52,12 +52,35 @@
             </x-slot>
         </x-dropdown>
 
-        <!-- Notificaciones -->
-        <a href="#" title="Notificaciones">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-400" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.684a1.5 1.5 0 1 0-1.208 0A5.002 5.002 0 0 0 3 6c0 1.098-.628 2.082-1.579 2.563A.5.5 0 0 0 1.5 9.5h13a.5.5 0 0 0 .079-.937A2.993 2.993 0 0 1 13 6a5.002 5.002 0 0 0-4.896-4.684z"/>
-            </svg>
-        </a>
+        <!-- Notificaciones (tomas) -->
+        <div class="relative">
+            <button type="button" class="relative inline-flex items-center" data-bell title="Notificaciones">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-400" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.684a1.5 1.5 0 1 0-1.208 0A5.002 5.002 0 0 0 3 6c0 1.098-.628 2.082-1.579 2.563A.5.5 0 0 0 1.5 9.5h13a.5.5 0 0 0 .079-.937A2.993 2.993 0 0 1 13 6a5.002 5.002 0 0 0-4.896-4.684z"/>
+                </svg>
+                <!-- Badge rojo -->
+                <span data-bell-badge class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none px-1.5 py-0.5 rounded-full">0</span>
+            </button>
+
+            <!-- Dropdown -->
+            <div data-bell-menu class="hidden absolute right-0 mt-2 w-80 bg-[#0C1222] border border-gray-700 rounded-xl shadow-xl overflow-hidden z-50">
+                <div class="px-4 py-3 border-b border-gray-700 flex items-center justify-between">
+                    <span class="text-sm font-semibold">Tomas</span>
+                    <button type="button" data-bell-markall class="text-xs text-blue-300 hover:text-blue-200">Marcar todas como leídas</button>
+                </div>
+
+                <!-- Estado vacío -->
+                <div data-bell-empty class="hidden px-4 py-8 text-sm text-gray-400 text-center">
+                    No hay notificaciones que mostrar
+                </div>
+
+                <!-- Listas -->
+                <ul data-bell-list class="max-h-64 overflow-auto divide-y divide-gray-800"></ul>
+
+                <div data-bell-recent-header class="px-4 py-2 text-xs opacity-70 border-t border-gray-800">Recientes</div>
+                <ul data-bell-list-recent class="max-h-40 overflow-auto divide-y divide-gray-800"></ul>
+            </div>
+        </div>
 
         <!-- Menú usuario -->
         @php
@@ -98,3 +121,132 @@
         </x-dropdown>
     </div>
 </header>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const bell = document.querySelector('[data-bell]');
+  const badge = document.querySelector('[data-bell-badge]');
+  const menu = document.querySelector('[data-bell-menu]');
+  const list = document.querySelector('[data-bell-list]');
+  const listRecent = document.querySelector('[data-bell-list-recent]');
+  const markAll = document.querySelector('[data-bell-markall]');
+  const emptyBox = document.querySelector('[data-bell-empty]');
+  const recentHeader = document.querySelector('[data-bell-recent-header]');
+
+  if (!bell || !badge || !menu || !list || !listRecent) {
+    console.error('[Notif] Faltan nodos del header:', { bell: !!bell, badge: !!badge, menu: !!menu, list: !!list, listRecent: !!listRecent });
+    return;
+  }
+
+  function showEmptyState() {
+    if (emptyBox) emptyBox.classList.remove('hidden');
+    list.innerHTML = '';
+    listRecent.innerHTML = '';
+    list.classList.add('hidden');
+    listRecent.classList.add('hidden');
+    if (recentHeader) recentHeader.classList.add('hidden');
+  }
+
+  function showLists() {
+    if (emptyBox) emptyBox.classList.add('hidden');
+    list.classList.remove('hidden');
+    listRecent.classList.remove('hidden');
+    if (recentHeader) recentHeader.classList.remove('hidden');
+  }
+
+  function render(arr, container) {
+    container.innerHTML = '';
+    if (!arr || !arr.length) return;
+    arr.forEach(n => {
+      const li = document.createElement('li');
+      li.className = 'px-4 py-3 hover:bg-gray-800/60 cursor-pointer';
+      li.innerHTML = `
+        <div class="text-sm font-medium">${n.titulo}</div>
+        <div class="text-xs opacity-80">${n.msg || ''}</div>
+        <div class="text-[11px] opacity-60 mt-1">${n.hora}</div>
+      `;
+      li.addEventListener('click', () => marcarLeida(n.id));
+      container.appendChild(li);
+    });
+  }
+
+  async function fetchData() {
+    try {
+      const res = await fetch('{{ route('notificaciones.index') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+      if (!res.ok) { showEmptyState(); return; }
+      const data = await res.json();
+
+      const unreadCount = data.unread_count || 0;
+      badge.textContent = unreadCount || '';
+      badge.classList.toggle('hidden', !(unreadCount > 0));
+
+      const hasUnread = Array.isArray(data.unread) && data.unread.length > 0;
+      const hasRecent = Array.isArray(data.recent) && data.recent.length > 0;
+
+      if (!hasUnread && !hasRecent) { showEmptyState(); return; }
+
+      showLists();
+      render(data.unread || [], list);
+      render(data.recent || [], listRecent);
+
+      if (!hasRecent) {
+        if (recentHeader) recentHeader.classList.add('hidden');
+        listRecent.classList.add('hidden');
+      }
+    } catch (e) {
+      console.error('[Notif] Error fetchData:', e);
+      showEmptyState();
+    }
+  }
+
+  async function marcarLeida(id) {
+    try {
+      await fetch(`{{ url('/notificaciones') }}/${id}/leer`, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        }
+      });
+      fetchData();
+    } catch (e) {
+      console.error('[Notif] Error marcarLeida:', e);
+    }
+  }
+
+  async function marcarTodas() {
+    try {
+      await fetch(`{{ route('notificaciones.leerTodas') }}`, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        }
+      });
+      fetchData();
+    } catch (e) {
+      console.error('[Notif] Error marcarTodas:', e);
+    }
+  }
+
+  bell.addEventListener('click', () => {
+    const willOpen = menu.classList.contains('hidden');
+    menu.classList.toggle('hidden');
+    if (willOpen) fetchData();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && !bell.contains(e.target)) {
+      menu.classList.add('hidden');
+    }
+  });
+
+  if (markAll) markAll.addEventListener('click', marcarTodas);
+
+  // Carga inicial + poll cada 60s
+  fetchData();
+  setInterval(fetchData, 60000);
+});
+</script>
+@endpush

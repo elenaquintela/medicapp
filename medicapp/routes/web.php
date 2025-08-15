@@ -15,6 +15,7 @@ use App\Http\Controllers\PerfilInvitacionController;
 use App\Http\Controllers\PerfilMiembrosController;
 use App\Http\Controllers\InformeController;
 use App\Http\Controllers\GoogleCalendarController;
+use App\Http\Controllers\NotificacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -132,6 +133,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/informes', [InformeController::class, 'store'])->name('informe.store');
     Route::get('/informes/{informe}/descargar', [InformeController::class, 'download'])->name('informe.download');
     Route::delete('/informes/{informe}', [InformeController::class, 'destroy'])->name('informe.destroy');
+
+    // Notificaciones
+
+    Route::get('/notificaciones', [NotificacionController::class, 'index'])
+        ->name('notificaciones.index');
+    Route::post('/notificaciones/{notificacion}/leer', [NotificacionController::class, 'marcarLeida'])
+        ->name('notificaciones.leer');
+    Route::post('/notificaciones/leer-todas', [NotificacionController::class, 'marcarTodasLeidas'])
+        ->name('notificaciones.leerTodas');
 
     // Cuenta
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');
