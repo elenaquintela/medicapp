@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-08-2025 a las 12:15:10
+-- Tiempo de generación: 15-08-2025 a las 19:49:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -32,6 +32,14 @@ CREATE TABLE `cache` (
   `value` mediumtext NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `cache`
+--
+
+INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
+('laravel_cache_proba4@proba.com|127.0.0.1', 'i:1;', 1755279868),
+('laravel_cache_proba4@proba.com|127.0.0.1:timer', 'i:1755279868;', 1755279868);
 
 -- --------------------------------------------------------
 
@@ -68,15 +76,6 @@ CREATE TABLE `cita` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `cita`
---
-
-INSERT INTO `cita` (`id_cita`, `id_perfil`, `id_usuario_crea`, `fecha`, `hora_inicio`, `hora_fin`, `motivo`, `ubicacion`, `especialidad`, `recordatorio`, `observaciones`, `google_event_id`, `created_at`, `updated_at`) VALUES
-(5, 5, 4, '2025-08-28', '15:30:00', NULL, 'Consulta', 'CHUS', 'Medicina de familia', 0, NULL, 'loc08e0eusti4ql629rp03r4rg', '2025-08-14 14:25:55', '2025-08-14 15:45:57'),
-(6, 5, 4, '2025-08-15', '20:40:00', NULL, 'Renovación de alta', 'CHUS', 'Dermatología', 0, NULL, '82j26clkhihagp37ir3mpo78vo', '2025-08-14 15:36:58', '2025-08-14 16:01:25'),
-(7, 5, 4, '2025-08-15', '13:00:00', NULL, 'Consulta', 'Centro de salud de Fontiñas', 'Alergología', 0, NULL, NULL, '2025-08-15 10:13:04', '2025-08-15 10:13:04');
-
 -- --------------------------------------------------------
 
 --
@@ -109,13 +108,6 @@ CREATE TABLE `informe` (
   `ruta_pdf` varchar(255) NOT NULL,
   `ts_creacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `informe`
---
-
-INSERT INTO `informe` (`id_informe`, `id_usuario`, `id_perfil`, `id_tratamiento`, `rango_inicio`, `rango_fin`, `ruta_pdf`, `ts_creacion`) VALUES
-(3, 4, 5, 6, '2025-08-12', '2025-08-14', 'informes/informe_5_t6_20250814_112429.pdf', '2025-08-14 09:24:31');
 
 -- --------------------------------------------------------
 
@@ -166,18 +158,6 @@ CREATE TABLE `medicamento` (
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `medicamento`
---
-
-INSERT INTO `medicamento` (`id_medicamento`, `nombre`, `descripcion`, `id_cima`, `created_at`, `updated_at`) VALUES
-(1, 'Paracetamol', NULL, NULL, '2025-08-11 16:17:17', '2025-08-11 16:17:17'),
-(2, 'Insulina', NULL, NULL, '2025-08-11 16:46:20', '2025-08-11 16:46:20'),
-(3, 'medicacion1', NULL, NULL, '2025-08-12 17:21:43', '2025-08-12 17:21:43'),
-(4, 'Lupisan', NULL, NULL, '2025-08-12 17:22:09', '2025-08-12 17:22:09'),
-(5, 'medicacion4', NULL, NULL, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
-(6, 'Ibuprofeno', NULL, NULL, '2025-08-14 18:42:33', '2025-08-14 18:42:33');
 
 -- --------------------------------------------------------
 
@@ -232,15 +212,6 @@ CREATE TABLE `perfil` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `perfil`
---
-
-INSERT INTO `perfil` (`id_perfil`, `nombre_paciente`, `fecha_nacimiento`, `sexo`, `created_at`, `updated_at`) VALUES
-(5, 'paciente1', '1988-07-07', 'F', '2025-08-12 17:05:20', '2025-08-12 17:05:20'),
-(6, 'paciente1', '1989-08-08', 'F', '2025-08-12 17:18:36', '2025-08-12 17:18:36'),
-(14, 'paciente2', '2001-06-06', 'F', '2025-08-13 17:09:09', '2025-08-13 17:09:09');
-
 -- --------------------------------------------------------
 
 --
@@ -261,14 +232,6 @@ CREATE TABLE `perfil_invitacion` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `perfil_invitacion`
---
-
-INSERT INTO `perfil_invitacion` (`id_invitacion`, `id_perfil`, `id_usuario_invitador`, `email`, `token`, `estado`, `expires_at`, `accepted_at`, `id_usuario_invitado`, `created_at`, `updated_at`) VALUES
-(1, 5, 4, 'a23elenaqb@iessanclemente.net', 'ZMK3FJ7uYWunvP5Iu3rH1BtDPLJpbXMcCFd6xpSWbWtO1yk6', 'aceptada', '2025-08-20 18:54:02', '2025-08-13 19:05:09', 6, '2025-08-13 16:54:02', '2025-08-13 17:05:09'),
-(2, 5, 4, 'proba3@proba.com', 'vx0BlX3xWN7vUQ8BFu6cRBcDWA8BH6ZePPMffr0JoDi7b6Gc', 'aceptada', '2025-08-20 19:12:52', '2025-08-13 19:15:39', NULL, '2025-08-13 17:12:52', '2025-08-13 17:15:39');
-
 -- --------------------------------------------------------
 
 --
@@ -283,70 +246,6 @@ CREATE TABLE `recordatorio` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `recordatorio`
---
-
-INSERT INTO `recordatorio` (`id`, `id_trat_med`, `fecha_hora`, `tomado`, `created_at`, `updated_at`) VALUES
-(55, 5, '2025-08-12 01:00:00', 0, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
-(56, 5, '2025-08-12 09:00:00', 0, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
-(57, 5, '2025-08-12 17:00:00', 0, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
-(58, 5, '2025-08-13 01:00:00', 0, '2025-08-12 17:05:52', '2025-08-13 18:59:20'),
-(59, 5, '2025-08-13 09:00:00', 0, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
-(60, 5, '2025-08-13 17:00:00', 0, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
-(61, 5, '2025-08-14 01:00:00', 0, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
-(62, 5, '2025-08-14 09:00:00', 0, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
-(63, 5, '2025-08-14 17:00:00', 0, '2025-08-12 17:05:52', '2025-08-12 17:05:52'),
-(66, 6, '2025-08-12 02:00:00', 0, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(67, 6, '2025-08-12 11:00:00', 0, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(68, 6, '2025-08-12 20:00:00', 0, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(69, 6, '2025-08-13 05:00:00', 0, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(70, 6, '2025-08-13 14:00:00', 0, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(71, 6, '2025-08-13 23:00:00', 0, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(72, 6, '2025-08-14 08:00:00', 0, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(73, 6, '2025-08-14 17:00:00', 0, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(74, 7, '2025-08-12 05:06:00', 0, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(75, 7, '2025-08-12 13:06:00', 0, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(76, 7, '2025-08-12 21:06:00', 0, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(77, 7, '2025-08-13 05:06:00', 0, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(78, 7, '2025-08-13 13:06:00', 0, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(79, 7, '2025-08-13 21:06:00', 0, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(80, 7, '2025-08-14 05:06:00', 0, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(81, 7, '2025-08-14 13:06:00', 0, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(165, 16, '2025-08-13 06:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(166, 16, '2025-08-13 13:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(167, 16, '2025-08-13 20:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(168, 16, '2025-08-14 03:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(169, 16, '2025-08-14 10:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(170, 16, '2025-08-14 17:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(171, 16, '2025-08-15 00:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(172, 16, '2025-08-15 07:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(173, 16, '2025-08-15 14:03:00', 0, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(204, 17, '2025-08-14 03:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
-(205, 17, '2025-08-14 15:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
-(206, 17, '2025-08-15 03:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
-(207, 17, '2025-08-15 15:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
-(208, 17, '2025-08-16 03:55:00', 0, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
-(209, 17, '2025-08-16 15:55:00', 0, '2025-08-14 13:57:08', '2025-08-14 13:57:08'),
-(211, 18, '2025-08-14 20:15:00', 0, '2025-08-14 16:14:56', '2025-08-14 16:14:56'),
-(212, 18, '2025-08-15 20:15:00', 0, '2025-08-14 16:14:56', '2025-08-14 16:14:56'),
-(213, 5, '2025-08-15 17:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(214, 5, '2025-08-16 01:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(215, 5, '2025-08-16 09:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(216, 5, '2025-08-16 17:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(217, 5, '2025-08-17 01:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(218, 5, '2025-08-17 09:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(219, 18, '2025-08-16 20:15:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(220, 19, '2025-08-15 14:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(221, 19, '2025-08-15 20:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(222, 19, '2025-08-16 02:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(223, 19, '2025-08-16 08:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(224, 19, '2025-08-16 14:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(225, 19, '2025-08-16 20:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(226, 19, '2025-08-17 02:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(227, 19, '2025-08-17 08:00:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17'),
-(228, 17, '2025-08-17 03:55:00', 0, '2025-08-15 10:12:17', '2025-08-15 10:12:17');
 
 -- --------------------------------------------------------
 
@@ -365,16 +264,6 @@ CREATE TABLE `tratamiento` (
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `tratamiento`
---
-
-INSERT INTO `tratamiento` (`id_tratamiento`, `id_perfil`, `id_usuario_creador`, `causa`, `fecha_inicio`, `estado`, `ts_creacion`, `created_at`, `updated_at`) VALUES
-(6, 5, 4, 'Catarro', '2025-08-12', 'activo', '2025-08-12 17:05:21', '2025-08-12 17:05:21', '2025-08-12 17:05:21'),
-(7, 6, 5, 'Gota', '2025-08-12', 'activo', '2025-08-12 17:18:36', '2025-08-12 17:18:36', '2025-08-12 17:18:36'),
-(17, 14, 6, 'Diabetes', '2025-08-13', 'activo', '2025-08-13 17:09:09', '2025-08-13 17:09:09', '2025-08-13 17:09:09'),
-(18, 5, NULL, 'Bronquitis', '2025-08-14', 'activo', '2025-08-14 10:32:29', '2025-08-14 10:32:29', '2025-08-14 10:32:29');
 
 -- --------------------------------------------------------
 
@@ -400,19 +289,6 @@ CREATE TABLE `tratamiento_medicamento` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `tratamiento_medicamento`
---
-
-INSERT INTO `tratamiento_medicamento` (`id_trat_med`, `id_tratamiento`, `id_medicamento`, `indicacion`, `presentacion`, `via`, `dosis`, `pauta_intervalo`, `pauta_unidad`, `fecha_hora_inicio`, `observaciones`, `estado`, `sustituido_por`, `created_at`, `updated_at`) VALUES
-(5, 6, 1, 'Dolor', 'comprimidos', 'topica', '1g', 8, 'horas', '2025-08-10 09:00:00', NULL, 'archivado', 19, '2025-08-12 17:05:52', '2025-08-14 18:42:33'),
-(6, 7, 1, 'Tiroides', 'comprimidos', 'oral', '1g', 9, 'horas', '2025-06-06 08:00:00', NULL, 'activo', NULL, '2025-08-12 17:18:58', '2025-08-12 17:18:58'),
-(7, 7, 1, 'Control azucar', 'comprimidos', 'oral', '23mg', 8, 'horas', '2025-07-07 05:06:00', NULL, 'activo', NULL, '2025-08-12 17:19:19', '2025-08-12 17:19:19'),
-(16, 17, 2, 'Náuseas', 'comprimidos', 'oral', '1mg', 7, 'horas', '2025-02-22 03:03:00', NULL, 'activo', NULL, '2025-08-13 17:09:28', '2025-08-13 17:09:28'),
-(17, 18, 5, 'Tos', 'inyeccion', 'intravenosa', '1mg', 12, 'horas', '2025-04-04 15:55:00', NULL, 'activo', NULL, '2025-08-14 10:33:16', '2025-08-14 10:33:16'),
-(18, 6, 3, 'Tos', 'gotas', 'ocular', '30ml', 1, 'dias', '2025-08-08 20:15:00', NULL, 'archivado', NULL, '2025-08-14 16:14:56', '2025-08-14 18:16:18'),
-(19, 6, 6, 'Dolor', 'comprimidos', 'oral', '50mg', 6, 'horas', '2025-08-13 08:00:00', NULL, 'activo', NULL, '2025-08-14 18:42:33', '2025-08-14 18:42:33');
-
 -- --------------------------------------------------------
 
 --
@@ -431,15 +307,6 @@ CREATE TABLE `usuario` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `usuario`
---
-
-INSERT INTO `usuario` (`id_usuario`, `nombre`, `email`, `contrasena`, `rol_global`, `remember_token`, `google_oauth_tokens`, `created_at`, `updated_at`) VALUES
-(4, 'proba4', 'proba4@proba.com', '$2y$12$1/WTKNueLY/JWwxwHg8oP.XzrM2vVz1B1D6X6EQWuBuAiXbb7RWZy', 'premium', NULL, NULL, '2025-08-12 17:05:04', '2025-08-14 15:53:51'),
-(5, 'proba5', 'proba5@proba.com', '$2y$12$bNMdEXw1mDijreUW/ZKcr.4doP9GDWDG3Kb.3r/1kM7ZXrneyRAGu', 'premium', NULL, NULL, '2025-08-12 17:18:21', '2025-08-12 17:18:25'),
-(6, 'elena', 'a23elenaqb@iessanclemente.net', '$2y$12$Yn/YhgXoOkIMyzq5A.sQwOHy/oXTR.GvR1bG3jtTSoyrDZHvvVk9u', 'premium', NULL, NULL, '2025-08-13 17:05:09', '2025-08-13 17:08:44');
-
 -- --------------------------------------------------------
 
 --
@@ -453,16 +320,6 @@ CREATE TABLE `usuario_perfil` (
   `fecha_inv` datetime DEFAULT NULL,
   `estado` enum('pendiente','aceptada','cancelada') DEFAULT 'aceptada'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `usuario_perfil`
---
-
-INSERT INTO `usuario_perfil` (`id_usuario`, `id_perfil`, `rol_en_perfil`, `fecha_inv`, `estado`) VALUES
-(4, 5, 'creador', NULL, 'aceptada'),
-(5, 6, 'creador', NULL, 'aceptada'),
-(6, 5, 'invitado', '2025-08-13 19:05:09', 'aceptada'),
-(6, 14, 'creador', NULL, 'aceptada');
 
 --
 -- Índices para tablas volcadas
@@ -600,7 +457,7 @@ ALTER TABLE `usuario_perfil`
 -- AUTO_INCREMENT de la tabla `cita`
 --
 ALTER TABLE `cita`
-  MODIFY `id_cita` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_cita` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -612,7 +469,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `informe`
 --
 ALTER TABLE `informe`
-  MODIFY `id_informe` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_informe` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `jobs`
@@ -624,7 +481,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT de la tabla `medicamento`
 --
 ALTER TABLE `medicamento`
-  MODIFY `id_medicamento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_medicamento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
@@ -642,37 +499,37 @@ ALTER TABLE `notificacion`
 -- AUTO_INCREMENT de la tabla `perfil`
 --
 ALTER TABLE `perfil`
-  MODIFY `id_perfil` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_perfil` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `perfil_invitacion`
 --
 ALTER TABLE `perfil_invitacion`
-  MODIFY `id_invitacion` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_invitacion` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `recordatorio`
 --
 ALTER TABLE `recordatorio`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=229;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tratamiento`
 --
 ALTER TABLE `tratamiento`
-  MODIFY `id_tratamiento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_tratamiento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tratamiento_medicamento`
 --
 ALTER TABLE `tratamiento_medicamento`
-  MODIFY `id_trat_med` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_trat_med` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -740,3 +597,10 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+-- Vaciar las tablas de caché de Laravel
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE cache;
+TRUNCATE TABLE cache_locks;
+SET FOREIGN_KEY_CHECKS=1;
