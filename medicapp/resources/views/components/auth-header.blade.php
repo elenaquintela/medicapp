@@ -134,7 +134,31 @@ document.addEventListener('DOMContentLoaded', function () {
   const emptyBox = document.querySelector('[data-bell-empty]');
   const recentHeader = document.querySelector('[data-bell-recent-header]');
 
+  // --- NO TOCAR SI NO EXISTE ALGÚN NODO ---
   if (!bell || !badge || !menu || !list || !listRecent) return;
+
+  // ---------- NUEVO: indicadores "no vistas" ----------
+  const ORIGINAL_TITLE = document.title;
+  let menuOpen = false;
+  let currentUnreadCount = 0;
+  let currentMaxId = 0;   // id más alto recibido en el último fetch
+  let lastSeenMaxId = 0;  // id más alto que el usuario ya vio (al abrir menú)
+
+  function applyIndicators() {
+    // Mostrar badge y (N) SOLO si hay nuevas no vistas y el menú NO está abierto
+    const hasUnseen = currentUnreadCount > 0 && currentMaxId > lastSeenMaxId && !menuOpen;
+
+    if (hasUnseen) {
+      badge.textContent = currentUnreadCount;
+      badge.classList.remove('hidden');
+      document.title = `(${currentUnreadCount}) ${ORIGINAL_TITLE}`;
+    } else {
+      badge.textContent = '';
+      badge.classList.add('hidden');
+      document.title = ORIGINAL_TITLE;
+    }
+  }
+  // ----------------------------------------------------
 
   function showEmptyState() {
     if (emptyBox) emptyBox.classList.remove('hidden');
@@ -148,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function showLists() {
     if (emptyBox) emptyBox.classList.add('hidden');
     list.classList.remove('hidden');
-    // no usamos recientes
+    // No usamos recientes
     listRecent.innerHTML = '';
     listRecent.classList.add('hidden');
     if (recentHeader) recentHeader.classList.add('hidden');
@@ -159,13 +183,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!arr || !arr.length) return;
     arr.forEach(n => {
       const li = document.createElement('li');
-      li.className = 'px-4 py-3 hover:bg-gray-800/60 cursor-pointer';
+      li.className = 'px-4 py-3 hover:bg-gray-800/60';
       li.innerHTML = `
         <div class="text-sm font-medium">${n.titulo}</div>
         <div class="text-xs opacity-80">${n.msg || ''}</div>
         <div class="text-[11px] opacity-60 mt-1">${n.hora}</div>
       `;
-      li.addEventListener('click', () => marcarLeida(n.id));
       container.appendChild(li);
     });
   }
@@ -176,15 +199,25 @@ document.addEventListener('DOMContentLoaded', function () {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
         cache: 'no-store'
       });
-      if (!res.ok) { showEmptyState(); return { count: 0, items: [] }; }
+      if (!res.ok) {
+        currentUnreadCount = 0;
+        currentMaxId = 0;
+        showEmptyState();
+        applyIndicators();
+        return { count: 0, items: [] };
+      }
 
       const data = await res.json();
       const unread = Array.isArray(data.unread) ? data.unread : [];
       const count = data.unread_count || unread.length;
 
-      // 🔴 actualizar badge SIEMPRE (menú abierto o cerrado)
-      badge.textContent = count || '';
-      badge.classList.toggle('hidden', !(count > 0));
+      currentUnreadCount = count;
+      currentMaxId = unread.reduce((mx, n) => Math.max(mx, Number(n.id) || 0), 0);
+
+      // Si el menú está abierto, lo que hay en pantalla se considera "visto" (pero NO leído)
+      if (menuOpen && currentMaxId > lastSeenMaxId) {
+        lastSeenMaxId = currentMaxId;
+      }
 
       if (count === 0) {
         showEmptyState();
@@ -192,25 +225,13 @@ document.addEventListener('DOMContentLoaded', function () {
         showLists();
         render(unread, list);
       }
+
+      applyIndicators();
       return { count, items: unread };
-    } catch {
-      // si hay error de red, no tocamos el UI
+    } catch (e) {
+      // silencioso
       return { count: 0, items: [] };
     }
-  }
-
-  async function marcarLeida(id) {
-    try {
-      await fetch(`{{ url('/notificaciones') }}/${id}/leer`, {
-        method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-        }
-      });
-      // Opcional: refrescar ligero tras marcar una sola
-      fetchData();
-    } catch {}
   }
 
   async function marcarTodasSilencioso() {
@@ -226,52 +247,57 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch { return false; }
   }
 
-  // 🔔 Abrir/cerrar dropdown
+  // 🔔 Abrir/cerrar dropdown (RESTABLECIDO)
   bell.addEventListener('click', async () => {
     const willOpen = menu.classList.contains('hidden');
     menu.classList.toggle('hidden');
+    menuOpen = willOpen;
 
     if (willOpen) {
-      // 1) Trae las no leídas y muéstralas
-      const { count } = await fetchData();
-
-      if (count > 0) {
-        // 2) Oculta el badge YA (porque el usuario "las ha visto")
-        badge.textContent = '';
-        badge.classList.add('hidden');
-        // 3) Marca todas como leídas en segundo plano (no borres la lista mostrada)
-        marcarTodasSilencioso();
-      }
+      // Al abrir: pinta lista y marca como "vistas" (apaga badge y (N) para este lote)
+      await fetchData();
+      lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
+      applyIndicators(); // apaga indicadores tras verlas
+    } else {
+      // Al cerrar: reevalúa (si llegaron nuevas durante la apertura, se verán)
+      fetchData();
     }
   });
 
   // Cerrar al hacer click fuera
   document.addEventListener('click', (e) => {
     if (!menu.contains(e.target) && !bell.contains(e.target)) {
-      menu.classList.add('hidden');
+      if (!menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        menuOpen = false;
+        fetchData();
+      }
     }
   });
 
-  // Botón "Marcar todas como leídas" (si lo usas manualmente)
+  // Botón "Marcar todas como leídas" (mantiene la lista vacía y apaga indicadores)
   if (markAllBtn) {
     markAllBtn.addEventListener('click', async () => {
       const ok = await marcarTodasSilencioso();
       if (ok) {
-        badge.textContent = '';
-        badge.classList.add('hidden');
+        currentUnreadCount = 0;
+        // Al marcar leídas, lo visto y lo máximo coinciden
+        lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
         showEmptyState();
+        applyIndicators();
       }
     });
   }
 
-  // ▶️ Carga inicial + ⏱️ Poll para que el badge se encienda solo
+  // ▶️ Carga inicial + Poll (como antes)
   fetchData();
-  const POLL_MS = 10000; // 10 s (ajústalo si quieres)
+  const POLL_MS = 10000; // 10 s
   setInterval(fetchData, POLL_MS);
 
-  // Refrescar al volver al tab o recuperar conexión
+  // Refrescar al volver al tab o al recuperar conexión
   document.addEventListener('visibilitychange', () => { if (!document.hidden) fetchData(); });
   window.addEventListener('online', fetchData);
 });
 </script>
 @endpush
+
