@@ -83,7 +83,7 @@
                         <th class="px-3 py-2 text-left">Fecha</th>
                         <th class="px-3 py-2 text-left">Tratamiento</th>
                         <th class="px-3 py-2 text-left">Rango</th>
-                        <th class="px-3 py-2 text-left">Acciones</th>
+                        <th class="px-3 py-2 text-left"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -103,7 +103,7 @@
                                 {{ \Illuminate\Support\Carbon::parse($inf->rango_fin)->format('d/m/Y') }}
                             </td>
                             <td class="px-3 py-2">
-                                <div class="flex gap-2">
+                                <div class="flex gap-8">
                                     <a href="{{ route('informe.download', $inf->id_informe) }}"
                                        class="px-3 py-1 rounded-full bg-yellow-300 hover:bg-yellow-200 text-[#0C1222] font-semibold">
                                         Descargar

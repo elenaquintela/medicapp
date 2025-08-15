@@ -130,14 +130,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const menu = document.querySelector('[data-bell-menu]');
   const list = document.querySelector('[data-bell-list]');
   const listRecent = document.querySelector('[data-bell-list-recent]');
-  const markAll = document.querySelector('[data-bell-markall]');
+  const markAllBtn = document.querySelector('[data-bell-markall]');
   const emptyBox = document.querySelector('[data-bell-empty]');
   const recentHeader = document.querySelector('[data-bell-recent-header]');
 
-  if (!bell || !badge || !menu || !list || !listRecent) {
-    console.error('[Notif] Faltan nodos del header:', { bell: !!bell, badge: !!badge, menu: !!menu, list: !!list, listRecent: !!listRecent });
-    return;
-  }
+  if (!bell || !badge || !menu || !list || !listRecent) return;
 
   function showEmptyState() {
     if (emptyBox) emptyBox.classList.remove('hidden');
@@ -151,8 +148,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function showLists() {
     if (emptyBox) emptyBox.classList.add('hidden');
     list.classList.remove('hidden');
-    listRecent.classList.remove('hidden');
-    if (recentHeader) recentHeader.classList.remove('hidden');
+    // no usamos recientes
+    listRecent.innerHTML = '';
+    listRecent.classList.add('hidden');
+    if (recentHeader) recentHeader.classList.add('hidden');
   }
 
   function render(arr, container) {
@@ -173,30 +172,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function fetchData() {
     try {
-      const res = await fetch('{{ route('notificaciones.index') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-      if (!res.ok) { showEmptyState(); return; }
+      const res = await fetch('{{ route('notificaciones.index') }}', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        cache: 'no-store'
+      });
+      if (!res.ok) { showEmptyState(); return { count: 0, items: [] }; }
+
       const data = await res.json();
+      const unread = Array.isArray(data.unread) ? data.unread : [];
+      const count = data.unread_count || unread.length;
 
-      const unreadCount = data.unread_count || 0;
-      badge.textContent = unreadCount || '';
-      badge.classList.toggle('hidden', !(unreadCount > 0));
+      // 🔴 actualizar badge SIEMPRE (menú abierto o cerrado)
+      badge.textContent = count || '';
+      badge.classList.toggle('hidden', !(count > 0));
 
-      const hasUnread = Array.isArray(data.unread) && data.unread.length > 0;
-      const hasRecent = Array.isArray(data.recent) && data.recent.length > 0;
-
-      if (!hasUnread && !hasRecent) { showEmptyState(); return; }
-
-      showLists();
-      render(data.unread || [], list);
-      render(data.recent || [], listRecent);
-
-      if (!hasRecent) {
-        if (recentHeader) recentHeader.classList.add('hidden');
-        listRecent.classList.add('hidden');
+      if (count === 0) {
+        showEmptyState();
+      } else {
+        showLists();
+        render(unread, list);
       }
-    } catch (e) {
-      console.error('[Notif] Error fetchData:', e);
-      showEmptyState();
+      return { count, items: unread };
+    } catch {
+      // si hay error de red, no tocamos el UI
+      return { count: 0, items: [] };
     }
   }
 
@@ -209,44 +208,70 @@ document.addEventListener('DOMContentLoaded', function () {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
         }
       });
+      // Opcional: refrescar ligero tras marcar una sola
       fetchData();
-    } catch (e) {
-      console.error('[Notif] Error marcarLeida:', e);
-    }
+    } catch {}
   }
 
-  async function marcarTodas() {
+  async function marcarTodasSilencioso() {
     try {
-      await fetch(`{{ route('notificaciones.leerTodas') }}`, {
+      const res = await fetch(`{{ route('notificaciones.leerTodas') }}`, {
         method: 'POST',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
         }
       });
-      fetchData();
-    } catch (e) {
-      console.error('[Notif] Error marcarTodas:', e);
-    }
+      return res.ok;
+    } catch { return false; }
   }
 
-  bell.addEventListener('click', () => {
+  // 🔔 Abrir/cerrar dropdown
+  bell.addEventListener('click', async () => {
     const willOpen = menu.classList.contains('hidden');
     menu.classList.toggle('hidden');
-    if (willOpen) fetchData();
+
+    if (willOpen) {
+      // 1) Trae las no leídas y muéstralas
+      const { count } = await fetchData();
+
+      if (count > 0) {
+        // 2) Oculta el badge YA (porque el usuario "las ha visto")
+        badge.textContent = '';
+        badge.classList.add('hidden');
+        // 3) Marca todas como leídas en segundo plano (no borres la lista mostrada)
+        marcarTodasSilencioso();
+      }
+    }
   });
 
+  // Cerrar al hacer click fuera
   document.addEventListener('click', (e) => {
     if (!menu.contains(e.target) && !bell.contains(e.target)) {
       menu.classList.add('hidden');
     }
   });
 
-  if (markAll) markAll.addEventListener('click', marcarTodas);
+  // Botón "Marcar todas como leídas" (si lo usas manualmente)
+  if (markAllBtn) {
+    markAllBtn.addEventListener('click', async () => {
+      const ok = await marcarTodasSilencioso();
+      if (ok) {
+        badge.textContent = '';
+        badge.classList.add('hidden');
+        showEmptyState();
+      }
+    });
+  }
 
-  // Carga inicial + poll cada 60s
+  // ▶️ Carga inicial + ⏱️ Poll para que el badge se encienda solo
   fetchData();
-  setInterval(fetchData, 60000);
+  const POLL_MS = 10000; // 10 s (ajústalo si quieres)
+  setInterval(fetchData, POLL_MS);
+
+  // Refrescar al volver al tab o recuperar conexión
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) fetchData(); });
+  window.addEventListener('online', fetchData);
 });
 </script>
 @endpush

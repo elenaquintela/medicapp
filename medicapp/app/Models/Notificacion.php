@@ -11,6 +11,7 @@ class Notificacion extends Model
 
     protected $table = 'notificacion';
     protected $primaryKey = 'id_notif';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_usuario_dest',
@@ -20,6 +21,11 @@ class Notificacion extends Model
         'mensaje',
         'ts_programada',
         'leida',
+    ];
+
+    protected $casts = [
+        'ts_programada' => 'datetime',
+        'leida'         => 'boolean',
     ];
 
     // Relación con Usuario: una notificación pertenece a un usuario
