@@ -68,7 +68,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
    ```
 
    E xerar a chave da aplicación:
-
+ 
    ```bash
    php artisan key:generate
    ```
@@ -88,13 +88,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
    DB_PASSWORD=
    ```
 
-7. **Executar migracións**
-
-   ```bash
-   php artisan migrate
-   ```
-
-8. **Iniciar o servidor de Laravel**
+7. **Iniciar o servidor de Laravel**
 
    Laravel trae un servidor de desenvolvemento integrado. Para iniciar a aplicación, executa:
 
@@ -109,7 +103,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
 **Nota**: Se se produce algún erro durante o proceso, comproba que:
 - Apache e MySQL están iniciados desde XAMPP.
 - Estás na ruta correcta do proxecto ao executar os comandos.
-- As versións de PHP, Node.js e Composer son compatibles con Laravel 10.
+- As versións de PHP, Node.js e Composer son compatibles con Laravel 12.
 
 
 ## Uso
