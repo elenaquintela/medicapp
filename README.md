@@ -1,9 +1,5 @@
 # Proxecto de fin de ciclo DAW
 
-> *Tarefa*: Este documento será a páxina de inicio do teu proxecto. Será o primero que vexan os que se interesen por el. Coida a súa redacción e ortografía. Elimina todas as liñas "*Tarefa*" cando teñas a redacción de todo o proxecto completada.
-> Podes acompañar a redacción deste ficheiros con imaxes ou GIFs, pero non abuses deles. 
-
-
 ## Descrición
 
 **MedicApp** é unha aplicación web deseñada para axudar ás persoas usuarias a levar ao día a súa medicación e as súas citas médicas, sen complicacións, cunha interface clara e manexable con poucos clics. O uso está guiado paso a paso: rexistro de usuario, elección do plan (estándar ou premium), creación dun perfil de doente, definición de tratamentos médicos e incorporación dos medicamentos correspondentes. A partir de aí, o sistema calcula automaticamente as próximas tomas, móstraas na páxina principal e xera unha notificación xusto á hora indicada.
@@ -110,16 +106,29 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
 - As versións de PHP, Node.js e Composer son compatibles con Laravel 12.
 
 ## Uso
-> *Tarefa*: Neste apartado, describe brevemente como se usará o software. Se ten unha interfaz de terminal, describe aquí a súa sintaxe. Se ten unha interfaz gráfica de usuario, describe aquí **só o uso** (a modo de sumario) **dos aspectos máis relevantes do seu funcionamento** (máxima brevidade, como se fose un anuncio reclamo ou comercial).
+
+**MedicApp** esta feita para rexistrar tratamentos e citas médicas de forma sinxela, lembrando automaticamente as tomas e avisando con antelación das citas. Todo se amosa nun panel principal claro e accesible. Co plan premium, ademais, pódense compartir perfís, sincronizar citas con Google Calendar e xerar informes en PDF.
 
 ## Sobre o autor
 > *Tarefa*: Realiza unha breve descrición de quen es desde unha perspectiva profesional, os teus puntos fortes, tecnoloxías que máis dominas e o motivo de por que te decantaches por este proxecto. **Non máis de 200 palabras**. Indica unha forma fiable de contactar contigo no presente e no futuro.
 
 ## Licencia
+
 Este proxecto licénciase baixo GNU GPL v3. Consulta o ficheiro [LICENSE](/LICENSE) na raíz do repositorio.
 
 ## Guía de contribución
-> *Tarefa*: Se o teu proxecto se trata de software libre, é importante que expoñas como se pode contribuir a el. Algúns exemplos disto son realizar novas funcionalidades, corrección e/ou optimización de código, realización de tests automatizados, novas interfaces de integración, desenvolvemento de plugins, etc. Intenta dar unha mensaxe concisa.
+
+Este proxecto é software libre e as contribucións son sempre benvidas. Pódese colaborar de diferentes maneiras: engadindo novas funcionalidades, corrixindo ou optimizando código existente, propoñendo melloras na interface, desenvolvendo integracións con outros servizos ou achegando tests automatizados que aumenten a calidade do sistema.
+
+Se desexas contribuír:
+
+1. Crea unha *issue* describindo o cambio ou mellora que propoñas.
+
+2. Fai un *fork* do repositorio e desenvolve os cambios nunha rama propia.
+
+3. Envía un *merge request* detallado para a súa revisión.
+
+Lembra manter un estilo de código coherente co resto do proxecto, respectar a licenza GPL v3 e evitar incluír credenciais ou datos persoais.
 
 ## Memoria
 
