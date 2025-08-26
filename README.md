@@ -98,6 +98,11 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
 
    Abre `http://127.0.0.1:8000` no navegador para acceder á aplicación.
 
+    **Credenciais de proba para usuario rexistrado**
+
+    - Usuario: proba@medicapp.com
+    - Contrasinal: abc123..
+
 ---
 
 **Nota**: Se se produce algún erro durante o proceso, comproba que:

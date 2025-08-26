@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-08-2025 a las 19:49:37
+-- Tiempo de generación: 26-08-2025 a las 21:45:55
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -32,14 +32,6 @@ CREATE TABLE `cache` (
   `value` mediumtext NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `cache`
---
-
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('laravel_cache_proba4@proba.com|127.0.0.1', 'i:1;', 1755279868),
-('laravel_cache_proba4@proba.com|127.0.0.1:timer', 'i:1755279868;', 1755279868);
 
 -- --------------------------------------------------------
 
@@ -159,6 +151,14 @@ CREATE TABLE `medicamento` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `medicamento`
+--
+
+INSERT INTO `medicamento` (`id_medicamento`, `nombre`, `descripcion`, `id_cima`, `created_at`, `updated_at`) VALUES
+(1, 'Paracetamol', NULL, NULL, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(2, 'Enantyum', NULL, NULL, '2025-08-26 19:36:53', '2025-08-26 19:36:53');
+
 -- --------------------------------------------------------
 
 --
@@ -212,6 +212,13 @@ CREATE TABLE `perfil` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `perfil`
+--
+
+INSERT INTO `perfil` (`id_perfil`, `nombre_paciente`, `fecha_nacimiento`, `sexo`, `created_at`, `updated_at`) VALUES
+(1, 'paciente1', '1982-11-11', 'F', '2025-08-26 19:35:15', '2025-08-26 19:35:15');
+
 -- --------------------------------------------------------
 
 --
@@ -247,6 +254,30 @@ CREATE TABLE `recordatorio` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `recordatorio`
+--
+
+INSERT INTO `recordatorio` (`id`, `id_trat_med`, `fecha_hora`, `tomado`, `created_at`, `updated_at`) VALUES
+(1, 1, '2025-08-26 00:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(2, 1, '2025-08-26 08:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(3, 1, '2025-08-26 16:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(4, 1, '2025-08-27 00:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(5, 1, '2025-08-27 08:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(6, 1, '2025-08-27 16:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(7, 1, '2025-08-28 00:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(8, 1, '2025-08-28 08:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(9, 1, '2025-08-28 16:00:00', 0, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(10, 2, '2025-08-26 04:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53'),
+(11, 2, '2025-08-26 12:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53'),
+(12, 2, '2025-08-26 20:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53'),
+(13, 2, '2025-08-27 04:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53'),
+(14, 2, '2025-08-27 12:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53'),
+(15, 2, '2025-08-27 20:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53'),
+(16, 2, '2025-08-28 04:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53'),
+(17, 2, '2025-08-28 12:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53'),
+(18, 2, '2025-08-28 20:00:00', 0, '2025-08-26 19:36:53', '2025-08-26 19:36:53');
+
 -- --------------------------------------------------------
 
 --
@@ -264,6 +295,13 @@ CREATE TABLE `tratamiento` (
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tratamiento`
+--
+
+INSERT INTO `tratamiento` (`id_tratamiento`, `id_perfil`, `id_usuario_creador`, `causa`, `fecha_inicio`, `estado`, `ts_creacion`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'Gripe', '2025-08-26', 'activo', '2025-08-26 19:35:15', '2025-08-26 19:35:15', '2025-08-26 19:35:15');
 
 -- --------------------------------------------------------
 
@@ -289,6 +327,14 @@ CREATE TABLE `tratamiento_medicamento` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `tratamiento_medicamento`
+--
+
+INSERT INTO `tratamiento_medicamento` (`id_trat_med`, `id_tratamiento`, `id_medicamento`, `indicacion`, `presentacion`, `via`, `dosis`, `pauta_intervalo`, `pauta_unidad`, `fecha_hora_inicio`, `observaciones`, `estado`, `sustituido_por`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'Dolor', 'comprimidos', 'oral', '1g', 8, 'horas', '2025-08-01 08:00:00', 'Con las comidas', 'activo', NULL, '2025-08-26 19:35:55', '2025-08-26 19:35:55'),
+(2, 1, 2, 'Dolor', 'comprimidos', 'oral', '50mg', 8, 'horas', '2025-08-08 12:00:00', NULL, 'activo', NULL, '2025-08-26 19:36:53', '2025-08-26 19:36:53');
+
 -- --------------------------------------------------------
 
 --
@@ -307,6 +353,13 @@ CREATE TABLE `usuario` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id_usuario`, `nombre`, `email`, `contrasena`, `rol_global`, `remember_token`, `google_oauth_tokens`, `created_at`, `updated_at`) VALUES
+(1, 'proba', 'proba@medicapp.com', '$2y$12$OpeW96yAZNDpswJnsFE5/Oz2rbDoQI4I2K1MylBlJDF7Z3pOd9A0C', 'premium', NULL, NULL, '2025-08-26 19:34:47', '2025-08-26 19:34:52');
+
 -- --------------------------------------------------------
 
 --
@@ -320,6 +373,13 @@ CREATE TABLE `usuario_perfil` (
   `fecha_inv` datetime DEFAULT NULL,
   `estado` enum('pendiente','aceptada','cancelada') DEFAULT 'aceptada'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `usuario_perfil`
+--
+
+INSERT INTO `usuario_perfil` (`id_usuario`, `id_perfil`, `rol_en_perfil`, `fecha_inv`, `estado`) VALUES
+(1, 1, 'creador', NULL, 'aceptada');
 
 --
 -- Índices para tablas volcadas
@@ -481,7 +541,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT de la tabla `medicamento`
 --
 ALTER TABLE `medicamento`
-  MODIFY `id_medicamento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_medicamento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
@@ -499,7 +559,7 @@ ALTER TABLE `notificacion`
 -- AUTO_INCREMENT de la tabla `perfil`
 --
 ALTER TABLE `perfil`
-  MODIFY `id_perfil` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_perfil` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `perfil_invitacion`
@@ -511,25 +571,25 @@ ALTER TABLE `perfil_invitacion`
 -- AUTO_INCREMENT de la tabla `recordatorio`
 --
 ALTER TABLE `recordatorio`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `tratamiento`
 --
 ALTER TABLE `tratamiento`
-  MODIFY `id_tratamiento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tratamiento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tratamiento_medicamento`
 --
 ALTER TABLE `tratamiento_medicamento`
-  MODIFY `id_trat_med` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_trat_med` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -597,10 +657,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
--- Vaciar las tablas de caché de Laravel
-SET FOREIGN_KEY_CHECKS=0;
-TRUNCATE TABLE cache;
-TRUNCATE TABLE cache_locks;
-SET FOREIGN_KEY_CHECKS=1;
