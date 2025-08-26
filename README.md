@@ -5,10 +5,14 @@
 
 
 ## Descrición
-> *Tarefa*: Realiza unha breve descrición do proxecto (entre 100 e 300 palabras). Resalta o fundamental **coas túas palabras**. Utiliza unha linguaxe correcta, pero natural, que o entenda todo o mundo, incluso e en especial, as persoas que non teñan un coñecemento técnico avanzado. Pode ser un estrato ou resumo dos apartados que se contemplan na memoria.
+
+**MedicApp** é unha aplicación web deseñada para axudar ás persoas usuarias a levar ao día a súa medicación e as súas citas médicas, sen complicacións, cunha interface clara e manexable con poucos clics. O uso está guiado paso a paso: rexistro de usuario, elección do plan (estándar ou premium), creación dun perfil de doente, definición de tratamentos médicos e incorporación dos medicamentos correspondentes. A partir de aí, o sistema calcula automaticamente as próximas tomas, móstraas na páxina principal e xera unha notificación xusto á hora indicada.
+
+En canto ás citas médicas, o usuario pode rexistralas indicando data, hora, especialidade, lugar e motivo, engadindo tamén observacións se o precisa. Estas citas aparecen igualmente na páxina principal e o sistema lanza unha notificación 30 minutos antes de cada unha.
+
+Existen diferenzas segundo o plan escollido. Tanto o plan estándar como o plan premium permiten crear e xestionar varios perfís de doente. Porén, só co plan premium é posible compartir perfís con familiares ou coidadores a través do correo electrónico, sincronizar citas con Google Calendar para telas no móbil e xerar informes en PDF co histórico completo.
 
 ## Instalación
-> *Tarefa*: Neste apartado describe con toda precisión e, a poder ser, coa maior simplicidade/facilidade posible, como poñer en marcha a túa aplicación para probala (nun entorno local). Valorarase moi positivamente que este proceso sexa o máis fácil posible, cunha simple instrución (por exemplo, un script de instalación).
 
 Para executar esta aplicación localmente, recoméndase usar **XAMPP** como contorno de desenvolvemento (inclúe PHP, Apache e MySQL) xunto con **Composer** e **Node.js**.
 
@@ -78,7 +82,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
    - Accede a `http://localhost/phpmyadmin`
    - Crea unha base de datos nova chamada `medicapp`
    - Preme sobre a base de datos e vai á pestana **Importar**
-   - Selecciona o ficheiro `medicapp.sql` incluído na carpeta do proxecto e pulsa en **Continuar**
+   - Selecciona o ficheiro `medicapp.sql` incluído na carpeta do proxecto e preme **Continuar**
 
 6. **Editar o ficheiro `.env`** para engadir os datos da base de datos:
 
@@ -105,24 +109,19 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
 - Estás na ruta correcta do proxecto ao executar os comandos.
 - As versións de PHP, Node.js e Composer son compatibles con Laravel 12.
 
-
 ## Uso
 > *Tarefa*: Neste apartado, describe brevemente como se usará o software. Se ten unha interfaz de terminal, describe aquí a súa sintaxe. Se ten unha interfaz gráfica de usuario, describe aquí **só o uso** (a modo de sumario) **dos aspectos máis relevantes do seu funcionamento** (máxima brevidade, como se fose un anuncio reclamo ou comercial).
 
-## Sobre el autor
+## Sobre o autor
 > *Tarefa*: Realiza unha breve descrición de quen es desde unha perspectiva profesional, os teus puntos fortes, tecnoloxías que máis dominas e o motivo de por que te decantaches por este proxecto. **Non máis de 200 palabras**. Indica unha forma fiable de contactar contigo no presente e no futuro.
 
 ## Licencia
-> *Tarefa*: É requisito INDISPENSABLE licenciar explicitamente o proxecto. Crea un ficheiro `LICENSE` na raíz do repositorio.
+Este proxecto licénciase baixo GNU GPL v3. Consulta o ficheiro [LICENSE](/LICENSE) na raíz do repositorio.
 
 ## Guía de contribución
 > *Tarefa*: Se o teu proxecto se trata de software libre, é importante que expoñas como se pode contribuir a el. Algúns exemplos disto son realizar novas funcionalidades, corrección e/ou optimización de código, realización de tests automatizados, novas interfaces de integración, desenvolvemento de plugins, etc. Intenta dar unha mensaxe concisa.
 
-
 ## Memoria
-
-> *Tarefa*: Indexa de forma ordenada a memoria do teu proxecto.
-> Durante a redacción da memoria, debes ir completando progresivamente o anexo de Referencias.
 
 1. [Estudo preliminar](doc/templates/1_estudo_preliminar.md)
 2. [Análise: Requerimentos do sistema](doc/templates/2_analise.md)
