@@ -115,8 +115,19 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
 
 **MedicApp** está feita para rexistrar tratamentos e citas médicas de forma sinxela, lembrando automaticamente as tomas e avisando con antelación das citas. Todo se amosa nun panel principal claro e accesible. Co plan premium, ademais, pódense compartir perfís, sincronizar citas con Google Calendar e xerar informes en PDF.
 
-## Sobre o autor
-> *Tarefa*: Realiza unha breve descrición de quen es desde unha perspectiva profesional, os teus puntos fortes, tecnoloxías que máis dominas e o motivo de por que te decantaches por este proxecto. **Non máis de 200 palabras**. Indica unha forma fiable de contactar contigo no presente e no futuro.
+## Sobre a autora
+
+Son **Elena Quintela Babío**, futura Técnico Superior en Desenvolvemento de Aplicacións Web. Ao longo da miña formación decidín orientar o meu proxecto final cara ao ámbito da saúde, porque creo que a tecnoloxía pode ser unha ferramenta valiosa para facer a vida máis sinxela e segura ás persoas.
+
+En MedicApp quixen aplicar os coñecementos adquiridos en programación web, bases de datos e deseño de interfaces para crear unha solución práctica. O proceso supuxo todo un reto, unindo backend con **Laravel**, frontend con **Blade**/**Tailwind** e integracións externas como **Google Calendar**, e serviume para consolidar a maior parte das competencias adquiridas durante o ciclo.
+
+Ademais das tecnoloxías usadas en MedicApp, tamén adquirín recentemente coñecementos en **.NET 8**, **C# 12**, **Spring Boot 3.x** e **Sage200**, o que me dá unha visión máis ampla do desenvolvemento web e multiplataforma. 
+
+Considero que os meus puntos fortes son a capacidade de aprendizaxe continua, a atención ao detalle e a motivación por crear aplicacións que teñan un impacto real.
+
+📧 **Contacto**: elenaquintela66@gmail.com
+
+🔗 **LinkedIn**: linkedin.com/in/elena-qb-b5850386
 
 ## Licencia
 
