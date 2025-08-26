@@ -42,10 +42,10 @@ Deberán incluírse:
 
 **Codificación e probas**
 
-* Laravel Documentation. [Laravel Docs](https://laravel.com/docs/12.x/installation)
+* Laravel Documentation. (https://laravel.com/docs/12.x/installation)
 
-* Node.js. [Node.js](https://nodejs.org/es)
+* Node.js. (https://nodejs.org/es)
 
-* Google Cloud Console. [Google Cloud](https://cloud.google.com/gcp?utm_source=google&utm_medium=cpc&utm_campaign=emea-es-all-es-dr-bkws-all-all-trial-b-gcp-1707574&utm_content=text-ad-none-any-DEV_c-CRE_673503512346-ADGP_Hybrid+%7C+BKWS+-+MIX+%7C+Txt+-+Generic+Cloud+-+Cloud+Generic+-+Core+GCP-KWID_43700082436647690-kwd-23339932970-userloc_9211638&utm_term=KW_nube+google-NET_g-PLAC_&&gclsrc=aw.ds&gad_source=1&gad_campaignid=20535123987&gclid=CjwKCAjwtrXFBhBiEiwAEKen15PWE71GplIFyPsLuN0ouVtDYDSThXFnTBPUBLJWsg5NY1D_4kgbxxoCIPEQAvD_BwE)
+* Google Cloud Console. (https://cloud.google.com/gcp?utm_source=google&utm_medium=cpc&utm_campaign=emea-es-all-es-dr-bkws-all-all-trial-b-gcp-1707574&utm_content=text-ad-none-any-DEV_c-CRE_673503512346-ADGP_Hybrid+%7C+BKWS+-+MIX+%7C+Txt+-+Generic+Cloud+-+Cloud+Generic+-+Core+GCP-KWID_43700082436647690-kwd-23339932970-userloc_9211638&utm_term=KW_nube+google-NET_g-PLAC_&&gclsrc=aw.ds&gad_source=1&gad_campaignid=20535123987&gclid=CjwKCAjwtrXFBhBiEiwAEKen15PWE71GplIFyPsLuN0ouVtDYDSThXFnTBPUBLJWsg5NY1D_4kgbxxoCIPEQAvD_BwE)
 
-* Flaticon. [Flaticon](https://www.flaticon.es/)
+* Flaticon. (https://www.flaticon.es/)
