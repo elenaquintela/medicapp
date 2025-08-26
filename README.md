@@ -36,7 +36,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
    Podes clonar o repositorio en calquera carpeta do teu equipo (non é necesario copialo en `htdocs`):
 
    ```bash
-   git clone https://gitlab.iessanclemente.net/dawdu/a23elenaqb.git
+   git clone ssh://git@gitlab.iessanclemente.net:60600/dawdu/a23elenaqb.git
    cd medicapp
    ```
 
@@ -56,7 +56,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
 
    ```bash
    npm install
-   npm run build
+   npm run dev
    ```
 
 4. **Configurar o entorno**
@@ -96,18 +96,19 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
    php artisan serve
    ```
 
-   Abre `http://localhost:8000` no navegador para acceder á aplicación.
+   Abre `http://127.0.0.1:8000` no navegador para acceder á aplicación.
 
 ---
 
 **Nota**: Se se produce algún erro durante o proceso, comproba que:
 - Apache e MySQL están iniciados desde XAMPP.
+- Non haxa máis procesos de mysql no Administrador de Tarefas.
 - Estás na ruta correcta do proxecto ao executar os comandos.
 - As versións de PHP, Node.js e Composer son compatibles con Laravel 12.
 
 ## Uso
 
-**MedicApp** esta feita para rexistrar tratamentos e citas médicas de forma sinxela, lembrando automaticamente as tomas e avisando con antelación das citas. Todo se amosa nun panel principal claro e accesible. Co plan premium, ademais, pódense compartir perfís, sincronizar citas con Google Calendar e xerar informes en PDF.
+**MedicApp** está feita para rexistrar tratamentos e citas médicas de forma sinxela, lembrando automaticamente as tomas e avisando con antelación das citas. Todo se amosa nun panel principal claro e accesible. Co plan premium, ademais, pódense compartir perfís, sincronizar citas con Google Calendar e xerar informes en PDF.
 
 ## Sobre o autor
 > *Tarefa*: Realiza unha breve descrición de quen es desde unha perspectiva profesional, os teus puntos fortes, tecnoloxías que máis dominas e o motivo de por que te decantaches por este proxecto. **Non máis de 200 palabras**. Indica unha forma fiable de contactar contigo no presente e no futuro.
@@ -118,7 +119,7 @@ Este proxecto licénciase baixo GNU GPL v3. Consulta o ficheiro [LICENSE](/LICEN
 
 ## Guía de contribución
 
-Este proxecto é software libre e as contribucións son sempre benvidas. Pódese colaborar de diferentes maneiras: engadindo novas funcionalidades, corrixindo ou optimizando código existente, propoñendo melloras na interface, desenvolvendo integracións con outros servizos ou achegando tests automatizados que aumenten a calidade do sistema.
+Este proxecto é software libre e as contribucións son sempre benvidas. Pódese colaborar de diferentes xeitos: engadindo novas funcionalidades, corrixindo ou optimizando código existente, propoñendo melloras na interface, desenvolvendo integracións con outros servizos ou achegando tests automatizados que aumenten a calidade do sistema.
 
 Se desexas contribuír:
 
