@@ -80,7 +80,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
    - Preme sobre a base de datos e vai á pestana **Importar**
    - Selecciona o ficheiro `medicapp.sql` incluído na carpeta do proxecto e preme **Continuar**
 
-6. **Editar o ficheiro `.env`** para engadir os datos da base de datos:
+6. **Asegurarse de que no ficheiro `.env`** estánr os datos da base de datos:
 
    ```
    DB_DATABASE=medicapp
@@ -88,7 +88,17 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
    DB_PASSWORD=
    ```
 
-7. **Iniciar o servidor de Laravel**
+7. **Limpiar os cachés**
+
+   ```bash
+   php artisan config:clear
+   php artisan cache:clear
+   php artisan route:clear
+   php artisan view:clear
+   php artisan optimize:clear
+   ```
+
+8. **Iniciar o servidor de Laravel**
 
    Laravel trae un servidor de desenvolvemento integrado. Para iniciar a aplicación, executa:
 
