@@ -1,15 +1,5 @@
 # Referencias
 
-Nesta páxina deben incluirse todas as referencias empregadas: webs, libros, etc. Este anexo débese ir cubrindo a medida que se vaia desenvolvendo o proxecto.
-
-Deberán incluírse:
-
-* Referencias a sitios web de documentación técnica.
-* Referencias que xustifiquen as afirmacións realizadas.
-* Fontes que se utilizaran para definir os requisitos do proxecto.
-* Referencias aos sitios oficiais do software utilizado.
-* Normas ou documentos legais.
-
 **Estudo preliminar**
 
 * MyTherapy (2017). https://www.mytherapyapp.com/es
@@ -38,14 +28,34 @@ Deberán incluírse:
 
 **Deseño**
 
-* Canva. [Canva](https://www.canva.com/es_es/)
+* Canva. (2025). *Canva*. https://www.canva.com/es_es/
 
 **Codificación e probas**
 
-* Laravel Documentation. (https://laravel.com/docs/12.x/installation)
+* Laravel. (2025). *Laravel documentation (v12.x)*. https://laravel.com/docs/12.x
 
-* Node.js. (https://nodejs.org/es)
+* PHP Group. (2025). *PHP documentation*. https://www.php.net/docs.php
 
-* Google Cloud Console. (https://cloud.google.com/gcp?utm_source=google&utm_medium=cpc&utm_campaign=emea-es-all-es-dr-bkws-all-all-trial-b-gcp-1707574&utm_content=text-ad-none-any-DEV_c-CRE_673503512346-ADGP_Hybrid+%7C+BKWS+-+MIX+%7C+Txt+-+Generic+Cloud+-+Cloud+Generic+-+Core+GCP-KWID_43700082436647690-kwd-23339932970-userloc_9211638&utm_term=KW_nube+google-NET_g-PLAC_&&gclsrc=aw.ds&gad_source=1&gad_campaignid=20535123987&gclid=CjwKCAjwtrXFBhBiEiwAEKen15PWE71GplIFyPsLuN0ouVtDYDSThXFnTBPUBLJWsg5NY1D_4kgbxxoCIPEQAvD_BwE)
+* Composer. (2025). *Composer documentation*. https://getcomposer.org/doc/
 
-* Flaticon. (https://www.flaticon.es/)
+* Node.js Foundation. (2025). *Node.js documentation*. https://nodejs.org/es
+
+* Vite. (2025). *Vite documentation*. https://vite.dev/
+
+* Tailwind Labs. (2025). *Tailwind CSS documentation*. https://tailwindcss.com/docs
+
+* MariaDB Corporation. (2025). *MariaDB knowledge base*. https://mariadb.com/kb/en/documentation/
+
+* Oracle Corporation. (2025). *MySQL reference manual*. https://dev.mysql.com/doc/
+
+* Apache Friends. (2025). *XAMPP documentation*. https://www.apachefriends.org/docs/
+
+* Barry vd. Heuvel. (2025). *laravel-dompdf* (repositorio de GitHub). https://github.com/barryvdh/laravel-dompdf
+
+* Google Developers. (2025). *Google Calendar API*. https://developers.google.com/calendar/api
+
+* Google Developers. (2025). *OAuth 2.0 for web server applications*. https://developers.google.com/identity/protocols/oauth2
+
+* Google Cloud. (2025). *Google Cloud Console*. https://console.cloud.google.com/
+
+* Freepik Company S.L. (2025). *Flaticon*. https://www.flaticon.es/
