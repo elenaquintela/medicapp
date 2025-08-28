@@ -149,6 +149,9 @@ Route::middleware('auth')->group(function () {
         ->name('notificaciones.leer');
     Route::post('/notificaciones/leer-todas', [NotificacionController::class, 'marcarTodasLeidas'])
         ->name('notificaciones.leerTodas');
+    Route::post('/notificaciones/visto', [NotificacionController::class, 'marcarVistas'])
+        ->name('notificaciones.visto');
+
 
     // Cuenta
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');

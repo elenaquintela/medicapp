@@ -128,22 +128,23 @@ document.addEventListener('DOMContentLoaded', function () {
   const ORIGINAL_TITLE = document.title;
   let menuOpen = false;
   let currentUnreadCount = 0;
-  let currentMaxId = 0;   
-  let lastSeenMaxId = 0;  
+  let currentBadgeCount = 0; 
+
 
   function applyIndicators() {
-    const hasUnseen = currentUnreadCount > 0 && currentMaxId > lastSeenMaxId && !menuOpen;
+    const hasUnseen = currentBadgeCount > 0 && !menuOpen;
 
     if (hasUnseen) {
-      badge.textContent = currentUnreadCount;
+      badge.textContent = currentBadgeCount;
       badge.classList.remove('hidden');
-      document.title = `(${currentUnreadCount}) ${ORIGINAL_TITLE}`;
+      document.title = `(${currentBadgeCount}) ${ORIGINAL_TITLE}`;
     } else {
       badge.textContent = '';
       badge.classList.add('hidden');
       document.title = ORIGINAL_TITLE;
     }
   }
+
 
   function showEmptyState() {
     if (emptyBox) emptyBox.classList.remove('hidden');
@@ -177,18 +178,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  async function fetchData(markSeen = false) {
+  async function fetchData() {
     try {
-      const url = new URL('{{ route('notificaciones.index') }}', window.location.origin);
-      if (markSeen) url.searchParams.set('mark_seen', '1');
-
-      const res = await fetch(url.toString(), {
+      const res = await fetch(`{{ route('notificaciones.index') }}`, {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        cache: 'no-store'
+        cache: 'no-store',
+        credentials: 'same-origin',
       });
+
       if (!res.ok) {
         currentUnreadCount = 0;
-        currentMaxId = 0;
+        currentBadgeCount = 0;
         showEmptyState();
         applyIndicators();
         return { count: 0, items: [] };
@@ -196,14 +196,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const data = await res.json();
       const unread = Array.isArray(data.unread) ? data.unread : [];
-      const count = data.unread_count || unread.length;
+      const count = Number(data.unread_count ?? unread.length) || 0;
 
       currentUnreadCount = count;
-      currentMaxId = unread.reduce((mx, n) => Math.max(mx, Number(n.id) || 0), 0);
-
-      if (menuOpen && currentMaxId > lastSeenMaxId) {
-        lastSeenMaxId = currentMaxId;
-      }
+      currentBadgeCount  = Number(data.badge_count ?? 0) || 0;
 
       if (count === 0) {
         showEmptyState();
@@ -214,7 +210,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
       applyIndicators();
       return { count, items: unread };
-    } catch (e) {
+    } catch {
+      currentUnreadCount = 0;
+      currentBadgeCount = 0;
+      showEmptyState();
+      applyIndicators();
       return { count: 0, items: [] };
     }
   }
@@ -238,9 +238,20 @@ document.addEventListener('DOMContentLoaded', function () {
     menuOpen = willOpen;
 
     if (willOpen) {
-      await fetchData(true); 
-      lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
-      applyIndicators(); 
+      try {
+        await fetch(`{{ route('notificaciones.visto') }}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          },
+          credentials: 'same-origin',
+        });
+        currentBadgeCount = 0;
+        applyIndicators();
+      } catch {}
+      await fetchData();
     } else {
       fetchData();
     }

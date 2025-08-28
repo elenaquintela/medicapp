@@ -34,6 +34,7 @@ class Usuario extends Authenticatable
 
     protected $casts = [
         'google_oauth_tokens' => 'array',
+        'notif_last_seen' => 'datetime',
     ];
 
     public function getAuthPassword()
