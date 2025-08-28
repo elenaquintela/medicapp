@@ -14,7 +14,9 @@
 
     <p>Para aceptar la invitación, haz clic aquí:</p>
     <p>
-      <a href="{{ $link }}">{{ $link }}</a>
+      <a href="{{ $link }}" style="background:#0d6efd; color:#fff; padding:10px 15px; text-decoration:none; border-radius:5px;">
+        Aceptar invitación
+      </a>
     </p>
 
     <p>

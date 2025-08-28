@@ -42,7 +42,7 @@ class PerfilInvitacionController extends Controller
             'email'                => $request->email,
             'token'                => $token,
             'estado'               => 'pendiente',
-            'expires_at'           => now()->addDays(7),
+            'expires_at'           => now()->addDays(3),
         ]);
 
         $link = route('invitaciones.accept', $token);
