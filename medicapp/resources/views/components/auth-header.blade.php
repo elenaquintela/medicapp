@@ -232,30 +232,31 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch { return false; }
   }
 
-  bell.addEventListener('click', async () => {
-    const willOpen = menu.classList.contains('hidden');
-    menu.classList.toggle('hidden');
-    menuOpen = willOpen;
+bell.addEventListener('click', async () => {
+  const willOpen = menu.classList.contains('hidden');
+  menu.classList.toggle('hidden');
+  menuOpen = willOpen;
 
-    if (willOpen) {
-      try {
-        await fetch(`{{ route('notificaciones.visto') }}`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          },
-          credentials: 'same-origin',
-        });
-        currentBadgeCount = 0;
-        applyIndicators();
-      } catch {}
-      await fetchData();
-    } else {
-      fetchData();
-    }
-  });
+  if (willOpen) {
+    await fetchData();
+    try {
+      await fetch(`{{ route('notificaciones.visto') }}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
+        credentials: 'same-origin',
+      });
+    } catch {}
+    currentBadgeCount = 0;
+    applyIndicators();
+
+  } else {
+    fetchData();
+  }
+});
 
   document.addEventListener('click', (e) => {
     if (!menu.contains(e.target) && !bell.contains(e.target)) {
@@ -271,13 +272,15 @@ document.addEventListener('DOMContentLoaded', function () {
     markAllBtn.addEventListener('click', async () => {
       const ok = await marcarTodasSilencioso();
       if (ok) {
-        currentUnreadCount = 0;
-        lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
-        showEmptyState();
+        // Refrescamos desde backend (badge_count y lista) para evitar estados raros
+        await fetchData();
+        // Garantiza que el badge desaparezca ya
+        currentBadgeCount = 0;
         applyIndicators();
       }
     });
   }
+
 
   fetchData();
   const POLL_MS = 10000; 
