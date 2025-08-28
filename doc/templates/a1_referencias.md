@@ -59,3 +59,9 @@
 * Google Cloud. (2025). *Google Cloud Console*. https://console.cloud.google.com/
 
 * Freepik Company S.L. (2025). *Flaticon*. https://www.flaticon.es/
+
+**Despregamento**
+
+* Railway. (s. f.). *Deploy a Laravel App*. https://docs.railway.com/guides/laravel
+
+* Oracle. (2025). *MySQL Workbench*. https://www.mysql.com/products/workbench/
