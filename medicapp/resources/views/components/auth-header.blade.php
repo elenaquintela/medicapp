@@ -6,13 +6,13 @@
 @endphp
 
 <header class="bg-[#0C1222] text-white py-4 px-6 flex items-center justify-between shadow-md">
-
     <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center space-x-3 hover:opacity-90 transition">
         <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-20 h-auto">
         <span class="text-4xl font-bold text-white">MedicApp</span>
     </a>
 
     <div class="flex items-center space-x-6">
+
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
                 <button class="bg-yellow-300 text-[#0C1222] font-semibold px-4 py-2 rounded-full shadow hover:bg-yellow-200 transition inline-flex items-center">
@@ -66,7 +66,9 @@
                 <div data-bell-empty class="hidden px-4 py-8 text-sm text-gray-400 text-center">
                     No hay notificaciones que mostrar
                 </div>
+
                 <ul data-bell-list class="max-h-64 overflow-auto divide-y divide-gray-800"></ul>
+
                 <div data-bell-recent-header class="px-4 py-2 text-xs opacity-70 border-t border-gray-800">Recientes</div>
                 <ul data-bell-list-recent class="max-h-40 overflow-auto divide-y divide-gray-800"></ul>
             </div>
@@ -127,29 +129,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const ORIGINAL_TITLE = document.title;
   let menuOpen = false;
-  let currentUnread = 0;
-
-  const USER_ID = '{{ Auth::id() }}';
-  const BASELINE_KEY = `notifBaseline:${USER_ID}`;
-  function getBaseline() {
-    const raw = localStorage.getItem(BASELINE_KEY);
-    const n = Number(raw);
-    return Number.isFinite(n) && n >= 0 ? n : 0;
-  }
-  function setBaseline(n) {
-    localStorage.setItem(BASELINE_KEY, String(Math.max(0, Number(n) || 0)));
-  }
-
-  if (localStorage.getItem(BASELINE_KEY) === null) setBaseline(0);
+  let currentUnreadCount = 0;
+  let currentMaxId = 0;  
+  let lastSeenMaxId = 0;  
 
   function applyIndicators() {
-    const baseline = getBaseline();
-    const newCount = Math.max(currentUnread - baseline, 0);
+    const hasUnseen = currentUnreadCount > 0 && currentMaxId > lastSeenMaxId && !menuOpen;
 
-    if (!menuOpen && newCount > 0) {
-      badge.textContent = newCount;
+    if (hasUnseen) {
+      badge.textContent = currentUnreadCount;
       badge.classList.remove('hidden');
-      document.title = `(${newCount}) ${ORIGINAL_TITLE}`;
+      document.title = `(${currentUnreadCount}) ${ORIGINAL_TITLE}`;
     } else {
       badge.textContent = '';
       badge.classList.add('hidden');
@@ -189,16 +179,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  async function fetchData() {
+  async function fetchData(markSeen = false) {
     try {
-      const res = await fetch(`{{ route('notificaciones.index') }}`, {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        cache: 'no-store',
-        credentials: 'same-origin',
-      });
+      const url = new URL('{{ route('notificaciones.index') }}', window.location.origin);
+      if (markSeen) url.searchParams.set('mark_seen', '1');
 
+      const res = await fetch(url.toString(), {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        cache: 'no-store'
+      });
       if (!res.ok) {
-        currentUnread = 0;
+        currentUnreadCount = 0;
+        currentMaxId = 0;
         showEmptyState();
         applyIndicators();
         return { count: 0, items: [] };
@@ -206,9 +198,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const data = await res.json();
       const unread = Array.isArray(data.unread) ? data.unread : [];
-      currentUnread = Number(data.unread_count ?? unread.length) || 0;
+      const count = data.unread_count || unread.length;
 
-      if (currentUnread === 0) {
+      currentUnreadCount = count;
+      currentMaxId = unread.reduce((mx, n) => Math.max(mx, Number(n.id) || 0), 0);
+
+      if (menuOpen && currentMaxId > lastSeenMaxId) {
+        lastSeenMaxId = currentMaxId;
+      }
+
+      if (count === 0) {
         showEmptyState();
       } else {
         showLists();
@@ -216,11 +215,8 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       applyIndicators();
-      return { count: currentUnread, items: unread };
-    } catch {
-      currentUnread = 0;
-      showEmptyState();
-      applyIndicators();
+      return { count, items: unread };
+    } catch (e) {
       return { count: 0, items: [] };
     }
   }
@@ -232,8 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-        },
-        credentials: 'same-origin',
+        }
       });
       return res.ok;
     } catch { return false; }
@@ -245,15 +240,14 @@ document.addEventListener('DOMContentLoaded', function () {
     menuOpen = willOpen;
 
     if (willOpen) {
-      const { count } = await fetchData();
-      setBaseline(count);
-      applyIndicators();
+      await fetchData(true); 
+      lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
+      applyIndicators(); 
     } else {
       fetchData();
     }
   });
 
- 
   document.addEventListener('click', (e) => {
     if (!menu.contains(e.target) && !bell.contains(e.target)) {
       if (!menu.classList.contains('hidden')) {
@@ -264,25 +258,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-
   if (markAllBtn) {
     markAllBtn.addEventListener('click', async () => {
       const ok = await marcarTodasSilencioso();
       if (ok) {
-        const { count } = await fetchData(); 
-        setBaseline(count);                  
+        currentUnreadCount = 0;
+
+        lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
+        showEmptyState();
         applyIndicators();
       }
     });
   }
 
- 
   fetchData();
-  const POLL_MS = 10000;
+  const POLL_MS = 10000; // 10 s
   setInterval(fetchData, POLL_MS);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) fetchData(); });
   window.addEventListener('online', fetchData);
 });
 </script>
 @endpush
-

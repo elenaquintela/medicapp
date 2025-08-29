@@ -14,6 +14,7 @@ class NotificacionController extends Controller
     {
         /** @var \App\Models\Usuario $usuario */
         $usuario = Auth::user();
+
         $perfilIds = $usuario->perfiles->pluck('id_perfil');
 
         $tz    = config('app.timezone');
@@ -37,7 +38,7 @@ class NotificacionController extends Controller
             ->whereIn('p.id_perfil', $perfilIds)
             ->where('tm.estado', 'activo')
             ->whereDate('r.fecha_hora', $today)
-            ->whereBetween('r.fecha_hora', [$from, $to])
+            ->whereBetween('r.fecha_hora', [$from, $to])  
             ->where('r.tomado', 0)
             ->whereNull('n.id_notif')
             ->select(['r.fecha_hora', 'p.id_perfil', 'p.nombre_paciente as perfil', 'm.nombre as med', 'tm.dosis'])
@@ -89,7 +90,6 @@ class NotificacionController extends Controller
                 'leida'           => 0,
             ]);
         }
-
         $noLeidas = \App\Models\Notificacion::where('id_usuario_dest', $usuario->id_usuario)
             ->whereIn('categoria', ['toma', 'cita'])
             ->whereIn('id_perfil', $perfilIds)
@@ -105,6 +105,7 @@ class NotificacionController extends Controller
                 'msg'    => $n->mensaje,
                 'hora'   => \Carbon\Carbon::parse($n->ts_programada, $tz)->format('H:i'),
             ]),
+            'recent' => [], 
         ]);
     }
 
@@ -122,7 +123,7 @@ class NotificacionController extends Controller
         $usuario = Auth::user();
 
         Notificacion::where('id_usuario_dest', $usuario->id_usuario)
-            ->whereIn('categoria', ['toma', 'cita'])
+            ->whereIn('categoria', ['toma', 'cita']) 
             ->where('leida', 0)
             ->update(['leida' => 1]);
 
@@ -135,5 +136,4 @@ class NotificacionController extends Controller
         $usuario = Auth::user();
         abort_unless($n->id_usuario_dest === $usuario->id_usuario, 403);
     }
-
 }
