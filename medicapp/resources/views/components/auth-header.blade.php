@@ -128,15 +128,34 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!bell || !badge || !menu || !list || !listRecent) return;
 
   const ORIGINAL_TITLE = document.title;
+  const USER_ID = {{ Auth::id() }};
   let menuOpen = false;
   let currentUnreadCount = 0;
   let currentMaxId = 0;  
-  let lastSeenMaxId = 0;  
+  
+  function getStoredValue(key, defaultValue = 0) {
+    try {
+      return parseInt(localStorage.getItem(key)) || defaultValue;
+    } catch (e) {
+      console.warn('localStorage not available, using session storage');
+      return parseInt(sessionStorage.getItem(key)) || defaultValue;
+    }
+  }
+  
+  function setStoredValue(key, value) {
+    try {
+      localStorage.setItem(key, value.toString());
+    } catch (e) {
+      sessionStorage.setItem(key, value.toString());
+    }
+  }
+  
+  let lastSeenMaxId = getStoredValue(`notif_last_seen_id_${USER_ID}`);  
 
   function applyIndicators() {
-    const hasUnseen = currentUnreadCount > 0 && currentMaxId > lastSeenMaxId && !menuOpen;
+    const hasUnseenUnread = currentUnreadCount > 0 && currentMaxId > lastSeenMaxId && !menuOpen;
 
-    if (hasUnseen) {
+    if (hasUnseenUnread) {
       badge.textContent = currentUnreadCount;
       badge.classList.remove('hidden');
       document.title = `(${currentUnreadCount}) ${ORIGINAL_TITLE}`;
@@ -185,7 +204,11 @@ document.addEventListener('DOMContentLoaded', function () {
       if (markSeen) url.searchParams.set('mark_seen', '1');
 
       const res = await fetch(url.toString(), {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        headers: { 
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
         cache: 'no-store'
       });
       if (!res.ok) {
@@ -205,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (menuOpen && currentMaxId > lastSeenMaxId) {
         lastSeenMaxId = currentMaxId;
+        setStoredValue(`notif_last_seen_id_${USER_ID}`, lastSeenMaxId);
       }
 
       if (count === 0) {
@@ -217,7 +241,8 @@ document.addEventListener('DOMContentLoaded', function () {
       applyIndicators();
       return { count, items: unread };
     } catch (e) {
-      return { count: 0, items: [] };
+      console.error('Error fetching notifications:', e);
+      return { count: currentUnreadCount, items: [] };
     }
   }
 
@@ -242,6 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (willOpen) {
       await fetchData(true); 
       lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
+      setStoredValue(`notif_last_seen_id_${USER_ID}`, lastSeenMaxId);
       applyIndicators(); 
     } else {
       fetchData();
@@ -265,6 +291,7 @@ document.addEventListener('DOMContentLoaded', function () {
         currentUnreadCount = 0;
 
         lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
+        setStoredValue(`notif_last_seen_id_${USER_ID}`, lastSeenMaxId);
         showEmptyState();
         applyIndicators();
       }
