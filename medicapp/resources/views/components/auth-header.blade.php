@@ -5,19 +5,20 @@
     $rol = $usuario->rol_global;
 @endphp
 
-<header class="bg-[#0C1222] text-white py-4 px-6 flex items-center justify-between shadow-md">
-    <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center space-x-3 hover:opacity-90 transition">
-        <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-20 h-auto">
-        <span class="text-4xl font-bold text-white">MedicApp</span>
+<header class="bg-[#0C1222] text-white py-2 sm:py-4 px-3 sm:px-6 flex items-center justify-between shadow-md">
+    <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center space-x-2 sm:space-x-3 hover:opacity-90 transition">
+        <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-12 sm:w-16 lg:w-20 h-auto">
+        <span class="text-xl sm:text-2xl lg:text-4xl font-bold text-white">MedicApp</span>
     </a>
 
-    <div class="flex items-center space-x-6">
+    <div class="flex items-center space-x-2 sm:space-x-4 lg:space-x-6">
 
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
-                <button class="bg-yellow-300 text-[#0C1222] font-semibold px-4 py-2 rounded-full shadow hover:bg-yellow-200 transition inline-flex items-center">
-                    <span>{{ $perfilActivo->nombre_paciente ?? 'Perfil actual' }}</span>
-                    <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <button class="bg-yellow-300 text-[#0C1222] font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-full shadow hover:bg-yellow-200 transition inline-flex items-center text-xs sm:text-sm">
+                    <span class="hidden sm:inline">{{ $perfilActivo->nombre_paciente ?? 'Perfil actual' }}</span>
+                    <span class="sm:hidden">{{ Str::limit($perfilActivo->nombre_paciente ?? 'Perfil', 8, '') }}</span>
+                    <svg class="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0l-4.25-4.25a.75.75 0 01.02-1.06z"/>
                     </svg>
                 </button>
@@ -50,27 +51,27 @@
         </x-dropdown>
 
         <div class="relative">
-            <button type="button" class="relative inline-flex items-center" data-bell title="Notificaciones">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-400" fill="currentColor" viewBox="0 0 16 16">
+            <button type="button" class="relative inline-flex items-center p-1 sm:p-2" data-bell title="Notificaciones">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.684a1.5 1.5 0 1 0-1.208 0A5.002 5.002 0 0 0 3 6c0 1.098-.628 2.082-1.579 2.563A.5.5 0 0 0 1.5 9.5h13a.5.5 0 0 0 .079-.937A2.993 2.993 0 0 1 13 6a5.002 5.002 0 0 0-4.896-4.684z"/>
                 </svg>
-                <span data-bell-badge class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none px-1.5 py-0.5 rounded-full">0</span>
+                <span data-bell-badge class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] sm:text-[10px] leading-none px-1 sm:px-1.5 py-0.5 rounded-full">0</span>
             </button>
 
-            <div data-bell-menu class="hidden absolute right-0 mt-2 w-80 bg-[#0C1222] border border-gray-700 rounded-xl shadow-xl overflow-hidden z-50">
-                <div class="px-4 py-3 border-b border-gray-700 flex items-center justify-between">
-                    <span class="text-sm font-semibold">Tomas</span>
-                    <button type="button" data-bell-markall class="text-xs text-blue-300 hover:text-blue-200">Marcar todas como leídas</button>
+            <div data-bell-menu class="hidden absolute right-0 mt-2 w-72 sm:w-80 bg-[#0C1222] border border-gray-700 rounded-xl shadow-xl overflow-hidden z-50 max-h-[80vh] sm:max-h-none">
+                <div class="px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-700 flex items-center justify-between">
+                    <span class="text-xs sm:text-sm font-semibold">Tomas</span>
+                    <button type="button" data-bell-markall class="text-[10px] sm:text-xs text-blue-300 hover:text-blue-200">Marcar todas como leídas</button>
                 </div>
 
-                <div data-bell-empty class="hidden px-4 py-8 text-sm text-gray-400 text-center">
+                <div data-bell-empty class="hidden px-3 sm:px-4 py-6 sm:py-8 text-xs sm:text-sm text-gray-400 text-center">
                     No hay notificaciones que mostrar
                 </div>
 
-                <ul data-bell-list class="max-h-64 overflow-auto divide-y divide-gray-800"></ul>
+                <ul data-bell-list class="max-h-48 sm:max-h-64 overflow-auto divide-y divide-gray-800"></ul>
 
-                <div data-bell-recent-header class="px-4 py-2 text-xs opacity-70 border-t border-gray-800">Recientes</div>
-                <ul data-bell-list-recent class="max-h-40 overflow-auto divide-y divide-gray-800"></ul>
+                <div data-bell-recent-header class="px-3 sm:px-4 py-2 text-[10px] sm:text-xs opacity-70 border-t border-gray-800">Recientes</div>
+                <ul data-bell-list-recent class="max-h-32 sm:max-h-40 overflow-auto divide-y divide-gray-800"></ul>
             </div>
         </div>
 
@@ -82,13 +83,14 @@
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
                 <button
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow transition
+                    class="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 border border-transparent rounded-full shadow transition text-xs sm:text-sm
                     {{ $isPremium ? 'bg-[#7fb0dd] text-white hover:bg-[#6aa1d0]' : 'bg-yellow-300 text-[#0C1222] hover:bg-yellow-200' }}">
-                    <span class="font-bold mr-2">{{ $user->nombre ?? $user->name }}</span>
-                    <span class="text-sm font-semibold {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}">
+                    <span class="font-bold mr-1 sm:mr-2 hidden sm:inline">{{ $user->nombre ?? $user->name }}</span>
+                    <span class="font-bold mr-1 sm:hidden">{{ Str::limit($user->nombre ?? $user->name, 6, '') }}</span>
+                    <span class="text-xs sm:text-sm font-semibold {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}">
                         {{ ucfirst($user->rol_global) }}
                     </span>
-                    <svg class="ml-2 w-4 h-4 {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4 {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
                             d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                             clip-rule="evenodd" />
@@ -189,11 +191,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!arr || !arr.length) return;
     arr.forEach(n => {
       const li = document.createElement('li');
-      li.className = 'px-4 py-3 hover:bg-gray-800/60';
+      li.className = 'px-3 sm:px-4 py-2 sm:py-3 hover:bg-gray-800/60';
       li.innerHTML = `
-        <div class="text-sm font-medium">${n.titulo}</div>
-        <div class="text-xs opacity-80">${n.msg || ''}</div>
-        <div class="text-[11px] opacity-60 mt-1">${n.hora}</div>
+        <div class="text-xs sm:text-sm font-medium">${n.titulo}</div>
+        <div class="text-[10px] sm:text-xs opacity-80">${n.msg || ''}</div>
+        <div class="text-[9px] sm:text-[11px] opacity-60 mt-1">${n.hora}</div>
       `;
       container.appendChild(li);
     });
