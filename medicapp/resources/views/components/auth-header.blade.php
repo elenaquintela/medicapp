@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const USER_ID = {{ Auth::id() }};
   let menuOpen = false;
   let currentUnreadCount = 0;
-  let currentUnseenCount = 0; // Nuevo: contador de notificaciones no vistas
+  let currentUnseenCount = 0; 
   let currentMaxId = 0;  
   
   function getStoredValue(key, defaultValue = 0) {
@@ -154,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let lastSeenMaxId = getStoredValue(`notif_last_seen_id_${USER_ID}`);  
 
   function applyIndicators() {
-    // Mostrar el número de notificaciones no vistas (nuevas)
     const hasUnseen = currentUnseenCount > 0 && !menuOpen;
 
     if (hasUnseen) {
@@ -204,7 +203,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       const url = new URL('{{ route('notificaciones.index') }}', window.location.origin);
       if (markSeen) url.searchParams.set('mark_seen', '1');
-      // Enviar el último ID visto para calcular notificaciones nuevas
       url.searchParams.set('last_seen_id', lastSeenMaxId.toString());
 
       const res = await fetch(url.toString(), {
@@ -228,13 +226,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const unread = Array.isArray(data.unread) ? data.unread : [];
       
       currentUnreadCount = data.unread_count || unread.length;
-      currentUnseenCount = data.unseen_count || 0; // Notificaciones no vistas
+      currentUnseenCount = data.unseen_count || 0; 
       currentMaxId = data.max_id || 0;
 
       if (menuOpen && currentMaxId > lastSeenMaxId) {
         lastSeenMaxId = currentMaxId;
         setStoredValue(`notif_last_seen_id_${USER_ID}`, lastSeenMaxId);
-        // Al marcar como vistas, resetear el contador de no vistas
         currentUnseenCount = 0;
       }
 
@@ -296,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const ok = await marcarTodasSilencioso();
       if (ok) {
         currentUnreadCount = 0;
-        currentUnseenCount = 0; // También resetear las no vistas
+        currentUnseenCount = 0; 
 
         lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
         setStoredValue(`notif_last_seen_id_${USER_ID}`, lastSeenMaxId);
@@ -307,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   fetchData();
-  const POLL_MS = 10000; // 10 s
+  const POLL_MS = 10000; 
   setInterval(fetchData, POLL_MS);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) fetchData(); });
   window.addEventListener('online', fetchData);
