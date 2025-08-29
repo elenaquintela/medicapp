@@ -48,9 +48,9 @@
                        value="{{ old('causa') }}"
                        class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded text-[#0C1222] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
-            <div class="text-center mt-8">
+            <div class="text-center mt-6 sm:mt-8">
                 <button type="submit"
-                        class="bg-yellow-300 text-[#0C1222] font-bold text-lg px-10 py-3 rounded-full hover:bg-yellow-200 transition">
+                        class="bg-yellow-300 text-[#0C1222] font-bold text-base sm:text-lg px-6 sm:px-10 py-2 sm:py-3 rounded-full hover:bg-yellow-200 transition w-full sm:w-auto">
                     Crear perfil
                 </button>
             </div>

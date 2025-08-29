@@ -9,131 +9,219 @@
     $archivados = $tratamientos->where('estado', 'archivado');
 @endphp
 
-<div class="flex flex-col px-10 pt-6 h-full">
-    <h2 class="text-3xl font-bold mb-8 text-center">Tratamientos</h2>
+<div class="flex flex-col px-4 sm:px-6 lg:px-10 pt-4 sm:pt-6 h-full">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">Tratamientos</h2>
 
-    <form method="GET" action="{{ route('tratamiento.index') }}" class="flex items-center gap-3 mb-6 w-full max-w-[85%]">
+    <form method="GET" action="{{ route('tratamiento.index') }}" class="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 w-full">
         <img src="{{ asset('filtro.png') }}" alt="Filtro"
-             class="h-12 aspect-auto object-contain brightness-0 invert" />
+             class="h-8 sm:h-12 aspect-auto object-contain brightness-0 invert flex-shrink-0" />
 
         <input type="text"
                name="busqueda"
                id="busqueda"
                value="{{ request('busqueda') }}"
-               class="w-full p-3 rounded-md text-black placeholder-gray-600 text-sm"
+               class="w-full p-2 sm:p-3 rounded-md text-black placeholder-gray-600 text-xs sm:text-sm"
                placeholder="Filtre por causa, estado, fecha o creador" />
     </form>
+    
     <div class="flex w-full items-start">
-        <div class="max-w-[85%] w-full overflow-x-auto mx-auto">
-            <h3 class="text-xl font-semibold text-white mb-2">Activos</h3>
-            <table class="w-full text-sm text-white border border-white">
-                <thead class="bg-blue-400 text-black uppercase text-center">
-                    <tr>
-                        <th class="py-3 px-4">Causa</th>
-                        <th class="py-3 px-4">Estado</th>
-                        <th class="py-3 px-4">Fecha de inicio</th>
-                        <th class="py-3 px-4">Creado por</th>
-                        <th class="py-3 px-4">Ver detalles</th>
-                        <th class="py-3 px-4">Archivar</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-tratamientos-activos" class="text-center">
-                    @forelse ($activos as $tratamiento)
-                        <tr class="border-t border-white tratamiento-fila fila-activo">
-                            <td class="py-3">{{ $tratamiento->causa }}</td>
-                            <td class="py-3">{{ ucfirst($tratamiento->estado) }}</td>
-                            <td class="py-3">{{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d / m / Y') }}</td>
-                            <td class="py-3 font-semibold">
-                                {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}
-                            </td>
-                            <td class="py-3">
-                                <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}" class="hover:opacity-80 inline-block">
-                                    <img src="{{ asset('detalles.png') }}" alt="Detalles" class="w-6 h-6 object-contain invert mx-auto">
-                                </a>
-                            </td>
-                            <td class="py-3">
-                                <form method="POST" action="{{ route('tratamiento.archivar', $tratamiento->id_tratamiento) }}">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit"
-                                            class="bg-red-500 hover:bg-red-600 text-white font-bold py-1.5 px-4 rounded-full shadow">
-                                        Archivar
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
+        <div class="w-full overflow-x-auto">
+            <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Activos</h3>
+            
+            <!-- Versión móvil: Cards -->
+            <div class="sm:hidden space-y-3 mb-6">
+                @forelse ($activos as $tratamiento)
+                    <div class="bg-gray-800/50 border border-gray-600 rounded-lg p-4 tratamiento-fila fila-activo">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-white text-sm">{{ Str::limit($tratamiento->causa, 30) }}</h4>
+                            <span class="text-xs bg-green-600 text-white px-2 py-1 rounded">{{ ucfirst($tratamiento->estado) }}</span>
+                        </div>
+                        <div class="text-xs text-gray-300 mb-2">
+                            <div>Inicio: {{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d/m/Y') }}</div>
+                            <div>Por: {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}" 
+                               class="text-blue-400 hover:text-blue-300 text-xs">Ver detalles</a>
+                            <button onclick="archivarTratamiento({{ $tratamiento->id_tratamiento }})" 
+                                    class="text-red-400 hover:text-red-300 text-xs">Archivar</button>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-8 text-gray-300 text-sm">No hay tratamientos activos.</div>
+                @endforelse
+            </div>
+            
+            <!-- Versión desktop: Tabla -->
+            <div class="hidden sm:block">
+                <table class="w-full text-xs sm:text-sm text-white border border-white">
+                    <thead class="bg-blue-400 text-black uppercase text-center">
                         <tr>
-                            <td colspan="6" class="py-4 text-center text-gray-300">No hay tratamientos activos.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-
-            <div class="mt-10">
-                <h3 class="text-xl font-semibold text-white mb-2">Archivados</h3>
-                <table class="w-full text-sm text-white border border-white">
-                    <thead class="bg-gray-400 text-black uppercase text-center">
-                        <tr>
-                            <th class="py-3 px-4">Causa</th>
-                            <th class="py-3 px-4">Estado</th>
-                            <th class="py-3 px-4">Fecha de inicio</th>
-                            <th class="py-3 px-4">Creado por</th>
-                            <th class="py-3 px-4">Reactivar</th>
-                            <th class="py-3 px-4">Eliminar</th>
+                            <th class="py-2 sm:py-3 px-2 sm:px-4">Causa</th>
+                            <th class="py-2 sm:py-3 px-2 sm:px-4">Estado</th>
+                            <th class="py-2 sm:py-3 px-2 sm:px-4 hidden lg:table-cell">Fecha de inicio</th>
+                            <th class="py-2 sm:py-3 px-2 sm:px-4 hidden md:table-cell">Creado por</th>
+                            <th class="py-2 sm:py-3 px-2 sm:px-4">Ver detalles</th>
+                            <th class="py-2 sm:py-3 px-2 sm:px-4">Archivar</th>
                         </tr>
                     </thead>
-                    <tbody id="tabla-tratamientos-archivados" class="text-center">
-                        @forelse ($archivados as $tratamiento)
-                            <tr class="border-t border-white tratamiento-fila fila-archivado">
-                                <td class="py-3">{{ $tratamiento->causa }}</td>
-                                <td class="py-3">{{ ucfirst($tratamiento->estado) }}</td>
-                                <td class="py-3">{{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d / m / Y') }}</td>
-                                <td class="py-3 font-semibold">
-                                    {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}
+                    <tbody id="tabla-tratamientos-activos" class="text-center">
+                        @forelse ($activos as $tratamiento)
+                            <tr class="border-t border-white tratamiento-fila fila-activo">
+                                <td class="py-2 sm:py-3 px-2">{{ Str::limit($tratamiento->causa, 20) }}</td>
+                                <td class="py-2 sm:py-3 px-2">{{ ucfirst($tratamiento->estado) }}</td>
+                                <td class="py-2 sm:py-3 px-2 hidden lg:table-cell">{{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d / m / Y') }}</td>
+                                <td class="py-2 sm:py-3 px-2 font-semibold hidden md:table-cell">
+                                    {{ Str::limit($tratamiento->usuarioCreador->nombre ?? 'Desconocido', 15) }}
                                 </td>
-                                <td class="py-3">
-                                    <form method="POST" action="{{ route('tratamiento.reactivar', $tratamiento->id_tratamiento) }}">
+                                <td class="py-2 sm:py-3 px-2">
+                                    <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}" class="hover:opacity-80 inline-block">
+                                        <img src="{{ asset('detalles.png') }}" alt="Detalles" class="w-4 h-4 sm:w-6 sm:h-6 object-contain invert mx-auto">
+                                    </a>
+                                </td>
+                                <td class="py-2 sm:py-3 px-2">
+                                    <form method="POST" action="{{ route('tratamiento.archivar', $tratamiento->id_tratamiento) }}">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit"
-                                                class="bg-green-400 hover:bg-green-500 text-black font-bold py-1.5 px-4 rounded-full shadow">
-                                            Reactivar
-                                        </button>
-                                    </form>
-                                </td>
-                                <td class="py-3">
-                                    <form method="POST"
-                                        action="{{ route('tratamiento.destroy', $tratamiento->id_tratamiento) }}"
-                                        onsubmit="return confirm('¿Eliminar definitivamente este tratamiento archivado?');"
-                                        class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow inline-flex items-center justify-center"
-                                                title="Eliminar">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-1 1v1H4a1 1 0 000 2h12a1 1 0 100-2h-4V3a1 1 0 00-1-1H9zM5 7a1 1 0 011-1h8a1 1 0 011 1v9a2 2 0 01-2 2H7a2 2 0 01-2-2V7zm3 1a1 1 0 10-2 0v8a1 1 0 102 0V8zm4 0a1 1 0 10-2 0v8a1 1 0 102 0V8z" clip-rule="evenodd" />
-                                            </svg>
+                                                class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 sm:py-1.5 px-2 sm:px-4 rounded-full shadow text-xs sm:text-sm">
+                                            Archivar
                                         </button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-4 text-center text-gray-300">No hay tratamientos archivados.</td>
+                                <td colspan="6" class="py-4 text-center text-gray-300 text-xs sm:text-sm">No hay tratamientos activos.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
 
+            <div class="mt-8 sm:mt-10">
+                <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Archivados</h3>
+                
+                <!-- Versión móvil: Cards -->
+                <div class="sm:hidden space-y-3 mb-6">
+                    @forelse ($archivados as $tratamiento)
+                        <div class="bg-gray-700/50 border border-gray-500 rounded-lg p-4 tratamiento-fila fila-archivado">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-white text-sm">{{ Str::limit($tratamiento->causa, 30) }}</h4>
+                                <span class="text-xs bg-gray-600 text-white px-2 py-1 rounded">{{ ucfirst($tratamiento->estado) }}</span>
+                            </div>
+                            <div class="text-xs text-gray-300 mb-3">
+                                <div>Inicio: {{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d/m/Y') }}</div>
+                                <div>Por: {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}</div>
+                            </div>
+                            <div class="flex justify-between items-center space-x-2">
+                                <form method="POST" action="{{ route('tratamiento.reactivar', $tratamiento->id_tratamiento) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit"
+                                            class="bg-green-400 hover:bg-green-500 text-black font-bold py-1 px-3 rounded-full shadow text-xs">
+                                        Reactivar
+                                    </button>
+                                </form>
+                                <form method="POST"
+                                    action="{{ route('tratamiento.destroy', $tratamiento->id_tratamiento) }}"
+                                    onsubmit="return confirm('¿Eliminar definitivamente este tratamiento archivado?');"
+                                    class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow inline-flex items-center justify-center"
+                                            title="Eliminar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-1 1v1H4a1 1 0 000 2h12a1 1 0 100-2h-4V3a1 1 0 00-1-1H9zM5 7a1 1 0 011-1h8a1 1 0 011 1v9a2 2 0 01-2 2H7a2 2 0 01-2-2V7zm3 1a1 1 0 10-2 0v8a1 1 0 102 0V8zm4 0a1 1 0 10-2 0v8a1 1 0 102 0V8z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-8 text-gray-300 text-sm">No hay tratamientos archivados.</div>
+                    @endforelse
+                </div>
+                
+                <!-- Versión desktop: Tabla -->
+                <div class="hidden sm:block">
+                    <table class="w-full text-xs sm:text-sm text-white border border-white">
+                        <thead class="bg-gray-400 text-black uppercase text-center">
+                            <tr>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4">Causa</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4">Estado</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 hidden lg:table-cell">Fecha de inicio</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 hidden md:table-cell">Creado por</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4">Reactivar</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4">Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-tratamientos-archivados" class="text-center">
+                            @forelse ($archivados as $tratamiento)
+                                <tr class="border-t border-white tratamiento-fila fila-archivado">
+                                    <td class="py-2 sm:py-3 px-2">{{ Str::limit($tratamiento->causa, 20) }}</td>
+                                    <td class="py-2 sm:py-3 px-2">{{ ucfirst($tratamiento->estado) }}</td>
+                                    <td class="py-2 sm:py-3 px-2 hidden lg:table-cell">{{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d / m / Y') }}</td>
+                                    <td class="py-2 sm:py-3 px-2 font-semibold hidden md:table-cell">
+                                        {{ Str::limit($tratamiento->usuarioCreador->nombre ?? 'Desconocido', 15) }}
+                                    </td>
+                                    <td class="py-2 sm:py-3 px-2">
+                                        <form method="POST" action="{{ route('tratamiento.reactivar', $tratamiento->id_tratamiento) }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit"
+                                                    class="bg-green-400 hover:bg-green-500 text-black font-bold py-1 sm:py-1.5 px-2 sm:px-4 rounded-full shadow text-xs sm:text-sm">
+                                                Reactivar
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="py-2 sm:py-3 px-2">
+                                        <form method="POST"
+                                            action="{{ route('tratamiento.destroy', $tratamiento->id_tratamiento) }}"
+                                            onsubmit="return confirm('¿Eliminar definitivamente este tratamiento archivado?');"
+                                            class="inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="bg-red-500 hover:bg-red-600 text-white p-1.5 sm:p-2 rounded-full shadow inline-flex items-center justify-center"
+                                                    title="Eliminar">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-1 1v1H4a1 1 0 000 2h12a1 1 0 100-2h-4V3a1 1 0 00-1-1H9zM5 7a1 1 0 011-1h8a1 1 0 011 1v9a2 2 0 01-2 2H7a2 2 0 01-2-2V7zm3 1a1 1 0 10-2 0v8a1 1 0 102 0V8zm4 0a1 1 0 10-2 0v8a1 1 0 102 0V8z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="py-4 text-center text-gray-300">No hay tratamientos archivados.</td>
+                            </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="py-4 text-center text-gray-300 text-xs sm:text-sm">No hay tratamientos archivados.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </div>
 
-        <div class="w-[15%] flex flex-col items-center justify-center gap-6">
+        <!-- Botón flotante para móvil -->
+        <a href="{{ route('tratamiento.create', ['volver_a_index' => 1]) }}"
+           class="fixed bottom-6 right-6 sm:hidden bg-green-400 hover:bg-green-500 text-black rounded-full w-14 h-14 flex items-center justify-center shadow-lg z-20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
+            </svg>
+        </a>
+
+        <!-- Botón lateral para desktop -->
+        <div class="hidden sm:flex w-[15%] flex-col items-center justify-center gap-6">
             <a href="{{ route('tratamiento.create', ['volver_a_index' => 1]) }}"
-               class="bg-green-400 hover:bg-green-500 text-black rounded-full w-20 h-20 flex items-center justify-center shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+               class="bg-green-400 hover:bg-green-500 text-black rounded-full w-16 h-16 lg:w-20 lg:h-20 flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 lg:w-12 lg:h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
                 </svg>
             </a>
