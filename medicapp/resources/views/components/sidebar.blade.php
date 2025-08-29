@@ -2,46 +2,82 @@
     $rol = Auth::user()->rol_global;
 @endphp
 
-<div x-data="{ menuAbierto: window.innerWidth >= 1024 }" 
+<div x-data="{ menuAbierto: false, mobileMenuOpen: false }" 
      x-init="
+        // Para móvil, usar mobileMenuOpen; para desktop, usar menuAbierto
         window.addEventListener('resize', () => {
-            if (window.innerWidth >= 1024) {
-                menuAbierto = true;
-            } else {
-                menuAbierto = false;
+            if (window.innerWidth < 1024) {
+                mobileMenuOpen = false;
             }
         })
      "
      class="relative flex flex-col min-h-screen">
     
-    <!-- Toggle button - responsive -->
+    <!-- Toggle button desktop - igual que antes -->
     <button @click="menuAbierto = !menuAbierto"
-            class="absolute -right-3 top-16 sm:top-20 z-20 bg-yellow-300 text-[#0C1222] rounded-full w-6 h-12 sm:w-8 sm:h-16 flex items-center justify-center shadow hover:bg-yellow-200 transition lg:hidden">
-        <svg :class="{ 'rotate-180': menuAbierto }" class="w-4 h-4 sm:w-6 sm:h-6 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+            class="hidden lg:block absolute -right-3 top-20 z-10 bg-yellow-300 text-[#0C1222] rounded-full w-8 h-16 flex items-center justify-center shadow hover:bg-yellow-200 transition">
+        <svg :class="{ 'rotate-180': menuAbierto }" class="w-6 h-6 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M6.293 14.707a1 1 0 010-1.414L10.586 9 6.293 4.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+    </button>
+
+    <!-- Toggle button móvil -->
+    <button @click="mobileMenuOpen = !mobileMenuOpen"
+            class="lg:hidden absolute -right-3 top-16 sm:top-20 z-20 bg-yellow-300 text-[#0C1222] rounded-full w-6 h-12 sm:w-8 sm:h-16 flex items-center justify-center shadow hover:bg-yellow-200 transition">
+        <svg :class="{ 'rotate-180': mobileMenuOpen }" class="w-4 h-4 sm:w-6 sm:h-6 transition-transform" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M6.293 14.707a1 1 0 010-1.414L10.586 9 6.293 4.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
         </svg>
     </button>
 
     <!-- Overlay para móvil -->
-    <div x-show="menuAbierto" 
+    <div x-show="mobileMenuOpen" 
          x-transition:enter="transition-opacity ease-linear duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
          x-transition:leave="transition-opacity ease-linear duration-300"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         @click="menuAbierto = false"
+         @click="mobileMenuOpen = false"
          class="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
          style="display: none;">
     </div>
 
     <!-- Sidebar -->
-    <aside :class="menuAbierto ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-           class="fixed lg:relative top-0 left-0 z-15 lg:z-auto bg-yellow-200 text-[#0C1222] 
-                  w-64 lg:w-56 h-full transition-transform duration-300 ease-in-out
-                  p-4 sm:p-6 space-y-3 sm:space-y-4 flex flex-col shadow-xl lg:shadow-none">
+    <aside class="bg-yellow-200 text-[#0C1222] transition-all duration-300 overflow-hidden flex flex-col
+                 lg:relative lg:h-full lg:p-6 lg:space-y-4
+                 fixed top-0 left-0 z-15 w-64 h-full p-4 space-y-3 shadow-xl
+                 lg:shadow-none"
+           :class="{
+               // Desktop behavior (pantallas grandes)
+               'lg:w-56': menuAbierto,
+               'lg:w-12': !menuAbierto,
+               // Mobile behavior (pantallas pequeñas)
+               'translate-x-0': mobileMenuOpen,
+               '-translate-x-full': !mobileMenuOpen
+           }">
 
-        <nav class="flex flex-col space-y-3 sm:space-y-4 font-bold text-base sm:text-lg mt-16 lg:mt-0">
+        <!-- Navegación para desktop -->
+        <nav class="hidden lg:flex flex-col space-y-4 font-bold text-lg">
+            <a href="{{ route('dashboard') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Inicio</a>
+            <a href="{{ route('tratamiento.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Tratamientos</a>
+            <a href="{{ route('cita.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Citas</a>
+            <a href="{{ route('perfil.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Perfiles</a>
+
+            @if ($rol === 'premium')
+                <a href="{{ route('informe.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Informes</a>
+            @else
+                <span class="text-gray-400 cursor-not-allowed whitespace-nowrap" x-show="menuAbierto">Informes</span>
+            @endif
+
+            <a href="{{ route('account.edit') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Ajustes</a>
+            <form method="POST" action="{{ route('logout') }}" x-show="menuAbierto" class="mt-8">
+                @csrf
+                <button type="submit" class="text-red-600 hover:underline whitespace-nowrap">SALIR</button>
+            </form>
+        </nav>
+
+        <!-- Navegación para móvil -->
+        <nav class="flex flex-col lg:hidden space-y-3 sm:space-y-4 font-bold text-base sm:text-lg mt-16">
             <a href="{{ route('dashboard') }}" 
                class="hover:text-orange-600 transition-colors p-2 rounded-lg hover:bg-yellow-300">
                 <span class="flex items-center space-x-3">
