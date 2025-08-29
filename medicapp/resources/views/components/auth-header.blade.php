@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const USER_ID = {{ Auth::id() }};
   let menuOpen = false;
   let currentUnreadCount = 0;
+  let currentUnseenCount = 0; // Nuevo: contador de notificaciones no vistas
   let currentMaxId = 0;  
   
   function getStoredValue(key, defaultValue = 0) {
@@ -153,12 +154,13 @@ document.addEventListener('DOMContentLoaded', function () {
   let lastSeenMaxId = getStoredValue(`notif_last_seen_id_${USER_ID}`);  
 
   function applyIndicators() {
-    const hasUnseenUnread = currentUnreadCount > 0 && currentMaxId > lastSeenMaxId && !menuOpen;
+    // Mostrar el número de notificaciones no vistas (nuevas)
+    const hasUnseen = currentUnseenCount > 0 && !menuOpen;
 
-    if (hasUnseenUnread) {
-      badge.textContent = currentUnreadCount;
+    if (hasUnseen) {
+      badge.textContent = currentUnseenCount;
       badge.classList.remove('hidden');
-      document.title = `(${currentUnreadCount}) ${ORIGINAL_TITLE}`;
+      document.title = `(${currentUnseenCount}) ${ORIGINAL_TITLE}`;
     } else {
       badge.textContent = '';
       badge.classList.add('hidden');
@@ -202,6 +204,8 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       const url = new URL('{{ route('notificaciones.index') }}', window.location.origin);
       if (markSeen) url.searchParams.set('mark_seen', '1');
+      // Enviar el último ID visto para calcular notificaciones nuevas
+      url.searchParams.set('last_seen_id', lastSeenMaxId.toString());
 
       const res = await fetch(url.toString(), {
         headers: { 
@@ -213,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       if (!res.ok) {
         currentUnreadCount = 0;
+        currentUnseenCount = 0;
         currentMaxId = 0;
         showEmptyState();
         applyIndicators();
@@ -221,17 +226,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const data = await res.json();
       const unread = Array.isArray(data.unread) ? data.unread : [];
-      const count = data.unread_count || unread.length;
-
-      currentUnreadCount = count;
-      currentMaxId = unread.reduce((mx, n) => Math.max(mx, Number(n.id) || 0), 0);
+      
+      currentUnreadCount = data.unread_count || unread.length;
+      currentUnseenCount = data.unseen_count || 0; // Notificaciones no vistas
+      currentMaxId = data.max_id || 0;
 
       if (menuOpen && currentMaxId > lastSeenMaxId) {
         lastSeenMaxId = currentMaxId;
         setStoredValue(`notif_last_seen_id_${USER_ID}`, lastSeenMaxId);
+        // Al marcar como vistas, resetear el contador de no vistas
+        currentUnseenCount = 0;
       }
 
-      if (count === 0) {
+      if (currentUnreadCount === 0) {
         showEmptyState();
       } else {
         showLists();
@@ -239,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       applyIndicators();
-      return { count, items: unread };
+      return { count: currentUnreadCount, items: unread };
     } catch (e) {
       console.error('Error fetching notifications:', e);
       return { count: currentUnreadCount, items: [] };
@@ -289,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const ok = await marcarTodasSilencioso();
       if (ok) {
         currentUnreadCount = 0;
+        currentUnseenCount = 0; // También resetear las no vistas
 
         lastSeenMaxId = Math.max(lastSeenMaxId, currentMaxId);
         setStoredValue(`notif_last_seen_id_${USER_ID}`, lastSeenMaxId);

@@ -97,8 +97,16 @@ class NotificacionController extends Controller
             ->orderByDesc('ts_programada')
             ->get();
 
+        // Obtener el último ID visto desde la petición
+        $lastSeenId = (int) $request->input('last_seen_id', 0);
+        
+        // Contar solo las notificaciones nuevas (no vistas)
+        $nuevas = $noLeidas->filter(fn($n) => $n->id_notif > $lastSeenId);
+
         return response()->json([
             'unread_count' => $noLeidas->count(),
+            'unseen_count' => $nuevas->count(), // Nuevo campo para notificaciones no vistas
+            'max_id' => $noLeidas->max('id_notif') ?? 0,
             'unread' => $noLeidas->map(fn($n) => [
                 'id'     => $n->id_notif,
                 'titulo' => $n->titulo,
