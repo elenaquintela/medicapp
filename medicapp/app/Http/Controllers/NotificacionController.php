@@ -97,29 +97,14 @@ class NotificacionController extends Controller
             ->orderByDesc('ts_programada')
             ->get();
 
-        $badgeQuery = \App\Models\Notificacion::where('id_usuario_dest', $usuario->id_usuario)
-            ->whereIn('categoria', ['toma', 'cita'])
-            ->whereIn('id_perfil', $perfilIds)
-            ->where('leida', 0);
-
-        if (!empty($usuario->notif_last_seen)) {
-            $lastSeenUtc = $usuario->notif_last_seen->copy()->setTimezone('UTC');
-            $badgeQuery->where('ts_creacion', '>', $lastSeenUtc);
-        }
-
-        $badgeCount = $badgeQuery->count();
-
-
         return response()->json([
             'unread_count' => $noLeidas->count(),
-            'badge_count'  => $badgeCount,
             'unread' => $noLeidas->map(fn($n) => [
                 'id'     => $n->id_notif,
                 'titulo' => $n->titulo,
                 'msg'    => $n->mensaje,
                 'hora'   => \Carbon\Carbon::parse($n->ts_programada, $tz)->format('H:i'),
             ]),
-            'recent' => [],
         ]);
     }
 
@@ -151,15 +136,4 @@ class NotificacionController extends Controller
         abort_unless($n->id_usuario_dest === $usuario->id_usuario, 403);
     }
 
-    public function marcarVistas()
-    {
-        /** @var \App\Models\Usuario $usuario */
-        $usuario = Auth::user();
-
-        $usuario->forceFill([
-            'notif_last_seen' => now('UTC'),
-        ])->save();
-
-        return response()->noContent();
-    }
 }

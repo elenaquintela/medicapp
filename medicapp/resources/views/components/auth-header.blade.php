@@ -127,24 +127,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const ORIGINAL_TITLE = document.title;
   let menuOpen = false;
-  let currentUnreadCount = 0;
-  let currentBadgeCount = 0; 
+  let currentUnread = 0;
 
+  const USER_ID = '{{ Auth::id() }}';
+  const BASELINE_KEY = `notifBaseline:${USER_ID}`;
+  function getBaseline() {
+    const raw = localStorage.getItem(BASELINE_KEY);
+    const n = Number(raw);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  }
+  function setBaseline(n) {
+    localStorage.setItem(BASELINE_KEY, String(Math.max(0, Number(n) || 0)));
+  }
+
+  if (localStorage.getItem(BASELINE_KEY) === null) setBaseline(0);
 
   function applyIndicators() {
-    const hasUnseen = currentBadgeCount > 0 && !menuOpen;
+    const baseline = getBaseline();
+    const newCount = Math.max(currentUnread - baseline, 0);
 
-    if (hasUnseen) {
-      badge.textContent = currentBadgeCount;
+    if (!menuOpen && newCount > 0) {
+      badge.textContent = newCount;
       badge.classList.remove('hidden');
-      document.title = `(${currentBadgeCount}) ${ORIGINAL_TITLE}`;
+      document.title = `(${newCount}) ${ORIGINAL_TITLE}`;
     } else {
       badge.textContent = '';
       badge.classList.add('hidden');
       document.title = ORIGINAL_TITLE;
     }
   }
-
 
   function showEmptyState() {
     if (emptyBox) emptyBox.classList.remove('hidden');
@@ -187,8 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       if (!res.ok) {
-        currentUnreadCount = 0;
-        currentBadgeCount = 0;
+        currentUnread = 0;
         showEmptyState();
         applyIndicators();
         return { count: 0, items: [] };
@@ -196,12 +206,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const data = await res.json();
       const unread = Array.isArray(data.unread) ? data.unread : [];
-      const count = Number(data.unread_count ?? unread.length) || 0;
+      currentUnread = Number(data.unread_count ?? unread.length) || 0;
 
-      currentUnreadCount = count;
-      currentBadgeCount  = Number(data.badge_count ?? 0) || 0;
-
-      if (count === 0) {
+      if (currentUnread === 0) {
         showEmptyState();
       } else {
         showLists();
@@ -209,10 +216,9 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       applyIndicators();
-      return { count, items: unread };
+      return { count: currentUnread, items: unread };
     } catch {
-      currentUnreadCount = 0;
-      currentBadgeCount = 0;
+      currentUnread = 0;
       showEmptyState();
       applyIndicators();
       return { count: 0, items: [] };
@@ -226,38 +232,28 @@ document.addEventListener('DOMContentLoaded', function () {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-        }
+        },
+        credentials: 'same-origin',
       });
       return res.ok;
     } catch { return false; }
   }
 
-bell.addEventListener('click', async () => {
-  const willOpen = menu.classList.contains('hidden');
-  menu.classList.toggle('hidden');
-  menuOpen = willOpen;
+  bell.addEventListener('click', async () => {
+    const willOpen = menu.classList.contains('hidden');
+    menu.classList.toggle('hidden');
+    menuOpen = willOpen;
 
-  if (willOpen) {
-    await fetchData();
-    try {
-      await fetch(`{{ route('notificaciones.visto') }}`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-        },
-        credentials: 'same-origin',
-      });
-    } catch {}
-    currentBadgeCount = 0;
-    applyIndicators();
+    if (willOpen) {
+      const { count } = await fetchData();
+      setBaseline(count);
+      applyIndicators();
+    } else {
+      fetchData();
+    }
+  });
 
-  } else {
-    fetchData();
-  }
-});
-
+ 
   document.addEventListener('click', (e) => {
     if (!menu.contains(e.target) && !bell.contains(e.target)) {
       if (!menu.classList.contains('hidden')) {
@@ -268,25 +264,25 @@ bell.addEventListener('click', async () => {
     }
   });
 
+
   if (markAllBtn) {
     markAllBtn.addEventListener('click', async () => {
       const ok = await marcarTodasSilencioso();
       if (ok) {
-        // Refrescamos desde backend (badge_count y lista) para evitar estados raros
-        await fetchData();
-        // Garantiza que el badge desaparezca ya
-        currentBadgeCount = 0;
+        const { count } = await fetchData(); 
+        setBaseline(count);                  
         applyIndicators();
       }
     });
   }
 
-
+ 
   fetchData();
-  const POLL_MS = 10000; 
+  const POLL_MS = 10000;
   setInterval(fetchData, POLL_MS);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) fetchData(); });
   window.addEventListener('online', fetchData);
 });
 </script>
 @endpush
+
