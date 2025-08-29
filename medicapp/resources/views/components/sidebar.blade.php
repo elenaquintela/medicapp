@@ -2,7 +2,7 @@
     $rol = Auth::user()->rol_global;
 @endphp
 
-<div x-data="{ menuAbierto: false, mobileMenuOpen: false }" 
+<div x-data="{ menuAbierto: true, mobileMenuOpen: false }" 
      x-init="
         // Para móvil, usar mobileMenuOpen; para desktop, usar menuAbierto
         window.addEventListener('resize', () => {
@@ -58,19 +58,27 @@
 
         <!-- Navegación para desktop -->
         <nav class="hidden lg:flex flex-col space-y-4 font-bold text-lg">
-            <a href="{{ route('dashboard') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Inicio</a>
-            <a href="{{ route('tratamiento.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Tratamientos</a>
-            <a href="{{ route('cita.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Citas</a>
-            <a href="{{ route('perfil.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Perfiles</a>
+            <a href="{{ route('dashboard') }}" class="hover:text-orange-600 whitespace-nowrap" 
+               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Inicio</a>
+            <a href="{{ route('tratamiento.index') }}" class="hover:text-orange-600 whitespace-nowrap"
+               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Tratamientos</a>
+            <a href="{{ route('cita.index') }}" class="hover:text-orange-600 whitespace-nowrap"
+               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Citas</a>
+            <a href="{{ route('perfil.index') }}" class="hover:text-orange-600 whitespace-nowrap"
+               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Perfiles</a>
 
             @if ($rol === 'premium')
-                <a href="{{ route('informe.index') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Informes</a>
+                <a href="{{ route('informe.index') }}" class="hover:text-orange-600 whitespace-nowrap"
+                   :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Informes</a>
             @else
-                <span class="text-gray-400 cursor-not-allowed whitespace-nowrap" x-show="menuAbierto">Informes</span>
+                <span class="text-gray-400 cursor-not-allowed whitespace-nowrap"
+                      :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Informes</span>
             @endif
 
-            <a href="{{ route('account.edit') }}" class="hover:text-orange-600 whitespace-nowrap" x-show="menuAbierto">Ajustes</a>
-            <form method="POST" action="{{ route('logout') }}" x-show="menuAbierto" class="mt-8">
+            <a href="{{ route('account.edit') }}" class="hover:text-orange-600 whitespace-nowrap"
+               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Ajustes</a>
+            <form method="POST" action="{{ route('logout') }}" class="mt-8"
+                  :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">
                 @csrf
                 <button type="submit" class="text-red-600 hover:underline whitespace-nowrap">SALIR</button>
             </form>
