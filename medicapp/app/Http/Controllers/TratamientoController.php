@@ -72,28 +72,29 @@ class TratamientoController extends Controller
 
     public function index()
     {
-        /** @var \App\Models\Usuario $usuario */
-        $usuario = Auth::user();
-        $perfilActivo = $usuario->perfilActivo;
-
-        $tratamientos = collect();
-
-        if ($perfilActivo) {
-            $query = $perfilActivo->tratamientos()->with('usuarioCreador');
-
-            if ($busqueda = request('busqueda')) {
-                $query->where(function ($q) use ($busqueda) {
-                    $q->where('causa', 'like', "%{$busqueda}%")
-                        ->orWhere('estado', 'like', "%{$busqueda}%")
-                        ->orWhereDate('fecha_inicio', $busqueda)
-                        ->orWhereHas('usuarioCreador', function ($subquery) use ($busqueda) {
-                            $subquery->where('nombre', 'like', "%{$busqueda}%");
-                        });
-                });
+        try {
+            /** @var \App\Models\Usuario $usuario */
+            $usuario = Auth::user();
+            
+            if (!$usuario) {
+                return response('Usuario no encontrado', 500);
             }
-            $tratamientos = $query->get();
+            
+            $perfilActivo = $usuario->perfilActivo;
+            
+            if (!$perfilActivo) {
+                // Si no hay perfil activo, mostrar página vacía
+                $tratamientos = collect();
+                return view('tratamiento.index', compact('tratamientos'));
+            }
+
+            $tratamientos = $perfilActivo->tratamientos()->with('usuarioCreador')->get();
+            
+            return view('tratamiento.index', compact('tratamientos'));
+            
+        } catch (\Exception $e) {
+            return response('Error en TratamientoController: ' . $e->getMessage() . ' en línea ' . $e->getLine(), 500);
         }
-        return view('tratamiento.index', compact('tratamientos'));
     }
 
     public function show(Tratamiento $tratamiento)
