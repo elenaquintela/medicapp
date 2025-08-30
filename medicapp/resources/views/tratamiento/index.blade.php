@@ -33,24 +33,32 @@
                 @forelse ($activos as $tratamiento)
                     <div class="bg-gray-800/50 border border-gray-600 rounded-lg p-4 tratamiento-fila fila-activo">
                         <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-semibold text-white text-sm">{{ Str::limit($tratamiento->causa, 30) }}</h4>
-                            <span class="text-xs bg-green-600 text-white px-2 py-1 rounded">{{ ucfirst($tratamiento->estado) }}</span>
+                            <h4 class="font-semibold text-white text-base">{{ Str::limit($tratamiento->causa, 30) }}</h4>
                         </div>
-                        <div class="text-xs text-gray-300 mb-2">
+                        <div class="text-sm text-gray-300 mb-2">
                             <div>Inicio: {{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d/m/Y') }}</div>
                             <div>Por: {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}</div>
                         </div>
-                        <div class="flex justify-between items-center">
+                        <div class="flex justify-between items-center space-x-2">
                             <a href="{{ route('tratamiento.show', $tratamiento->id_tratamiento) }}" 
-                               class="text-blue-400 hover:text-blue-300 text-xs">Ver detalles</a>
-                            <button onclick="archivarTratamiento({{ $tratamiento->id_tratamiento }})" 
-                                    class="text-red-400 hover:text-red-300 text-xs">Archivar</button>
+                               class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded-full shadow text-sm">
+                                Ver detalles
+                            </a>
+                            <form method="POST" action="{{ route('tratamiento.archivar', $tratamiento->id_tratamiento) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit"
+                                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded-full shadow text-sm">
+                                    Archivar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-8 text-gray-300 text-sm">No hay tratamientos activos.</div>
+                    <div class="text-center py-8 text-gray-300 text-base">No hay tratamientos activos.</div>
                 @endforelse
             </div>
+
             
             <!-- Versión desktop: Tabla -->
             <div class="hidden sm:block">
@@ -103,46 +111,46 @@
                 <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Archivados</h3>
                 
                 <!-- Versión móvil: Cards -->
-                <div class="sm:hidden space-y-3 mb-6">
-                    @forelse ($archivados as $tratamiento)
-                        <div class="bg-gray-700/50 border border-gray-500 rounded-lg p-4 tratamiento-fila fila-archivado">
-                            <div class="flex justify-between items-start mb-2">
-                                <h4 class="font-semibold text-white text-sm">{{ Str::limit($tratamiento->causa, 30) }}</h4>
-                                <span class="text-xs bg-gray-600 text-white px-2 py-1 rounded">{{ ucfirst($tratamiento->estado) }}</span>
-                            </div>
-                            <div class="text-xs text-gray-300 mb-3">
-                                <div>Inicio: {{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d/m/Y') }}</div>
-                                <div>Por: {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}</div>
-                            </div>
-                            <div class="flex justify-between items-center space-x-2">
-                                <form method="POST" action="{{ route('tratamiento.reactivar', $tratamiento->id_tratamiento) }}">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit"
-                                            class="bg-green-400 hover:bg-green-500 text-black font-bold py-1 px-3 rounded-full shadow text-xs">
-                                        Reactivar
-                                    </button>
-                                </form>
-                                <form method="POST"
-                                    action="{{ route('tratamiento.destroy', $tratamiento->id_tratamiento) }}"
-                                    onsubmit="return confirm('¿Eliminar definitivamente este tratamiento archivado?');"
-                                    class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                            class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow inline-flex items-center justify-center"
-                                            title="Eliminar">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-1 1v1H4a1 1 0 000 2h12a1 1 0 100-2h-4V3a1 1 0 00-1-1H9zM5 7a1 1 0 011-1h8a1 1 0 011 1v9a2 2 0 01-2 2H7a2 2 0 01-2-2V7zm3 1a1 1 0 10-2 0v8a1 1 0 102 0V8zm4 0a1 1 0 10-2 0v8a1 1 0 102 0V8z" clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
+            <div class="sm:hidden space-y-3 mb-6">
+                @forelse ($archivados as $tratamiento)
+                    <div class="bg-gray-700/50 border border-gray-500 rounded-lg p-4 tratamiento-fila fila-archivado">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-white text-base">{{ Str::limit($tratamiento->causa, 30) }}</h4>
                         </div>
-                    @empty
-                        <div class="text-center py-8 text-gray-300 text-sm">No hay tratamientos archivados.</div>
-                    @endforelse
-                </div>
+                        <div class="text-sm text-gray-300 mb-3">
+                            <div>Inicio: {{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d/m/Y') }}</div>
+                            <div>Por: {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}</div>
+                        </div>
+                        <div class="flex justify-between items-center space-x-2">
+                            <form method="POST" action="{{ route('tratamiento.reactivar', $tratamiento->id_tratamiento) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit"
+                                        class="bg-green-400 hover:bg-green-500 text-black font-bold py-1 px-3 rounded-full shadow text-sm">
+                                    Reactivar
+                                </button>
+                            </form>
+                            <form method="POST"
+                                action="{{ route('tratamiento.destroy', $tratamiento->id_tratamiento) }}"
+                                onsubmit="return confirm('¿Eliminar definitivamente este tratamiento archivado?');"
+                                class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow inline-flex items-center justify-center"
+                                        title="Eliminar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-1 1v1H4a1 1 0 000 2h12a1 1 0 100-2h-4V3a1 1 0 00-1-1H9zM5 7a1 1 0 011-1h8a1 1 0 011 1v9a2 2 0 01-2 2H7a2 2 0 01-2-2V7zm3 1a1 1 0 10-2 0v8a1 1 0 102 0V8zm4 0a1 1 0 10-2 0v8a1 1 0 102 0V8z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-8 text-gray-300 text-base">No hay tratamientos archivados.</div>
+                @endforelse
+            </div>
+
                 
                 <!-- Versión desktop: Tabla -->
                 <div class="hidden sm:block">
@@ -279,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (texto && !coincide && contenido.includes(texto)) coincide = true;
           }
         } else {
-          if (texto && contenido.includes(texto)) coincide = true;
+            if (texto && contenido.includes(texto)) coincide = true;
         }
       });
 
