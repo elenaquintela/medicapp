@@ -8,6 +8,30 @@ use App\Models\Tratamiento;
 
 class TratamientoController extends Controller
 {
+    public function index()
+    {
+        $usuario = Auth::user();
+        $perfilActivo = $usuario->perfilActivo;
+
+        $tratamientos = collect();
+
+        if ($perfilActivo) {
+            $query = $perfilActivo->tratamientos()->with('usuarioCreador');
+
+            if ($busqueda = request('busqueda')) {
+                $query->where(function ($q) use ($busqueda) {
+                    $q->where('causa', 'like', "%{$busqueda}%")
+                        ->orWhere('estado', 'like', "%{$busqueda}%")
+                        ->orWhereDate('fecha_inicio', $busqueda)
+                        ->orWhereHas('usuarioCreador', function ($subquery) use ($busqueda) {
+                            $subquery->where('nombre', 'like', "%{$busqueda}%");
+                        });
+                });
+            }
+            $tratamientos = $query->get();
+        }
+        return view('tratamiento.index', compact('tratamientos'));
+    }
     public function create()
     {
         /** @var \App\Models\Usuario $usuario */
@@ -70,30 +94,7 @@ class TratamientoController extends Controller
         return redirect()->route('medicacion.create', $params);
     }
 
-    public function index()
-    {
-        $usuario = Auth::user();
-        $perfilActivo = $usuario->perfilActivo;
-
-        $tratamientos = collect();
-
-        if ($perfilActivo) {
-            $query = $perfilActivo->tratamientos()->with('usuarioCreador');
-
-            if ($busqueda = request('busqueda')) {
-                $query->where(function ($q) use ($busqueda) {
-                    $q->where('causa', 'like', "%{$busqueda}%")
-                        ->orWhere('estado', 'like', "%{$busqueda}%")
-                        ->orWhereDate('fecha_inicio', $busqueda)
-                        ->orWhereHas('usuarioCreador', function ($subquery) use ($busqueda) {
-                            $subquery->where('nombre', 'like', "%{$busqueda}%");
-                        });
-                });
-            }
-            $tratamientos = $query->get();
-        }
-        return view('tratamiento.index', compact('tratamientos'));
-    }
+    
 
     public function show(Tratamiento $tratamiento)
     {
