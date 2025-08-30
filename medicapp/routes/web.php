@@ -106,7 +106,7 @@ Route::middleware('auth')->group(function () {
     // Tratamiento
     Route::get('/tratamiento/create', [TratamientoController::class, 'create'])->name('tratamiento.create');
     Route::post('/tratamiento', [TratamientoController::class, 'store'])->name('tratamiento.store');
-    Route::get('/tratamiento', [TratamientoController::class, 'index'])->name('tratamiento.index');
+    Route::get('/tratamientos', [TratamientoController::class, 'index'])->name('tratamiento.index');
     Route::get('/tratamiento/{tratamiento}', [TratamientoController::class, 'show'])->name('tratamiento.show');
     Route::put('/tratamiento/{tratamiento}/archivar', [TratamientoController::class, 'archivar'])->name('tratamiento.archivar');
     Route::delete('/tratamiento/{tratamiento}', [TratamientoController::class, 'destroy'])->name('tratamiento.destroy');
