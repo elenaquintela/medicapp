@@ -87,6 +87,14 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 
 - Facer a vista principal / de Login
 
+
+
+**Despregamento**
+
+- Rexistrarse en Railway 
+- Facer un mirroring repository en Github para enlazalo con Railway
+- Importar a base de datos a MySQL Workbench 
+
 ### Fase 5: Manuais do proxecto
 
 Descrición das tarefas a realizar, duración e recursos necesarios.
