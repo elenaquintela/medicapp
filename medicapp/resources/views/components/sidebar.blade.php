@@ -2,7 +2,7 @@
     $rol = Auth::user()->rol_global;
 @endphp
 
-<div x-data="{ menuAbierto: true, mobileMenuOpen: false }" 
+<div x-data="{ menuAbierto: false, mobileMenuOpen: false }" 
      x-init="
         // Para móvil, usar mobileMenuOpen; para desktop, usar menuAbierto
         window.addEventListener('resize', () => {
@@ -51,37 +51,31 @@
                // Desktop behavior (pantallas grandes)
                'lg:w-56': menuAbierto,
                'lg:w-12': !menuAbierto,
-               // Mobile behavior (pantallas pequeñas)
+               // Mobile behavior (pantallas pequeñas) - siempre colapsado inicialmente
                'translate-x-0': mobileMenuOpen,
                '-translate-x-full': !mobileMenuOpen
            }">
 
         <!-- Navegación para desktop -->
         <nav class="hidden lg:flex flex-col space-y-4 font-bold text-lg">
-            <a href="{{ route('dashboard') }}" class="hover:text-orange-600 whitespace-nowrap" 
-               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Inicio</a>
-            <a href="{{ route('tratamiento.index') }}" class="hover:text-orange-600 whitespace-nowrap"
-               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Tratamientos</a>
-            <a href="{{ route('cita.index') }}" class="hover:text-orange-600 whitespace-nowrap"
-               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Citas</a>
-            <a href="{{ route('perfil.index') }}" class="hover:text-orange-600 whitespace-nowrap"
-               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Perfiles</a>
+            <div x-show="menuAbierto" x-transition class="space-y-4 flex flex-col">
+                <a href="{{ route('dashboard') }}" class="hover:text-orange-600 whitespace-nowrap">Inicio</a>
+                <a href="{{ route('tratamiento.index') }}" class="hover:text-orange-600 whitespace-nowrap">Tratamientos</a>
+                <a href="{{ route('cita.index') }}" class="hover:text-orange-600 whitespace-nowrap">Citas</a>
+                <a href="{{ route('perfil.index') }}" class="hover:text-orange-600 whitespace-nowrap">Perfiles</a>
 
-            @if ($rol === 'premium')
-                <a href="{{ route('informe.index') }}" class="hover:text-orange-600 whitespace-nowrap"
-                   :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Informes</a>
-            @else
-                <span class="text-gray-400 cursor-not-allowed whitespace-nowrap"
-                      :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Informes</span>
-            @endif
+                @if ($rol === 'premium')
+                    <a href="{{ route('informe.index') }}" class="hover:text-orange-600 whitespace-nowrap">Informes</a>
+                @else
+                    <span class="text-gray-400 cursor-not-allowed whitespace-nowrap">Informes</span>
+                @endif
 
-            <a href="{{ route('account.edit') }}" class="hover:text-orange-600 whitespace-nowrap"
-               :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">Ajustes</a>
-            <form method="POST" action="{{ route('logout') }}" class="mt-8"
-                  :class="{ 'opacity-0 pointer-events-none': !menuAbierto }">
-                @csrf
-                <button type="submit" class="text-red-600 hover:underline whitespace-nowrap">SALIR</button>
-            </form>
+                <a href="{{ route('account.edit') }}" class="hover:text-orange-600 whitespace-nowrap">Ajustes</a>
+                <form method="POST" action="{{ route('logout') }}" class="mt-8">
+                    @csrf
+                    <button type="submit" class="text-red-600 hover:underline whitespace-nowrap">SALIR</button>
+                </form>
+            </div>
         </nav>
 
         <!-- Navegación para móvil -->

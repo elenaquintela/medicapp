@@ -26,7 +26,7 @@
         </div>
 
         <div class="w-full lg:w-1/2 p-6 sm:p-8 lg:p-12 flex flex-col justify-center border-t-4 lg:border-t-0 lg:border-l-4 border-yellow-300 lg:rounded-r-lg">
-            <h2 class="text-lg sm:text-xl text-center mb-1">¿Ya tiene una cuenta?</h2>
+            <h2 class="text-lg sm:text-xl text-center mb-1">¿Ya tienes una cuenta?</h2>
             <h3 class="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">Iniciar sesión</h3>
 
             <form method="POST" action="{{ route('login') }}" class="space-y-3 sm:space-y-4">
