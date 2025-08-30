@@ -56,18 +56,19 @@
                         </div>
                     </form>
 
-                    <div class="mt-8 flex items-center justify-center gap-4">
+                    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                         <button form="form-perfil"
-                                class="bg-green-500 hover:bg-green-600 text-black font-bold px-6 py-3 rounded-full shadow">
+                                class="bg-green-500 hover:bg-green-600 text-black font-bold w-full sm:w-auto px-3 py-2 sm:px-6 sm:py-3 rounded-full shadow text-sm sm:text-base">
                             Guardar cambios
                         </button>
 
                         <form method="POST" action="{{ route('perfil.destroy', $perfilActivo->id_perfil) }}"
-                              onsubmit="return confirm('¿Está seguro de que desea eliminar este perfil? Esta acción no se puede deshacer.');">
+                            onsubmit="return confirm('¿Está seguro de que desea eliminar este perfil? Esta acción no se puede deshacer.');"
+                            class="w-full sm:w-auto">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                                    class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-full shadow">
+                                    class="bg-red-600 hover:bg-red-700 text-white font-bold w-full sm:w-auto px-3 py-2 sm:px-6 sm:py-3 rounded-full shadow text-sm sm:text-base">
                                 Eliminar perfil
                             </button>
                         </form>
@@ -128,10 +129,10 @@
                     </div>
 
                     @if($esPremium && $esPropietario)
-                        <form method="POST" action="{{ route('perfil.invitaciones.store', $perfilActivo->id_perfil) }}" class="flex gap-3 items-center">
+                        <form method="POST" action="{{ route('perfil.invitaciones.store', $perfilActivo->id_perfil) }}" class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
                             @csrf
                             <input type="email" name="email" placeholder="correo@ejemplo.com" class="flex-1 px-4 py-2 rounded text-black" required>
-                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-black font-bold px-4 py-2 rounded-full">Invitar</button>
+                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-black font-bold w-full sm:w-auto px-4 py-2 rounded-full">Invitar</button>
                         </form>
 
                         @error('email') <p class="text-red-400 mt-3">{{ $message }}</p> @enderror

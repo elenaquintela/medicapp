@@ -13,13 +13,17 @@
     </a>
 
     <!-- Controles del usuario - reorganizados para móvil -->
-    <div class="flex items-center space-x-2 sm:space-x-4 lg:space-x-6">
+    <div class="flex items-center space-x-2 sm:space-x-4 lg:space-x-6 min-w-0">
         <!-- Dropdown de perfiles -->
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
-                <button class="bg-yellow-300 text-[#0C1222] font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-full shadow hover:bg-yellow-200 transition inline-flex items-center text-xs sm:text-sm">
-                    <span class="hidden sm:inline">{{ $perfilActivo->nombre_paciente ?? 'Perfil actual' }}</span>
-                    <span class="sm:hidden">{{ Str::limit($perfilActivo->nombre_paciente ?? 'Perfil', 8, '') }}</span>
+                <button class="bg-yellow-300 text-[#0C1222] font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-full shadow hover:bg-yellow-200 transition inline-flex items-center text-xs sm:text-sm max-w-[45vw] md:max-w-[32rem] min-w-0">
+                    <span class="hidden sm:inline block min-w-0 truncate">{{ $perfilActivo->nombre_paciente ?? 'Perfil actual' }}</span>
+                    <span
+                        class="sm:hidden block min-w-0 truncate"
+                        title="{{ $perfilActivo->nombre_paciente ?? 'Perfil' }}">
+                        {{ $perfilActivo->nombre_paciente ?? 'Perfil' }}
+                    </span>
                     <svg class="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0l-4.25-4.25a.75.75 0 01.02-1.06z"/>
                     </svg>
