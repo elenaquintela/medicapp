@@ -77,47 +77,47 @@
                 <ul data-bell-list-recent class="max-h-32 sm:max-h-40 overflow-auto divide-y divide-gray-800"></ul>
             </div>
         </div>
-    </div>
 
-    <!-- Dropdown de usuario - solo visible en desktop -->
-    @php
-        $user = Auth::user();
-        $isPremium = $user->rol_global === 'premium';
-    @endphp
+        <!-- Dropdown de usuario - solo visible en desktop -->
+        @php
+            $user = Auth::user();
+            $isPremium = $user->rol_global === 'premium';
+        @endphp
 
-    <div class="hidden sm:block">
-        <x-dropdown align="right" width="48">
-            <x-slot name="trigger">
-                <button
-                    class="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 border border-transparent rounded-full shadow transition text-xs sm:text-sm
-                    {{ $isPremium ? 'bg-[#7fb0dd] text-white hover:bg-[#6aa1d0]' : 'bg-yellow-300 text-[#0C1222] hover:bg-yellow-200' }}">
-                    <span class="font-bold mr-1 sm:mr-2 hidden sm:inline">{{ $user->nombre ?? $user->name }}</span>
-                    <span class="font-bold mr-1 sm:hidden">{{ Str::limit($user->nombre ?? $user->name, 6, '') }}</span>
-                    <span class="text-xs sm:text-sm font-semibold {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}">
-                        {{ ucfirst($user->rol_global) }}
-                    </span>
-                    <svg class="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4 {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-            </x-slot>
+        <div class="hidden sm:block">
+            <x-dropdown align="right" width="48">
+                <x-slot name="trigger">
+                    <button
+                        class="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 border border-transparent rounded-full shadow transition text-xs sm:text-sm
+                        {{ $isPremium ? 'bg-[#7fb0dd] text-white hover:bg-[#6aa1d0]' : 'bg-yellow-300 text-[#0C1222] hover:bg-yellow-200' }}">
+                        <span class="font-bold mr-1 sm:mr-2 hidden sm:inline">{{ $user->nombre ?? $user->name }}</span>
+                        <span class="font-bold mr-1 sm:hidden">{{ Str::limit($user->nombre ?? $user->name, 6, '') }}</span>
+                        <span class="text-xs sm:text-sm font-semibold {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}">
+                            {{ ucfirst($user->rol_global) }}
+                        </span>
+                        <svg class="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4 {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </x-slot>
 
-            <x-slot name="content">
-                <x-dropdown-link :href="route('account.edit')">
-                    Cuenta
-                </x-dropdown-link>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-dropdown-link href="{{ route('logout') }}"
-                                     onclick="event.preventDefault(); this.closest('form').submit();">
-                        Salir
+                <x-slot name="content">
+                    <x-dropdown-link :href="route('account.edit')">
+                        Cuenta
                     </x-dropdown-link>
-                </form>
-            </x-slot>
-        </x-dropdown>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-dropdown-link href="{{ route('logout') }}"
+                                         onclick="event.preventDefault(); this.closest('form').submit();">
+                            Salir
+                        </x-dropdown-link>
+                    </form>
+                </x-slot>
+            </x-dropdown>
+        </div>
     </div>
 </header>
 
