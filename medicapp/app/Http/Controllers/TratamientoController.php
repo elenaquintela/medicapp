@@ -31,8 +31,13 @@ class TratamientoController extends Controller
             }
             $tratamientos = $query->get();
         }
-        return view('tratamiento.index', compact('tratamientos'));
+        return view('tratamiento.index', [
+            'perfilesUsuario' => $usuario->perfiles,
+            'perfilActivo' => $perfilActivo,
+            'tratamientos' => $tratamientos
+        ]);
     }
+
     public function create()
     {
         /** @var \App\Models\Usuario $usuario */
