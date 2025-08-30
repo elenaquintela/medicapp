@@ -72,27 +72,42 @@ class TratamientoController extends Controller
 
     public function index()
     {
-        $usuario = Auth::user();
-        $perfilActivo = $usuario->perfilActivo;
-
-        $tratamientos = collect();
-
-        if ($perfilActivo) {
-            $query = $perfilActivo->tratamientos()->with('usuarioCreador');
-
-            if ($busqueda = request('busqueda')) {
-                $query->where(function ($q) use ($busqueda) {
-                    $q->where('causa', 'like', "%{$busqueda}%")
-                        ->orWhere('estado', 'like', "%{$busqueda}%")
-                        ->orWhereDate('fecha_inicio', $busqueda)
-                        ->orWhereHas('usuarioCreador', function ($subquery) use ($busqueda) {
-                            $subquery->where('nombre', 'like', "%{$busqueda}%");
-                        });
-                });
+        try {
+            $usuario = Auth::user();
+            
+            // Debug: verificar si el usuario existe
+            if (!$usuario) {
+                return response('Usuario no autenticado', 500);
             }
-            $tratamientos = $query->get();
+            
+            $perfilActivo = $usuario->perfilActivo;
+            
+            // Debug: verificar el perfil activo
+            if (!$perfilActivo) {
+                return response('No hay perfil activo - Session ID: ' . session('perfil_activo_id'), 500);
+            }
+
+            $tratamientos = collect();
+
+            if ($perfilActivo) {
+                $query = $perfilActivo->tratamientos()->with('usuarioCreador');
+
+                if ($busqueda = request('busqueda')) {
+                    $query->where(function ($q) use ($busqueda) {
+                        $q->where('causa', 'like', "%{$busqueda}%")
+                            ->orWhere('estado', 'like', "%{$busqueda}%")
+                            ->orWhereDate('fecha_inicio', $busqueda)
+                            ->orWhereHas('usuarioCreador', function ($subquery) use ($busqueda) {
+                                $subquery->where('nombre', 'like', "%{$busqueda}%");
+                            });
+                    });
+                }
+                $tratamientos = $query->get();
+            }
+            return view('tratamiento.index', compact('tratamientos'));
+        } catch (\Exception $e) {
+            return response('Error: ' . $e->getMessage() . ' - Line: ' . $e->getLine() . ' - File: ' . $e->getFile(), 500);
         }
-        return view('tratamiento.index', compact('tratamientos'));
     }
 
     public function show(Tratamiento $tratamiento)
