@@ -10,6 +10,7 @@ class TratamientoController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\Usuario $usuario */
         $usuario = Auth::user();
         $perfilActivo = $usuario->perfilActivo;
 
