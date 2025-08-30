@@ -197,7 +197,6 @@
                             <tr>
                                 <td colspan="6" class="py-4 text-center text-gray-300">No hay tratamientos archivados.</td>
                             </tr>
-                            @empty
                                 <tr>
                                     <td colspan="6" class="py-4 text-center text-gray-300 text-xs sm:text-sm">No hay tratamientos archivados.</td>
                                 </tr>
