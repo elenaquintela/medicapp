@@ -5,11 +5,11 @@
     $rol = $usuario->rol_global;
 @endphp
 
-<header class="bg-[#0C1222] text-white py-3 sm:py-4 px-3 sm:px-6 flex items-center justify-between shadow-md">
+<header class="bg-[#0C1222] text-white py-5 sm:py-4 px-3 sm:px-6 flex items-center justify-between shadow-md">
     <!-- Logo y nombre de la app - siempre a la izquierda -->
     <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center space-x-2 sm:space-x-3 hover:opacity-90 transition">
         <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-12 sm:w-16 lg:w-20 h-auto">
-        <span class="text-xl sm:text-2xl lg:text-4xl font-bold text-white">MedicApp</span>
+        <span class="text-2xl sm:text-5xl lg:text-5xl font-bold text-white">MedicApp</span>
     </a>
 
     <!-- Controles del usuario - reorganizados para móvil -->
@@ -17,14 +17,14 @@
         <!-- Dropdown de perfiles -->
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
-                <button class="bg-yellow-300 text-[#0C1222] font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-full shadow hover:bg-yellow-200 transition inline-flex items-center text-xs sm:text-sm max-w-[45vw] md:max-w-[32rem] min-w-0">
+                <button class="bg-yellow-300 text-[#0C1222] font-semibold px-3 sm:px-4 py-3 sm:py-2 rounded-full shadow hover:bg-yellow-200 transition text-transform: uppercase inline-flex items-center text-xs sm:text-sm max-w-[45vw] md:max-w-[32rem] min-w-0">
                     <span class="hidden sm:inline block min-w-0 truncate">{{ $perfilActivo->nombre_paciente ?? 'Perfil actual' }}</span>
                     <span
                         class="sm:hidden block min-w-0 truncate"
                         title="{{ $perfilActivo->nombre_paciente ?? 'Perfil' }}">
                         {{ $perfilActivo->nombre_paciente ?? 'Perfil' }}
                     </span>
-                    <svg class="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="ml-3 sm:ml-2 w-5 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0l-4.25-4.25a.75.75 0 01.02-1.06z"/>
                     </svg>
                 </button>
@@ -88,7 +88,7 @@
             $isPremium = $user->rol_global === 'premium';
         @endphp
 
-        <div class="hidden sm:block">
+        <div class="hidden lg:block">
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
                     <button
