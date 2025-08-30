@@ -77,14 +77,16 @@
                 <ul data-bell-list-recent class="max-h-32 sm:max-h-40 overflow-auto divide-y divide-gray-800"></ul>
             </div>
         </div>
+    </div>
 
-        <!-- Dropdown de usuario - solo visible en desktop -->
-        @php
-            $user = Auth::user();
-            $isPremium = $user->rol_global === 'premium';
-        @endphp
+    <!-- Dropdown de usuario - solo visible en desktop -->
+    @php
+        $user = Auth::user();
+        $isPremium = $user->rol_global === 'premium';
+    @endphp
 
-        <x-dropdown align="right" width="48" class="hidden sm:block">
+    <div class="hidden sm:block">
+        <x-dropdown align="right" width="48">
             <x-slot name="trigger">
                 <button
                     class="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 border border-transparent rounded-full shadow transition text-xs sm:text-sm
