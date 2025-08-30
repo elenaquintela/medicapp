@@ -5,7 +5,7 @@
     $rol = $usuario->rol_global;
 @endphp
 
-<header class="bg-[#0C1222] text-white py-2 sm:py-4 px-3 sm:px-6 flex items-center justify-between shadow-md">
+<header class="bg-[#0C1222] text-white py-3 sm:py-4 px-3 sm:px-6 flex items-center justify-between shadow-md">
     <!-- Logo y nombre de la app - siempre a la izquierda -->
     <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center space-x-2 sm:space-x-3 hover:opacity-90 transition">
         <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-12 sm:w-16 lg:w-20 h-auto">
