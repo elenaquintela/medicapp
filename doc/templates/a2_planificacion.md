@@ -92,8 +92,12 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 **Despregamento**
 
 - Rexistrarse en Railway 
-- Facer un mirroring repository en Github para enlazalo con Railway
-- Importar a base de datos a MySQL Workbench 
+- Facer un mirroring repository en Github para integralo con Railway.
+- Importar a base de datos a MySQL Workbench.
+- Crear un novo proxecto en Railway, conectalo co repositorio de Github e engadir a base de datos ó proxecto.
+- Configurar as variables de entorno para producción.
+- Asegurarse de que as varibles de entorno do servizo de base de datos coincidan cas da aplicación.
+- Despregar o contenedor cando todo estea configurado, establecendo os comandos necesarios na configuración.
 
 ### Fase 5: Manuais do proxecto
 
