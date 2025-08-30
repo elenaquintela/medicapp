@@ -25,7 +25,18 @@ class GoogleCalendarController extends Controller
         $client->setPrompt($forceSelectAccount ? 'consent select_account' : 'consent');
 
         $client->setScopes(['https://www.googleapis.com/auth/calendar.events']);
-        $client->setHttpClient(new \GuzzleHttp\Client(['verify' => 'C:/PHP/extras/ssl/cacert.pem']));
+        // Usa el bundle por defecto; hazlo configurable por .env si lo necesitas.
+        $ca = env('GUZZLE_CA_BUNDLE'); // opcional, ruta a un cacert.pem
+        $verify = env('GUZZLE_SSL_VERIFY', true); // true/false
+
+        $options = [];
+        if ($ca) {
+            $options['verify'] = $ca;        // ruta personalizada
+        } else {
+            $options['verify'] = filter_var($verify, FILTER_VALIDATE_BOOL); // o por defecto
+        }
+
+        $client->setHttpClient(new \GuzzleHttp\Client($options));
         return $client;
     }
 
@@ -98,7 +109,7 @@ class GoogleCalendarController extends Controller
                     $created = $service->events->insert('primary', new \Google\Service\Calendar\Event($payload));
                     return $created->id;
                 }
-                throw $e; 
+                throw $e;
             }
         }
 
@@ -172,8 +183,8 @@ class GoogleCalendarController extends Controller
 
         $perfilId = (int) $request->input('perfil_id', (int) session('perfil_activo_id'));
         session([
-            'google_sync_perfil_id' => $perfilId,  
-            'force_select_account'  => true,      
+            'google_sync_perfil_id' => $perfilId,
+            'force_select_account'  => true,
         ]);
 
         $user = $request->user();
