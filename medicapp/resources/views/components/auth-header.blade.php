@@ -6,13 +6,15 @@
 @endphp
 
 <header class="bg-[#0C1222] text-white py-2 sm:py-4 px-3 sm:px-6 flex items-center justify-between shadow-md">
+    <!-- Logo y nombre de la app - siempre a la izquierda -->
     <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center space-x-2 sm:space-x-3 hover:opacity-90 transition">
         <img src="{{ asset('logo.png') }}" alt="Logo MedicApp" class="w-12 sm:w-16 lg:w-20 h-auto">
         <span class="text-xl sm:text-2xl lg:text-4xl font-bold text-white">MedicApp</span>
     </a>
 
+    <!-- Controles del usuario - reorganizados para móvil -->
     <div class="flex items-center space-x-2 sm:space-x-4 lg:space-x-6">
-
+        <!-- Dropdown de perfiles -->
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
                 <button class="bg-yellow-300 text-[#0C1222] font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-full shadow hover:bg-yellow-200 transition inline-flex items-center text-xs sm:text-sm">
@@ -50,6 +52,7 @@
             </x-slot>
         </x-dropdown>
 
+        <!-- Notificaciones -->
         <div class="relative">
             <button type="button" class="relative inline-flex items-center p-1 sm:p-2" data-bell title="Notificaciones">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" fill="currentColor" viewBox="0 0 16 16">
@@ -75,12 +78,13 @@
             </div>
         </div>
 
+        <!-- Dropdown de usuario - solo visible en desktop -->
         @php
             $user = Auth::user();
             $isPremium = $user->rol_global === 'premium';
         @endphp
 
-        <x-dropdown align="right" width="48">
+        <x-dropdown align="right" width="48" class="hidden sm:block">
             <x-slot name="trigger">
                 <button
                     class="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 border border-transparent rounded-full shadow transition text-xs sm:text-sm
