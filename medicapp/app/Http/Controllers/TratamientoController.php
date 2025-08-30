@@ -72,29 +72,9 @@ class TratamientoController extends Controller
 
     public function index()
     {
-        try {
-            /** @var \App\Models\Usuario $usuario */
-            $usuario = Auth::user();
-            
-            if (!$usuario) {
-                return response('Usuario no encontrado', 500);
-            }
-            
-            $perfilActivo = $usuario->perfilActivo;
-            
-            if (!$perfilActivo) {
-                // Si no hay perfil activo, mostrar página vacía
-                $tratamientos = collect();
-                return view('tratamiento.index', compact('tratamientos'));
-            }
-
-            $tratamientos = $perfilActivo->tratamientos()->with('usuarioCreador')->get();
-            
-            return view('tratamiento.index', compact('tratamientos'));
-            
-        } catch (\Exception $e) {
-            return response('Error en TratamientoController: ' . $e->getMessage() . ' en línea ' . $e->getLine(), 500);
-        }
+        // Versión minimal para debug
+        $tratamientos = collect();
+        return view('tratamiento.index', compact('tratamientos'));
     }
 
     public function show(Tratamiento $tratamiento)
