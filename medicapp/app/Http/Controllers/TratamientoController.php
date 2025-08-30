@@ -4,117 +4,247 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Tratamiento;
 
 class TratamientoController extends Controller
 {
+    public function index()
+    {
+        try {
+            // Verificar usuario autenticado
+            $usuario = Auth::user();
+            if (!$usuario) {
+                return redirect()->route('login');
+            }
+
+            // Obtener perfil activo usando DB facade para evitar conflictos PDO
+            $perfilActivo = DB::table('perfiles')
+                ->where('id_usuario', $usuario->id_usuario)
+                ->where('activo', 1)
+                ->first();
+
+            if (!$perfilActivo) {
+                return view('tratamiento.index', [
+                    'tratamientos' => collect([]),
+                    'perfilActivo' => null
+                ]);
+            }
+
+            // Obtener tratamientos usando DB facade
+            $tratamientos = DB::table('tratamientos')
+                ->where('id_perfil', $perfilActivo->id_perfil)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('tratamiento.index', [
+                'tratamientos' => $tratamientos,
+                'perfilActivo' => $perfilActivo
+            ]);
+
+        } catch (\Exception $e) {
+            // Log específico para Railway
+            error_log('TratamientoController Error: ' . $e->getMessage());
+            
+            return view('tratamiento.index', [
+                'tratamientos' => collect([]),
+                'perfilActivo' => null,
+                'error' => 'Error al cargar tratamientos'
+            ]);
+        }
+    }
+
     public function create()
     {
-        /** @var \App\Models\Usuario $usuario */
-        $usuario = Auth::user();
-        $usuario->load('perfiles');
+        try {
+            $usuario = Auth::user();
+            if (!$usuario) {
+                return redirect()->route('login');
+            }
 
-        $perfilActivo = $usuario->perfilActivo;
+            // Usar DB facade para obtener perfil activo
+            $perfilActivo = DB::table('perfiles')
+                ->where('id_usuario', $usuario->id_usuario)
+                ->where('activo', 1)
+                ->first();
 
-        if (!$perfilActivo) {
-            return redirect()->route('dashboard')->withErrors(['perfil' => 'No hay perfil activo.']);
+            if (!$perfilActivo) {
+                return redirect()->route('dashboard')->withErrors(['perfil' => 'No hay perfil activo.']);
+            }
+
+            return view('tratamiento.create', [
+                'perfilActivo' => $perfilActivo
+            ]);
+
+        } catch (\Exception $e) {
+            error_log('TratamientoController Create Error: ' . $e->getMessage());
+            return redirect()->route('dashboard')->withErrors(['error' => 'Error al cargar formulario']);
         }
-
-        return view('tratamiento.create', [
-            'perfilActivo' => $perfilActivo
-        ]);
     }
 
     public function store(Request $request)
     {
-        /** @var \App\Models\Usuario $usuario */
-        $usuario = Auth::user();
-        $usuario->load('perfiles');
+        try {
+            $usuario = Auth::user();
+            if (!$usuario) {
+                return redirect()->route('login');
+            }
 
-        $perfilActivo = $usuario->perfilActivo;
+            $perfilActivo = DB::table('perfiles')
+                ->where('id_usuario', $usuario->id_usuario)
+                ->where('activo', 1)
+                ->first();
 
-        if (!$perfilActivo) {
-            return redirect()->route('dashboard')->withErrors(['perfil' => 'No hay perfil activo.']);
+            if (!$perfilActivo) {
+                return redirect()->route('dashboard')->withErrors(['perfil' => 'No hay perfil activo.']);
+            }
+
+            $request->validate([
+                'causa' => [
+                    'required',
+                    'string',
+                    'max:150',
+                    function ($attribute, $value, $fail) use ($perfilActivo) {
+                        $existe = DB::table('tratamientos')
+                            ->where('id_perfil', $perfilActivo->id_perfil)
+                            ->where('causa', $value)
+                            ->exists();
+
+                        if ($existe) {
+                            $fail('Ya existe un tratamiento con esta causa.');
+                        }
+                    },
+                ],
+                'tipo_tratamiento' => 'nullable|in:medico,psicologico,quirurgico,fisioterapia,otro',
+                'notas' => 'nullable|string|max:500',
+            ]);
+
+            // Insertar usando DB facade
+            DB::table('tratamientos')->insert([
+                'id_perfil' => $perfilActivo->id_perfil,
+                'causa' => $request->causa,
+                'tipo_tratamiento' => $request->tipo_tratamiento ?? 'medico',
+                'notas' => $request->notas,
+                'estado' => 'activo',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->route('tratamiento.index')->with('success', 'Tratamiento creado exitosamente.');
+
+        } catch (\Exception $e) {
+            error_log('TratamientoController Store Error: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Error al guardar tratamiento'])->withInput();
         }
-
-        $request->validate([
-            'causa' => [
-                'required',
-                'string',
-                'max:150',
-                function ($attribute, $value, $fail) use ($perfilActivo) {
-                    $existe = Tratamiento::where('id_perfil', $perfilActivo->id_perfil)
-                        ->where('causa', $value)
-                        ->exists();
-
-                    if ($existe) {
-                        $fail('Este perfil ya tiene un tratamiento con la causa "' . $value . '". Usa otro nombre.');
-                    }
-                }
-            ],
-        ]);
-
-        $tratamiento = Tratamiento::create([
-            'id_perfil' => $perfilActivo->id_perfil,
-            'id_usuario_creador' => $usuario->id_usuario,
-            'causa' => $request->causa,
-            'fecha_inicio' => now(),
-            'estado' => 'activo',
-        ]);
-
-        $params = ['tratamiento' => $tratamiento->id_tratamiento];
-        if ($request->has('volver_a_index')) {
-            $params['volver_a_index'] = 1;
-        }
-
-        return redirect()->route('medicacion.create', $params);
     }
 
-    public function index()
+    public function show($id)
     {
-        // Versión minimal para debug
-        $tratamientos = collect();
-        return view('tratamiento.index', compact('tratamientos'));
-    }
+        try {
+            $tratamiento = DB::table('tratamientos')->where('id_tratamiento', $id)->first();
+            
+            if (!$tratamiento) {
+                return redirect()->route('tratamiento.index')->withErrors(['error' => 'Tratamiento no encontrado']);
+            }
 
-    public function show(Tratamiento $tratamiento)
-    {
-        $tratamiento->load('medicaciones.medicamento');
-        return view('tratamiento.show', compact('tratamiento'));
-    }
+            return view('tratamiento.show', compact('tratamiento'));
 
-    public function archivar(\App\Models\Tratamiento $tratamiento)
-    {
-        $usuario = Auth::user();
-        $perfilActivo = $usuario->perfilActivo;
-        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
-            return back()->withErrors(['No tienes permiso para archivar este tratamiento.']);
+        } catch (\Exception $e) {
+            error_log('TratamientoController Show Error: ' . $e->getMessage());
+            return redirect()->route('tratamiento.index')->withErrors(['error' => 'Error al mostrar tratamiento']);
         }
-        $tratamiento->estado = 'archivado';
-        $tratamiento->save();
-        return back()->with('success', 'Tratamiento archivado.');
+    }
+
+    public function archivar($id)
+    {
+        try {
+            $usuario = Auth::user();
+            if (!$usuario) {
+                return redirect()->route('login');
+            }
+
+            $perfilActivo = DB::table('perfiles')
+                ->where('id_usuario', $usuario->id_usuario)
+                ->where('activo', 1)
+                ->first();
+
+            if (!$perfilActivo) {
+                return back()->withErrors(['error' => 'No hay perfil activo']);
+            }
+
+            $tratamiento = DB::table('tratamientos')->where('id_tratamiento', $id)->first();
+            
+            if (!$tratamiento || $tratamiento->id_perfil != $perfilActivo->id_perfil) {
+                return back()->withErrors(['error' => 'No tienes permiso para archivar este tratamiento']);
+            }
+
+            DB::table('tratamientos')
+                ->where('id_tratamiento', $id)
+                ->update([
+                    'estado' => 'archivado',
+                    'updated_at' => now()
+                ]);
+
+            return back()->with('success', 'Tratamiento archivado');
+
+        } catch (\Exception $e) {
+            error_log('TratamientoController Archivar Error: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Error al archivar tratamiento']);
+        }
     }
 
     public function reactivar($id)
     {
-        $tratamiento = Tratamiento::findOrFail($id);
-        $tratamiento->estado = 'activo';
-        $tratamiento->save();
+        try {
+            DB::table('tratamientos')
+                ->where('id_tratamiento', $id)
+                ->update([
+                    'estado' => 'activo',
+                    'updated_at' => now()
+                ]);
 
-        return redirect()->route('tratamiento.index')->with('success', 'Tratamiento reactivado correctamente.');
+            return redirect()->route('tratamiento.index')->with('success', 'Tratamiento reactivado correctamente');
+
+        } catch (\Exception $e) {
+            error_log('TratamientoController Reactivar Error: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Error al reactivar tratamiento']);
+        }
     }
 
-    public function destroy(\App\Models\Tratamiento $tratamiento)
+    public function destroy($id)
     {
-        $usuario = Auth::user();
-        $perfilActivo = $usuario->perfilActivo;
-        if (!$perfilActivo || $tratamiento->id_perfil !== $perfilActivo->id_perfil) {
-            return back()->withErrors(['No tienes permiso para eliminar este tratamiento.']);
+        try {
+            $usuario = Auth::user();
+            if (!$usuario) {
+                return redirect()->route('login');
+            }
+
+            $perfilActivo = DB::table('perfiles')
+                ->where('id_usuario', $usuario->id_usuario)
+                ->where('activo', 1)
+                ->first();
+
+            if (!$perfilActivo) {
+                return back()->withErrors(['error' => 'No hay perfil activo']);
+            }
+
+            $tratamiento = DB::table('tratamientos')->where('id_tratamiento', $id)->first();
+            
+            if (!$tratamiento || $tratamiento->id_perfil != $perfilActivo->id_perfil) {
+                return back()->withErrors(['error' => 'No tienes permiso para eliminar este tratamiento']);
+            }
+
+            if ($tratamiento->estado !== 'archivado') {
+                return back()->withErrors(['error' => 'Solo puedes eliminar tratamientos archivados']);
+            }
+
+            DB::table('tratamientos')->where('id_tratamiento', $id)->delete();
+
+            return back()->with('success', 'Tratamiento eliminado');
+
+        } catch (\Exception $e) {
+            error_log('TratamientoController Destroy Error: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Error al eliminar tratamiento']);
         }
-        if ($tratamiento->estado !== 'archivado') {
-            return back()->withErrors(['Solo puedes eliminar tratamientos archivados.']);
-        }
-        $tratamiento->delete();
-        return back()->with('success', 'Tratamiento eliminado.');
     }
 }
