@@ -88,7 +88,7 @@
             <section class="flex flex-col">
                 <div class="mb-4">
                     <h2 class="text-orange-400 text-lg sm:text-xl font-bold mb-2">PRÓXIMAS CITAS</h2>
-                    <h3 class="text-xl sm:text-2xl font-bold invisible lg:visible">&nbsp;</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold hidden lg:block">&nbsp;</h3>
                 </div>
                 <div class="flex-1 overflow-x-auto">
                     @if ($perfilActivo && $perfilActivo->citas->count())
@@ -104,14 +104,16 @@
                                             {{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}
                                         </div>
                                     </div>
-                                    <div class="text-white font-medium text-sm">
-                                        {{ $cita->especialidad }}
+                                    <div class="text-sm flex items-center gap-2 min-w-0">
+                                        <span class="text-white font-medium whitespace-nowrap">
+                                            {{ $cita->especialidad ?? '—' }}
+                                        </span>
+                                        @php $lugar = $cita->lugar ?? $cita->ubicacion; @endphp
+                                        @if($lugar)
+                                            <span class="text-white font-medium truncate">— {{ $lugar }}</span>
+                                        @endif
                                     </div>
-                                    @if($cita->lugar)
-                                        <div class="text-xs text-gray-300 mt-1">
-                                            {{ $cita->lugar }}
-                                        </div>
-                                    @endif
+
                                     @if($cita->notas)
                                         <div class="text-xs text-gray-300 italic mt-2">
                                             {{ Str::limit($cita->notas, 60) }}
@@ -150,21 +152,27 @@
             <h2 class="text-orange-400 text-lg sm:text-xl font-bold mb-4">TRATAMIENTOS ACTIVOS</h2>
 
             <!-- Tabs responsive -->
-            <div class="flex flex-wrap gap-1 sm:gap-2 mb-4">
+            <div class="flex flex-wrap gap-1 sm:gap-2 mb-1">
                 @forelse ($tratamientos as $key => $tratamiento)
                     <button type="button"
                             onclick="mostrarTratamiento('{{ $tratamiento->id_tratamiento }}')"
-                            class="tratamiento-tab bg-white text-[#0C1222] font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-t-md text-xs sm:text-sm"
+                            class="tratamiento-tab bg-white text-[#0C1222] font-semibold 
+                                px-3 sm:px-4 py-1 sm:py-2 rounded-t-md 
+                                text-sm sm:text-base"
                             id="tab-{{ $tratamiento->id_tratamiento }}">
                         {{ Str::limit($tratamiento->causa, 15) }}
                     </button>
+
                 @empty
                     <p class="text-white text-sm sm:text-base">No hay tratamientos registrados.</p>
                 @endforelse
 
                 @if ($perfilActivo)
                     <a href="{{ route('tratamiento.create', ['perfil' => $perfilActivo->id_perfil]) }}">
-                        <button type="button" class="bg-green-300 hover:bg-green-400 text-[#0C1222] font-bold px-2 sm:px-4 py-1 sm:py-2 rounded-t-md text-xs sm:text-sm">
+                        <button type="button" 
+                                class="bg-green-300 hover:bg-green-400 text-[#0C1222] font-bold 
+                                    px-4 sm:px-4 py-1 sm:py-2 rounded-t-md 
+                                    text-sm sm:text-base">
                             +
                         </button>
                     </a>
@@ -173,7 +181,7 @@
 
             @foreach ($tratamientos as $key => $tratamiento)
                 <div id="tratamiento-{{ $tratamiento->id_tratamiento }}"
-                     class="tratamiento-content bg-blue-100 text-[#0C1222] rounded-b-md p-3 sm:p-6 shadow {{ $key !== 0 ? 'hidden' : '' }}">
+                     class="tratamiento-content bg-blue-100 text-[#0C1222] rounded-b-md p-3 sm:p-6 -mt-1 sm:-mt-2 shadow {{ $key !== 0 ? 'hidden' : '' }}">
                     @if ($tratamiento->medicaciones && $tratamiento->medicaciones->isNotEmpty())
                         <ul class="list-disc pl-4 sm:pl-5 space-y-2 sm:space-y-4">
                             @foreach ($tratamiento->medicaciones as $med)
@@ -200,63 +208,77 @@
 </div>
 
 <script>
-    const timeouts = {};
+  const timeouts = {};
+  const HIDE_DELAY_MS = 500; 
+  const FADE_MS = 400;       
 
-    function mostrarTratamiento(id) {
-        const contenidos = document.querySelectorAll('.tratamiento-content');
-        const pestañas = document.querySelectorAll('.tratamiento-tab');
+  function getReminderNodes(id) {
+    return Array.from(document.querySelectorAll(`[data-row-id='${id}']`));
+  }
 
-        contenidos.forEach(div => div.classList.add('hidden'));
-        pestañas.forEach(btn => {
-            btn.classList.remove('bg-blue-100', 'font-bold');
-            btn.classList.add('bg-white');
-        });
+  function getReminderChecks(id) {
+    return Array.from(document.querySelectorAll(`.recordatorio-check[data-id='${id}']`));
+  }
 
-        document.getElementById(`tratamiento-${id}`).classList.remove('hidden');
-        const activeTab = document.getElementById(`tab-${id}`);
-        activeTab.classList.remove('bg-white');
-        activeTab.classList.add('bg-blue-100', 'font-bold');
+  async function toggleReminder(e) {
+    const checked = e.target.checked;
+    const id = e.target.dataset.id;
+    const nodes = getReminderNodes(id);
+
+    try {
+      const res = await fetch(`/recordatorios/${id}/marcar`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tomado: checked })
+      });
+      if (!res.ok) throw new Error();
+
+      
+      getReminderChecks(id).forEach(chk => {
+        if (chk !== e.target) chk.checked = checked;
+      });
+
+      
+      if (checked) {
+        if (timeouts[id]) {
+          clearTimeout(timeouts[id].t1);
+          clearTimeout(timeouts[id].t2);
+        }
+        nodes.forEach(n => n.classList.add('transition-opacity','duration-700'));
+        timeouts[id] = {
+          t1: setTimeout(() => {
+            nodes.forEach(n => n.classList.add('opacity-0'));
+            timeouts[id].t2 = setTimeout(() => {
+              nodes.forEach(n => n.remove());
+              delete timeouts[id];
+            }, FADE_MS);
+          }, HIDE_DELAY_MS)
+        };
+      } else {
+        if (timeouts[id]) {
+          clearTimeout(timeouts[id].t1);
+          clearTimeout(timeouts[id].t2);
+          delete timeouts[id];
+        }
+        nodes.forEach(n => n.classList.remove('opacity-0'));
+      }
+    } catch (err) {
+      e.target.checked = !checked;
+      alert('Error al actualizar el recordatorio.');
     }
+  }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const primeraPestaña = document.querySelector('.tratamiento-tab');
-        if (primeraPestaña) primeraPestaña.click();
+  document.addEventListener('DOMContentLoaded', () => {
+    const primeraPestaña = document.querySelector('.tratamiento-tab');
+    if (primeraPestaña) primeraPestaña.click();
 
-        document.querySelectorAll('.recordatorio-check').forEach(check => {
-            check.addEventListener('change', async (e) => {
-                const id = e.target.dataset.id;
-                const row = document.querySelector(`tr[data-row-id='${id}']`);
-
-                try {
-                    const res = await fetch(`/recordatorios/${id}/marcar`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ tomado: e.target.checked })
-                    });
-
-                    if (!res.ok) throw new Error();
-
-                    if (e.target.checked) {
-                        row.classList.add('transition-opacity', 'duration-700');
-                        timeouts[id] = setTimeout(() => {
-                            row.classList.add('opacity-0');
-                            setTimeout(() => row.remove(), 700);
-                        }, 2000);
-                    } else {
-                        clearTimeout(timeouts[id]);
-                        delete timeouts[id];
-                    }
-
-                } catch (error) {
-                    alert('Error al actualizar el recordatorio.');
-                    e.target.checked = !e.target.checked;
-                }
-            });
-        });
+    document.querySelectorAll('.recordatorio-check').forEach(check => {
+      check.addEventListener('change', toggleReminder);
     });
+  });
 </script>
 @endsection
