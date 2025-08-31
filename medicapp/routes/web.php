@@ -25,10 +25,22 @@ use App\Http\Controllers\NotificacionController;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect()->route('dashboard');
+        /** @var \App\Models\Usuario $u */
+        $u = Auth::user();
+
+        if (!$u->rol_global) {
+            return redirect()->route('planes.show');   
+        }
+
+        if (!$u->perfiles()->exists()) {
+            return redirect()->route('perfil.create'); 
+        }
+
+        return redirect()->route('dashboard');         
     }
     return view('auth.welcome');
 })->name('welcome');
+
 
 Route::get('/login', function () {
     return redirect('/');
@@ -47,11 +59,17 @@ Route::view('/politica-cookies', 'legal.politica-cookies')->name('legal.cookies'
 Route::get('/planes', function () {
     /** @var \App\Models\Usuario $usuario */
     $usuario = Auth::user();
+
     if ($usuario->rol_global) {
-        return redirect()->route('dashboard');
+        $tienePerfil = $usuario->perfiles()->exists();
+        return $tienePerfil
+            ? redirect()->route('dashboard')
+            : redirect()->route('perfil.create');
     }
+
     return view('account.planes');
 })->middleware('auth')->name('planes.show');
+
 
 Route::post('/planes', function (Request $request) {
     $request->validate([

@@ -4,7 +4,7 @@
 
 @section('content')
 <main class="flex-grow flex items-center justify-center px-4 py-6">
-    <div class="w-full max-w-2xl">
+    <div class="w-full max-w-sm sm:max-w-md lg:max-w-2xl">
         <h2 class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-10">Datos del paciente</h2>
         @if ($errors->any())
             <div class="mb-4 sm:mb-6 p-3 sm:p-4 rounded bg-red-100 text-red-800 text-sm">
