@@ -41,7 +41,7 @@
                             @csrf
                             <input type="hidden" name="id_perfil" value="{{ $perfil->id_perfil }}">
                             <input type="hidden" name="redirect_to" value="{{ request()->fullUrl() }}">
-                            <button type="submit" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 ">
                                 {{ $perfil->nombre_paciente }}
                             </button>
                         </form>
@@ -94,7 +94,7 @@
                     <button
                         class="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 border border-transparent rounded-full shadow transition text-xs sm:text-sm
                         {{ $isPremium ? 'bg-[#7fb0dd] text-white hover:bg-[#6aa1d0]' : 'bg-yellow-300 text-[#0C1222] hover:bg-yellow-200' }}">
-                        <span class="font-bold mr-1 sm:mr-2 hidden sm:inline">{{ $user->nombre ?? $user->name }}</span>
+                        <span class="font-bold mr-1 sm:mr-2 hidden sm:inline text-transform: uppercase">{{ $user->nombre ?? $user->name }}</span>
                         <span class="font-bold mr-1 sm:hidden">{{ Str::limit($user->nombre ?? $user->name, 6, '') }}</span>
                         <span class="text-xs sm:text-sm font-semibold {{ $isPremium ? 'text-white' : 'text-[#0C1222]' }}">
                             {{ ucfirst($user->rol_global) }}
