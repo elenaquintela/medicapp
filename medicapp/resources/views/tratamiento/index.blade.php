@@ -33,9 +33,9 @@
                 @forelse ($activos as $tratamiento)
                     <div class="bg-gray-800/50 border border-gray-600 rounded-lg p-4 tratamiento-fila fila-activo">
                         <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-semibold text-white text-base">{{ Str::limit($tratamiento->causa, 30) }}</h4>
+                            <h4 class="font-semibold text-white text-base filtrable">{{ Str::limit($tratamiento->causa, 30) }}</h4>
                         </div>
-                        <div class="text-sm text-gray-300 mb-2">
+                        <div class="text-sm text-gray-300 mb-3 filtrable">
                             <div>Inicio: {{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d/m/Y') }}</div>
                             <div>Por: {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}</div>
                         </div>
@@ -115,9 +115,9 @@
                 @forelse ($archivados as $tratamiento)
                     <div class="bg-gray-700/50 border border-gray-500 rounded-lg p-4 tratamiento-fila fila-archivado">
                         <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-semibold text-white text-base">{{ Str::limit($tratamiento->causa, 30) }}</h4>
+                            <h4 class="font-semibold text-white text-base filtrable">{{ Str::limit($tratamiento->causa, 30) }}</h4>
                         </div>
-                        <div class="text-sm text-gray-300 mb-3">
+                        <div class="text-sm text-gray-300 mb-3 filtrable">
                             <div>Inicio: {{ \Carbon\Carbon::parse($tratamiento->fecha_inicio)->format('d/m/Y') }}</div>
                             <div>Por: {{ $tratamiento->usuarioCreador->nombre ?? 'Desconocido' }}</div>
                         </div>
@@ -248,46 +248,47 @@
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('busqueda');
   const filas = document.querySelectorAll('.tratamiento-fila');
+  const TARGET_SELECTOR = 'td, .filtrable';
 
+  // Guardar HTML original de cada objetivo filtrable
   filas.forEach(fila => {
-    fila.querySelectorAll('td').forEach(td => {
-      const esAccion = td.querySelector('a,button,form,img,svg');
-      if (!esAccion && !td.hasAttribute('data-original-html')) {
-        td.setAttribute('data-original-html', td.innerHTML);
+    fila.querySelectorAll(TARGET_SELECTOR).forEach(el => {
+      const esAccion = el.querySelector('a,button,form,img,svg');
+      if (!esAccion && !el.hasAttribute('data-original-html')) {
+        el.setAttribute('data-original-html', el.innerHTML);
       }
     });
   });
 
-  function resaltarEnCelda(td, texto) {
-    const htmlBase = td.getAttribute('data-original-html');
-    if (!htmlBase) return; 
-    if (!texto) { td.innerHTML = htmlBase; return; }
-
-    const regex = new RegExp(`(${texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    td.innerHTML = htmlBase.replace(regex, '<span class="resaltado">$1</span>');
+  function resaltarEnElemento(el, texto) {
+    const htmlBase = el.getAttribute('data-original-html');
+    if (!htmlBase) return;
+    if (!texto) { el.innerHTML = htmlBase; return; }
+    const regex = new RegExp(`(${texto.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')})`, 'gi');
+    el.innerHTML = htmlBase.replace(regex, '<span class="resaltado">$1</span>');
   }
 
   input.addEventListener('input', function () {
     const texto = (input.value || '').toLowerCase().trim();
 
     filas.forEach(fila => {
-      const celdas = fila.querySelectorAll('td');
+      const targets = fila.querySelectorAll(TARGET_SELECTOR);
       let coincide = false;
 
-      celdas.forEach(td => {
-        const esAccion = td.querySelector('a,button,form,img,svg');
-        const contenido = (td.textContent || '').toLowerCase();
+      targets.forEach(el => {
+        const esAccion = el.querySelector('a,button,form,img,svg');
+        const contenido = (el.textContent || '').toLowerCase();
 
         if (!esAccion) {
           if (texto && contenido.includes(texto)) {
             coincide = true;
-            resaltarEnCelda(td, texto);
+            resaltarEnElemento(el, texto);
           } else {
-            resaltarEnCelda(td, '');
+            resaltarEnElemento(el, '');
             if (texto && !coincide && contenido.includes(texto)) coincide = true;
           }
         } else {
-            if (texto && contenido.includes(texto)) coincide = true;
+          if (texto && contenido.includes(texto)) coincide = true;
         }
       });
 
@@ -296,5 +297,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+
 
 @endsection
