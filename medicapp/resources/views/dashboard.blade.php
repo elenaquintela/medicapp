@@ -62,7 +62,7 @@
                                             {{ $rec->fecha_hora->format('d/m H:i') }}
                                         @endif
                                     </td>
-                                    <td class="p-2 text-xs sm:text-sm">
+                                    <td class="p-2 text-xs sm:text-sm text-transform: capitalize">
                                         {{ $rec->tratamientoMedicamento->medicamento->nombre ?? 'Desconocido' }}
                                         {{ $rec->tratamientoMedicamento->dosis ? ' ' . $rec->tratamientoMedicamento->dosis : '' }}
                                     </td>
