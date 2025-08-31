@@ -1,8 +1,8 @@
 @extends('layouts.registro')
 
 @section('content')
-<main class="flex-grow flex items-center justify-center">
-    <div class="w-full max-w-md px-8">
+<main class="flex-grow flex justify-center py-10 sm:py-16">
+    <div class="w-full max-w-md px-6 sm:px-8">
         <h2 class="text-2xl font-bold text-center mb-8">Nuevo usuario</h2>
 
         <form method="POST" action="{{ route('register') }}" class="space-y-6">
