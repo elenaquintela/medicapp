@@ -59,7 +59,7 @@
         <!-- Notificaciones -->
         <div class="relative">
             <button type="button" class="relative inline-flex items-center p-1 sm:p-2" data-bell title="Notificaciones">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" fill="currentColor" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 sm:w-6 sm:h-6 text-orange-400" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.104-14.684a1.5 1.5 0 1 0-1.208 0A5.002 5.002 0 0 0 3 6c0 1.098-.628 2.082-1.579 2.563A.5.5 0 0 0 1.5 9.5h13a.5.5 0 0 0 .079-.937A2.993 2.993 0 0 1 13 6a5.002 5.002 0 0 0-4.896-4.684z"/>
                 </svg>
                 <span data-bell-badge class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[9px] sm:text-[10px] leading-none px-1 sm:px-1.5 py-0.5 rounded-full">0</span>
