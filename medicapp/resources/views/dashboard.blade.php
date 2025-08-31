@@ -152,17 +152,16 @@
             <h2 class="text-orange-400 text-lg sm:text-xl font-bold mb-4">TRATAMIENTOS ACTIVOS</h2>
 
             <!-- Tabs responsive -->
-            <div class="flex flex-wrap gap-1 sm:gap-2 mb-1">
+            <div class="flex flex-wrap gap-1 sm:gap-2 mb-0">
                 @forelse ($tratamientos as $key => $tratamiento)
                     <button type="button"
                             onclick="mostrarTratamiento('{{ $tratamiento->id_tratamiento }}')"
                             class="tratamiento-tab bg-white text-[#0C1222] font-semibold 
-                                px-3 sm:px-4 py-1 sm:py-2 rounded-t-md 
-                                text-sm sm:text-base"
+                                   px-3 sm:px-4 py-1 sm:py-2 rounded-t-md 
+                                   text-sm sm:text-base"
                             id="tab-{{ $tratamiento->id_tratamiento }}">
                         {{ Str::limit($tratamiento->causa, 15) }}
                     </button>
-
                 @empty
                     <p class="text-white text-sm sm:text-base">No hay tratamientos registrados.</p>
                 @endforelse
@@ -171,8 +170,8 @@
                     <a href="{{ route('tratamiento.create', ['perfil' => $perfilActivo->id_perfil]) }}">
                         <button type="button" 
                                 class="bg-green-300 hover:bg-green-400 text-[#0C1222] font-bold 
-                                    px-4 sm:px-4 py-1 sm:py-2 rounded-t-md 
-                                    text-sm sm:text-base">
+                                       px-4 sm:px-4 py-1 sm:py-2 rounded-t-md 
+                                       text-sm sm:text-base">
                             +
                         </button>
                     </a>
@@ -181,7 +180,7 @@
 
             @foreach ($tratamientos as $key => $tratamiento)
                 <div id="tratamiento-{{ $tratamiento->id_tratamiento }}"
-                     class="tratamiento-content bg-blue-100 text-[#0C1222] rounded-b-md p-3 sm:p-6 -mt-1 sm:-mt-2 shadow {{ $key !== 0 ? 'hidden' : '' }}">
+                     class="tratamiento-content bg-blue-100 text-[#0C1222] rounded-t-none rounded-b-md p-3 sm:p-6 shadow {{ $key !== 0 ? 'hidden' : '' }}">
                     @if ($tratamiento->medicaciones && $tratamiento->medicaciones->isNotEmpty())
                         <ul class="list-disc pl-4 sm:pl-5 space-y-2 sm:space-y-4">
                             @foreach ($tratamiento->medicaciones as $med)
@@ -212,6 +211,27 @@
   const HIDE_DELAY_MS = 500; 
   const FADE_MS = 400;       
 
+  function mostrarTratamiento(id) {
+    const contenidos = document.querySelectorAll('.tratamiento-content');
+    const pestañas = document.querySelectorAll('.tratamiento-tab');
+
+    contenidos.forEach(div => div.classList.add('hidden'));
+
+    pestañas.forEach(btn => {
+      btn.classList.remove('bg-blue-100', 'font-bold');
+      btn.classList.add('bg-white');
+    });
+
+    const panel = document.getElementById(`tratamiento-${id}`);
+    if (panel) panel.classList.remove('hidden');
+
+    const activeTab = document.getElementById(`tab-${id}`);
+    if (activeTab) {
+      activeTab.classList.remove('bg-white');
+      activeTab.classList.add('bg-blue-100', 'font-bold');
+    }
+  }
+
   function getReminderNodes(id) {
     return Array.from(document.querySelectorAll(`[data-row-id='${id}']`));
   }
@@ -237,12 +257,10 @@
       });
       if (!res.ok) throw new Error();
 
-      
       getReminderChecks(id).forEach(chk => {
         if (chk !== e.target) chk.checked = checked;
       });
 
-      
       if (checked) {
         if (timeouts[id]) {
           clearTimeout(timeouts[id].t1);
