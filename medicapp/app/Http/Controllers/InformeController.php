@@ -96,26 +96,27 @@ class InformeController extends Controller
         if ($informe->id_usuario !== $user->id_usuario) abort(403);
 
         $relative = $informe->ruta_pdf;
+        $downloadName = basename($relative) ?: 'informe.pdf';
 
         if (!Storage::disk('public')->exists($relative)) {
             $trat = \App\Models\Tratamiento::with(['medicaciones.medicamento', 'perfil'])
                 ->findOrFail($informe->id_tratamiento);
 
             $data = [
-                'informe'      => $informe,
-                'tratamiento'  => $trat,
-                'rango_inicio' => $informe->rango_inicio,
-                'rango_fin'    => $informe->rango_fin,
+                'perfil'        => $trat->perfil,
+                'tratamiento'   => $trat,
+                'inicio'        => $informe->rango_inicio,
+                'fin'           => $informe->rango_fin,
+                'generado_por'  => $user,
+                'generado_en'   => now(),
             ];
 
             $pdf = Pdf::loadView('informe.pdf', $data)->setPaper('a4', 'portrait');
 
-            $downloadName = basename($relative) ?: 'informe.pdf';
             return $pdf->download($downloadName);
         }
 
         $absolutePath = Storage::disk('public')->path($relative);
-        $downloadName = basename($relative) ?: 'informe.pdf';
         return response()->download($absolutePath, $downloadName);
     }
 
