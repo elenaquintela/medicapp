@@ -12,7 +12,7 @@
 
 ## Diagrama de Base de Datos
 
-!["Modelo relacional"](/doc/img/diagramas/diagrama_bd.PNG)
+!["Modelo relacional"](/doc/img/diagramas/diagrama_bd.png)
 
 ## Deseño de interface de usuarios
 
@@ -75,20 +75,16 @@ Na táboa, os tratamentos arquivados aparecerán ao final, e os activos más nov
 
 !["Vista detalles tratamento"](/doc/img/interfaces/vistaDetallesTratamento.png)
 
-### Interface de programación de recordatorio para tomas
-
-!["Vista programación de recordatorio"](/doc/img/interfaces/vistaRecordatorio.png)
 
 ### Interface de citas médicas para Usuario Estándar (invitado)
 
 O botón verde co "+" levaranos á interface de creación de citas.
-A versión para Usuario Estándar será totalmente igual pero sen a columna "Creado por", xa que non tería sentido se so xestiona unha persoa ese perfil.
 
 !["Vista citas médicas Usuario Estándar"](/doc/img/interfaces/vistaCitasEstandar.png)
 
 ### Interface citas médicas para Usuario Premium
 
-Co Usuario Premium poderanse sincronizar as citas médicas con Google Calendar individualmente ou en conxunto.  
+Co Usuario Premium poderanse sincronizar as citas médicas con Google Calendar.  
 
 !["Vista citas médicas Usuario Premium"](/doc/img/interfaces/vistaCitasPremium.png)
 
@@ -117,6 +113,8 @@ Co Usuario Premium poderanse sincronizar as citas médicas con Google Calendar i
 ### Interface de informes
 
 Só dispoñible para Usuarios Premium.
-A vista previa xeneraráse nesta mesma páxina entre o xenerador e o histórico de informes.
 
 !["Vista informes personalizados"](/doc/img/interfaces/vistaInformes.png)
+
+> Nota: No menú lateral, a opción **Informes** amósase activa para usuarios premium e desactivada para usuarios estándar.
+

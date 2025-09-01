@@ -84,7 +84,7 @@ Tecnoloxías e ferramentas necesarias:
 
 **Ferramentas de desenvolvemento e despregamento:**
 * IDE: Visual Studio Code
-* Control de versións: GitLab
+* Control de versións: GitLab e Github
 * Servidor web: Apache (incluído en XAMPP)
 * Railway
 * MySQL Workbench
