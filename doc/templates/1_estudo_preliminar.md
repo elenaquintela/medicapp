@@ -74,18 +74,23 @@ Tecnoloxías e ferramentas necesarias:
 **Desenvolvemento frontend:**
 * HTML5
 * CSS con Tailwind
-* JavaScript e jQuery
+* JavaScript (vanilla)
+* Blade (motor de plantillas de Laravel)
 
 **Desenvolvemento backend:**
-* PHP con Laravel
+
+* PHP 8.2 con Laravel 10 (framework principal)
+* Laravel Breeze (sistema de autenticación) 
+* Barryvdh/laravel-dompdf (libraría para xeración de informes en PDF)
+* Google API Client para PHP (libraría para integración con Google Calendar)
 
 **Base de datos:**
-* XAMPP con MariaDB.
+* XAMPP con MariaDB (en local)
+* MySQL Workbench (para exportar en despregamento)
 
 **Ferramentas de desenvolvemento e despregamento:**
 * IDE: Visual Studio Code
-* Control de versións: GitLab e Github
-* Servidor web: Apache (incluído en XAMPP)
-* Railway
-* MySQL Workbench
-* Google Cloud Console
+* Control de versións: GitLab, e Github (integración con Railway)
+* Servidor web: Apache, incluído en XAMPP (en local)
+* Railway (despregamento de contenedores)
+* Google Cloud Console (xestión das credenciais OAuth 2.0 para a sincronización con Google Calendar)
