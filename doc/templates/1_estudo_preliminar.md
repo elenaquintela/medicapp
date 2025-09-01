@@ -22,12 +22,10 @@ Dito o anterior, este proxecto espera poder contribuír a cumprir mellor co trat
 * Xestión de citas médicas:
     - Rexistro de citas (motivo, data, lugar, nome do médico, especialidade).
     - Apartados opcionais para anotar síntomas, observacións ou preguntas a realizar durante a consulta.
-    - Recordatorios adicionais (por exemplo, para levar documentos, levar mostras para analizar ou pedir unha ambulancia se fora necesario).
 
 **Funcionalidades avanzadas:**
 * Sincronización con calendarios externos como Google Calendar.
 * Seguimento de síntomas e efectos secundarios para xerar informes que se poidan compartir co médico.
-* Xeración de reportes personalizados sobre a evolución do tratamento.
 * Alerta de posibles interaccións medicamentosas se se introducen dous ou máis fármacos con risco coñecido.
 * Soporte multiusuario para facilitar a xestión centralizada dos tratamentos, no caso de que tamén a usen familiares ou coidadores.
 

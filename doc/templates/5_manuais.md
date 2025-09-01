@@ -120,7 +120,7 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
 ## Melloras futuras
 
 * Integración da API CIMA (https://sede.aemps.gob.es/docs/CIMA-REST-API_1_19.pdf)
-
 * Sincronización de tomas de medicamentos con Google Calendar (usuarios premium)
-
 * Notificacións de modificacións de usuarios en perfís colaborativos
+* Seguimento de síntomas e efectos secundarios para xerar informes que se poidan compartir co médico.
+* Alerta de posibles interaccións medicamentosas se se introducen dous ou máis fármacos con risco coñecido.
