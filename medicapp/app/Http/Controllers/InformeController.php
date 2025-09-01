@@ -59,8 +59,8 @@ class InformeController extends Controller
         $trat = $perfil->tratamientos()->where('id_tratamiento', $request->id_tratamiento)->first();
         if (!$trat) return back()->withErrors(['id_tratamiento' => 'Tratamiento inválido para este perfil.']);
 
-        $perfil->load('citas');             
-        $trat->load(['medicaciones.medicamento']); 
+        $perfil->load('citas');
+        $trat->load(['medicaciones.medicamento']);
 
         $data = [
             'perfil' => $perfil,
@@ -95,29 +95,27 @@ class InformeController extends Controller
         if ($user->rol_global !== 'premium') abort(403);
         if ($informe->id_usuario !== $user->id_usuario) abort(403);
 
-        $relative = $informe->ruta_pdf; 
+        $relative = $informe->ruta_pdf;
 
         if (!Storage::disk('public')->exists($relative)) {
-            $trat = \App\Models\Tratamiento::with(['medicaciones', 'perfil'])
+            $trat = \App\Models\Tratamiento::with(['medicaciones.medicamento', 'perfil'])
                 ->findOrFail($informe->id_tratamiento);
 
-        $data = [
-            'informe'      => $informe,
-            'tratamiento'  => $trat,
-            'rango_inicio' => $informe->rango_inicio,
-            'rango_fin'    => $informe->rango_fin,
-        ];
+            $data = [
+                'informe'      => $informe,
+                'tratamiento'  => $trat,
+                'rango_inicio' => $informe->rango_inicio,
+                'rango_fin'    => $informe->rango_fin,
+            ];
 
-        $pdf = PDF::loadView('informe.pdf', $data)->setPaper('a4', 'portrait');
+            $pdf = Pdf::loadView('informe.pdf', $data)->setPaper('a4', 'portrait');
 
-        $downloadName = basename($relative) ?: 'informe.pdf';
-        return $pdf->download($downloadName);
-
+            $downloadName = basename($relative) ?: 'informe.pdf';
+            return $pdf->download($downloadName);
         }
 
         $absolutePath = Storage::disk('public')->path($relative);
         $downloadName = basename($relative) ?: 'informe.pdf';
-
         return response()->download($absolutePath, $downloadName);
     }
 
