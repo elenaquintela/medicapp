@@ -17,7 +17,7 @@
             <strong>Correo de contacto:</strong> a23elenaqb@iessanclemente.net<br>
             <strong>Teléfono:</strong> No disponible<br>
             <strong>Nombre comercial / marca:</strong> MedicApp<br>
-            <strong>Dominio/s:</strong> www.medicapp.com</p>
+            <strong>Dominio/s:</strong> https://medicapp-production-8cbe.up.railway.app/</p>
 
             <h3 class="text-2xl font-semibold mt-10 mb-4">1. Objeto del sitio web</h3>
             <p>Este sitio web ofrece una plataforma de <strong>gestión y seguimiento de tratamientos y medicación</strong>, incluyendo creación de perfiles, registro de medicación y pautas, recordatorios de tomas y gestión de citas médicas, así como la posibilidad de compartir acceso con terceros mediante invitaciones. El uso puede variar por tipo de cuenta (estándar/premium).</p>

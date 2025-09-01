@@ -17,7 +17,7 @@
             <p><strong>Titular:</strong> Elena Quintela Babío<br>
             <strong>Domicilio:</strong> Proyecto académico – sin domicilio físico asociado<br>
             <strong>Email de contacto:</strong> a23elenaqb@iessanclemente.net<br>
-            <strong>Dominio:</strong> www.medicapp.com</p>
+            <strong>Dominio:</strong> https://medicapp-production-8cbe.up.railway.app/</p>
 
             <h3 class="text-2xl font-semibold mt-8 mb-4">2. Finalidad del tratamiento</h3>
             <p>Los datos personales que recogemos se utilizan para:</p>
