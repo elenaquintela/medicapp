@@ -7,7 +7,7 @@
     $features = [
         'Creación de múltiples perfiles' => [true, true],
         'Gestión de tratamientos y citas médicas' => [true, true],
-        'Configuración de alertas y recordatorios' => [true, true],
+        'Recordatorios de tomas y citas' => [true, true],
         'Soporte multiusuario (invite a familiares y cuidadores a gestionar su perfil)' => [false, true],
         'Generación y exportación de informes personalizados' => [false, true],
         'Sincronización de citas médicas con Google Calendar' => [false, true],
