@@ -4,7 +4,6 @@
 
 Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse seguir a metodoloxía en cascada. Esta metodoloxía de desenvolvemento de software consiste en realizar cada fase por completo antes de pasar á seguinte. De todas formas, sempre haberá marxe para pequenos axustes a medida que surxan dificultades ou novas ideas interesantes para implementar.
 
-
 ## Fases planificadas
 
 ### Fase 1: Estudo preliminar
@@ -35,7 +34,6 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 **Duración estimada total:** 16 horas
 
 **Recursos necesarios:** ordenador portátil, conexión a Internet.
-
 
 ### Fase 3: Deseño
 
@@ -79,15 +77,38 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 
 **Backend**
 
-- Adaptar a migración de Breeze á base de datos
-- Comprobar que o rexistro e o login funcionan
-- Elaborar os modelos Eloquent de Perfil, Tratamento, Medicamento e Cita
+- Adaptar a migración de Breeze á base de datos.
+- Elaborar os modelos Eloquent de Perfil, Tratamento, Medicamento e Cita.
+- Implementar controladores para a xestión de perfís, tratamentos, medicación e citas.
+- Control de acceso por plan: empregar rol_global en rutas e vistas para redirixir/amosar opcións segundo plan.
+- Desenvolver a lóxica de recordatorios automáticos de tomas de medicación e citas.
+- Xerar informes en PDF co histórico de tratamentos e medicación empregando DomPDF.
+- Crear un sistema de notificacións para avisar de cada toma de medicación e cita.
+- Engadir sincronización con Google Calendar para citas médicas mediante API oficial.
 
 **Frontend**
 
-- Facer a vista principal / de Login
+- Facer a vista principal / de Login.
+- Deseñar e implementar vistas con Blade e Tailwind CSS para:
+    - Rexistro de usuario e elección de plan.
+    - Creación de perfís de doente.
+    - Rexistro de tratamentos, medicación e citas.
+    - Dashboard con pestanas de tratamentos e citas.
+    - Xestión de perfís (editar, eliminar, compartir no plan premium).
+    - Vista de informes descargables en PDF.
+    - Vista de axustes de conta con eliminación de usuario mediante modal de confirmación.
+- Adaptar as vistas a dispositivos móbiles (responsive design).
 
+**Probas**
 
+- Probas manuais de cada fluxo principal:
+    - Rexistro/login.
+    - Creación de perfil, tratamento, medicación e citas.
+    - Xeración e marcaxe de recordatorios.
+    - Sincronización con Google Calendar.
+    - Exportación de informes a PDF.
+- Corrección de erros e axuste de estilos.
+- Validación final de requisitos e comprobación de datos en phpMyAdmin.
 
 **Despregamento**
 
@@ -99,15 +120,28 @@ Xa que este proxecto se presentou en fases fixas e secuenciales, decidiuse segui
 - Asegurarse de que as varibles de entorno do servizo de base de datos coincidan cas da aplicación.
 - Despregar o contenedor cando todo estea configurado, establecendo os comandos necesarios na configuración.
 
+**Duración estimada total:** 120 horas.
+
+**Recursos necesarios:** ordenador con XAMPP, Composer, Node.js e PHP 8.2, conexión a Internet, conta en Railway e Google Cloud Console, IDE (Visual Studio Code ou similar).
+
 ### Fase 5: Manuais do proxecto
 
-Descrición das tarefas a realizar, duración e recursos necesarios.
+- Redacción do manual técnico (instalación, configuración, despregue) e do manual de usuario (guías paso a paso das funcións), 
+- Corrección de erros detectados durante a revisión de manuais.  
+
+**Duración estimada total:** 12 horas.
+
+**Recursos necesarios:** ordenador portátil, conexión a Internet.
+
 
 ## Calendario
 
-Calendario que indique as datas nas cales se vai desenvolver a aplicación. Este calendario pódese facer de dúas formas:
+| Fase | Accións principais | Duración | Datas |
+|------|-------------------|----------|-------|
+| Fase 1: Estudo preliminar | Xustificación, público obxectivo, tecnoloxías | 6 h | Maio 2025, semana 1 |
+| Fase 2: Análise | Funcionalidades, casos de uso, normativa | 16 h | Maio 2025, semanas 2–3 |
+| Fase 3: Deseño | Diagramas, BD, interfaces | 28 h | Maio 2025, semanas 4–5 |
+| Fase 4: Codificación e probas | Configuración inicial, backend, frontend, recordatorios, Google Calendar, informes PDF, probas e despregue | 120 h | Xuño–Agosto 2025 (ata finais de mes) |
+| Fase 5: Manuais | Redacción manual técnico e manual de usuario, revisión final | 20 h | Agosto–Setembro 2025 (ata esta semana) |
 
-- Cunha **táboa** que recolla as diferentes accións a realizar xunto coas datas de inicio e fin de cada acción.
-- Cun **cronograma** como pode ser un diagrama de Gantt, que permite visualizar de forma gráfica canto vai ocupar cada acción no tempo.
 
-Trátase dunha estimación que moi probablemente sexa necesario modificar mentres se avance no proxecto.

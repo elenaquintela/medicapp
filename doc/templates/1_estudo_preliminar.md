@@ -73,7 +73,7 @@ Tecnoloxías e ferramentas necesarias:
 
 **Desenvolvemento frontend:**
 * HTML5
-* CSS con Bootstrap
+* CSS con Tailwind
 * JavaScript e jQuery
 
 **Desenvolvemento backend:**
@@ -86,3 +86,6 @@ Tecnoloxías e ferramentas necesarias:
 * IDE: Visual Studio Code
 * Control de versións: GitLab
 * Servidor web: Apache (incluído en XAMPP)
+* Railway
+* MySQL Workbench
+* Google Cloud Console
