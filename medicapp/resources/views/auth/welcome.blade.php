@@ -17,7 +17,7 @@
                 para que tú solo te dediques a <span class="text-yellow-300">vivir</span>.
             </p>
 
-            <div class="text-center lg:text-left mt-4 sm:mt-6">
+            <div class="text-center mt-4 sm:mt-6">
                 <a href="{{ route('register') }}"
                    class="inline-block bg-yellow-300 text-[#0C1222] font-bold py-3 px-8 sm:px-10 rounded-full hover:bg-yellow-200 transition">
                     Comenzar
