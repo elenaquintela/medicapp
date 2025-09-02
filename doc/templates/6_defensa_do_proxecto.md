@@ -37,42 +37,10 @@ A estrutura da exposición é de libre elección, pero os contidos a tratar debe
 
 ## Recursos
 
-Os recursos permitidos para a defensa do proxecto son:
-
-* Presentación de diapositivas.
-* Vídeo demostrativo.
-
-Os recursos que se utilicen durante a exposición deben ser un apoio para o discurso. Isto implica o seguinte:
-
-* O alumnado non debe limitarse a ler o texto das diapositivas.
-* As diapositivas deben conter textos relevantes e non todo o discurso.
-* O vídeo, no caso de habelo, non puede durar toda a presentación.
-
 ### Presentación de diapositivas
 
-A presentación de diapositivas debe cumprir unha serie de requisitos para que poida ser aceptada como válida:
-
-* Non pode reproducir partes completas da documentación.
-* Non pode conter todo o discurso da exposición.
-* Poden usarse só imaxes para apoiar a explicación.
-
-Algúns consellos para a súa elaboración son:
-
-* A información fundamental debería destacar fronte ao resto.
-* Desaconséllase encher as diapositivas de moito texto.
-* É recomendable apoiar a información con gráficos ou imaxes significativas.
-* O contraste entre o fondo e o texto debe ser alto.
-* O tamaño das fontes debe ser o suficientemente grande como para permitir unha lectura fluída.
+[DefensaMedicapp](/DefensaMedicapp.pdf)
  
 ### Vídeo demostrativo
 
-Pode usarse un vídeo demostrativo do funcionamento da aplicación durante a defensa do proxecto.
-
-O vídeo debe cumprir unha serie de requisitos para que poida ser aceptado como válido:
-
-* A duración do vídeo non pode exceder os 5 minutos.
-* A resolución mínima debe ser 1280x720.
-* A resolución máxima debe ser 1920x1080.
-* A inclusión de audio é opcional.
-
-É recomendable subir o vídeo a algunha plataforma de vídeo como [YouTube](https://www.youtube.com/) ou [Vimeo](https://vimeo.com/) e indicar a URL na documentación do proxecto.
+[Demo Medicapp](https://www.youtube.com/watch?v=fihq8WokEVE)
