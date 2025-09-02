@@ -39,7 +39,7 @@ A estrutura da exposición é de libre elección, pero os contidos a tratar debe
 
 ### Presentación de diapositivas
 
-[DefensaMedicapp](/DefensaMedicapp.pdf)
+[DefensaMedicapp](/Defensa Medicapp.pdf)
  
 ### Vídeo demostrativo
 
