@@ -117,6 +117,10 @@ A continuación detállanse os pasos para poñer en marcha o proxecto:
 - Estás na ruta correcta do proxecto ao executar os comandos.
 - As versións de PHP, Node.js e Composer son compatibles con Laravel 12.
 
+### Despregamento en Railway
+
+https://medicapp-production-8cbe.up.railway.app/
+
 ## Melloras futuras
 
 * Integración da API CIMA (https://sede.aemps.gob.es/docs/CIMA-REST-API_1_19.pdf)
